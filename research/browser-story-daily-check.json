@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "productVersion": "1.19.1",
+  "browser": "isolated Chrome, 1280x720",
+  "url": "http://127.0.0.1:8093/",
+  "buildLog": "logs/unity-story-daily-life-release2.log",
+  "userProfileWritten": false,
+  "fixtureSaveWrittenInIsolatedProfile": true,
+  "tutorialResume": {
+    "chapter": "tutorial_01",
+    "beforeCharacterClick": 47,
+    "afterBackgroundClick": 47,
+    "afterCharacterClick": 48,
+    "liveModePreserved": true,
+    "sourceTalkGuideVisible": true
+  },
+  "idleStoryInvitation": {
+    "trigger": "resting, level 2, unfinished main_01, timer stopped",
+    "appearsWithoutManualInvocation": true,
+    "characterClickStarts": "main_01",
+    "savedStoryLive": true,
+    "savedCursor": 6
+  },
+  "timerVoice": {
+    "trigger": "StartAutomaticScenario(4) after the room is ready",
+    "forcedUnseenGroup": "pomodorostart_word_001",
+    "nativeBodyMotion": 55,
+    "matchingAnimationCueType": 1,
+    "textVisibleAfterSeconds": 2,
+    "expectedAndSavedText": "Alright, let's do this!",
+    "completed": true,
+    "resumableChapterUnchanged": true,
+    "normalMessageAboveMusic": true,
+    "episodeControlsHidden": true
+  },
+  "screenshots": [
+    "output/playwright/tutorial-controller-wait.png",
+    "output/playwright/tutorial-controller-advanced.png",
+    "output/playwright/satone-invitation-1.19.1.png",
+    "output/playwright/satone-live-story-1.19.1.png",
+    "output/playwright/timer-animation-voice-1.19.1.png"
+  ],
+  "limitations": [
+    "Sleep progression, sofa weights and native loop readiness are checked in Unity; a full natural-length idle session was not recorded in Chrome.",
+    "Every story episode and choice combination has not been played end to end.",
+    "Unity cloud configuration requests still report ERR_CONNECTION_RESET; the checked local flows continue to work.",
+    "Mobile and Safari were not tested."
+  ]
+}

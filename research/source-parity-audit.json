@@ -3,7 +3,7 @@
   "method": "Đối chiếu masters/controllers/UI nguồn, kiểm tra state/callback/raycast trong Unity; thao tác UI và save/reload, IndexedDB/audio/import trong Chrome riêng. Xem browser-gameplay-check.json và browser-storage-check.json; không xác nhận mobile/Safari hay toàn bộ engine Windows.",
   "originalAssemblySha256": "2daf4eb479a910d9bcb7a4a33c2ab7cdf8f6831d9841fbfe61ccfd9494fc9e7f",
   "sourceCsFiles": 1429,
-  "portRuntimeCsFiles": 42,
+  "portRuntimeCsFiles": 44,
   "commandEnumValues": 50,
   "commandsWithoutSwitchCase": [],
   "features": [
@@ -283,7 +283,7 @@
       "id": 11,
       "feature": "Nhập nhạc cá nhân",
       "status": "Đã port import cho trình duyệt",
-      "remaining": "File/folder lưu IndexedDB, giải mã WAV khi phát và báo lỗi. Metadata file cá nhân dùng tên file; chưa đọc toàn bộ tag ID3. Chưa kiểm tra storage end-to-end trên trình duyệt.",
+      "remaining": "File/folder, metadata cơ bản, giải mã audio và IndexedDB đã kiểm tra trong Chrome riêng. Chưa đọc toàn bộ định dạng tag/plugin nhạc của Windows.",
       "original": [
         {
           "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/FacilityMusic.cs",
@@ -345,7 +345,7 @@
       "id": 13,
       "feature": "AI sinh hoạt tự nhiên của Satone",
       "status": "Đã mở rộng, còn khác nguồn",
-      "remaining": "Trọng số/growth/cooldown theo nhóm gốc, work/break/wild/rời ghế, trà/ăn/sleep và mesh đồ ăn hiếm. Các nhánh chuyển tiếp nội bộ của AI chưa khớp hoàn toàn engine nguồn.",
+      "remaining": "Work/break/wild/rời ghế, trà/ăn và mesh đồ ăn hiếm; thêm sofa có trọng số/cooldown, buồn ngủ tăng/giảm theo master, giữ tư thế nghe nhạc, giới hạn nghỉ PC theo bàn. Chặn thoại chen vào chuỗi hoạt động; thêm lời mời đọc tập mới khi nghỉ. Chưa tương đương toàn bộ AI, chuyển tiếp và readiness của đồ vật trong engine gốc.",
       "original": [
         {
           "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/HeroineAI.cs",
@@ -370,7 +370,12 @@
           "anchor": "Weighted"
         }
       ],
-      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+      "verification": [
+        "research/dialogue-layout-check.json",
+        "research/story-command-check.json",
+        "research/daily-life-check.json",
+        "research/browser-story-daily-check.json"
+      ]
     },
     {
       "id": 14,
@@ -587,8 +592,8 @@
     {
       "id": 21,
       "feature": "UI truyện/nhật ký thoại",
-      "status": "Một phần mở rộng",
-      "remaining": "Talk Log/row con, Skip, lịch sử thoại tối đa 200 mục và bảo toàn resume khi hội thoại tự động. Chưa đồng bộ toàn bộ bố cục/stats log nguồn.",
+      "status": "Đã sửa bố cục thoại theo nguồn",
+      "remaining": "Tách MainStoryTextParent và NormalTextParent theo Scenario; lời chào/phản ứng ở trên thanh nhạc. Talk Log, Skip/lịch sử và bảo toàn resume được nối; chưa toàn bộ stats log nguồn.",
       "original": [
         {
           "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/ScenarioReader.cs",
@@ -613,13 +618,18 @@
           "anchor": "Feature implementation"
         }
       ],
-      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+      "verification": [
+        "research/dialogue-layout-check.json",
+        "research/story-command-check.json",
+        "research/daily-life-check.json",
+        "research/browser-story-daily-check.json"
+      ]
     },
     {
       "id": 22,
       "feature": "Ngữ nghĩa lệnh kịch bản",
-      "status": "Một phần",
-      "remaining": "Có case cho mọi giá trị CommandType nhưng hành vi chưa đều tương đương: command 25 vốn chỉ phát ở talk log được gộp BGM thường; command 50 vốn chờ tín hiệu controller được đổi thành chờ Next; PomodoroVoiceText chưa đồng bộ AI/timer.",
+      "status": "Đã sửa các lệnh chờ/thoại/nhạc",
+      "remaining": "Command 25 chỉ dùng trong Talk Log; 50 chờ click controller và hiện guide nguồn. Command 22 nhận PlayPomodoroVoice từ animation, khớp loại cue và bỏ cue cũ khi hủy. BGM dùng ratio/offset/fade, resume theo scene history; command 26 chọn playlist. Live story/Talk Log được lưu riêng. Chưa xác nhận mọi tập và mọi tổ hợp hiệu ứng; scenario BGM vẫn dùng chung kênh với playlist trong adapter web.",
       "original": [
         {
           "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/ScenarioReader.cs",
@@ -653,6 +663,12 @@
           "line": 317,
           "anchor": "case 22: yield return Speak"
         }
+      ],
+      "verification": [
+        "research/dialogue-layout-check.json",
+        "research/story-command-check.json",
+        "research/daily-life-check.json",
+        "research/browser-story-daily-check.json"
       ]
     },
     {

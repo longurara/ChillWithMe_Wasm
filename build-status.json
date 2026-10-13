@@ -1,14 +1,14 @@
 {
   "stage": "standalone-completion-browser-preview-ready",
-  "completedAt": "2026-10-13T09:14:19.269164+07:00",
+  "completedAt": "2026-10-13T10:48:18.360596+07:00",
   "unity": "2022.3.62f2",
   "url": "http://127.0.0.1:8093/",
   "assets": 4517,
   "bundles": 233,
   "bundleBytes": 474455344,
-  "playerBytes": 138769019,
+  "playerBytes": 138793288,
   "assetBuildLog": "logs/unity-native-timer-release.log",
-  "playerBuildLog": "logs/unity-completion-release13.log",
+  "playerBuildLog": "logs/unity-story-daily-life-release2.log",
   "knownShaderCompilerErrors": 0,
   "automatedGameplayTests": true,
   "storyGroups": 610,
@@ -76,8 +76,8 @@
   "deskLampCheck": "research/desk-lamp-render-check.json",
   "glesAdditionalLightStagesChecked": 110,
   "additionalLightShaderCheck": "research/toon-additional-light-budget.json",
-  "productVersion": "1.19.0",
-  "featureReleaseBuildBytes": 165291851,
+  "productVersion": "1.19.1",
+  "featureReleaseBuildBytes": 165324136,
   "selectedFeatureGroups": [
     1,
     3,
@@ -131,5 +131,9 @@
   "sourceCostumes": true,
   "localProfileAvatar": true,
   "independentSpecialProgress": true,
-  "decorationRestoreDoesNotMutateUI": true
+  "decorationRestoreDoesNotMutateUI": true,
+  "browserStoryDailyCheck": "research/browser-story-daily-check.json",
+  "storyCommandCheck": "research/story-command-check.json",
+  "dailyLifeCheck": "research/daily-life-check.json",
+  "dialogueLayoutCheck": "research/dialogue-layout-check.json"
 }
