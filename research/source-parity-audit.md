@@ -47,3 +47,7 @@ Xem [phạm vi thay đổi và giới hạn](gameplay-polish-1.20.md), [catalog 
 ## Chuyển động 1.20.1
 
 Giữ controller nguồn qua lúc thoát truyện và sinh hoạt thường; bỏ các lượt Rebind/khởi động lại pose liên tiếp. Look/ghế chuyển dần, phản ứng ngắn giữ tư thế và lịch hoạt động. Xem [kiểm tra chuyển động](motion-continuity-1.20.1.md).
+
+## Physics 1.21.0
+
+Bước cố định 60 Hz, nội suy mục tiêu animation, giới hạn catch-up, giữ offset khi resume/teleport; capsule thuôn gốc và va chạm cổ/tay bổ sung. Đổi trang phục cập nhật chuỗi tay áo, giữ xương đang dùng và tránh đăng ký trùng. Ba động tác có bake từ solver web với kiểm tra profile/rig/state. Chưa tương đương MagicaCloth Windows, chưa kiểm chứng thiết bị mobile thật. Xem [kiểm tra physics](physics-1.21.md).

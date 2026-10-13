@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "productVersion": "1.21.0",
+  "finalBuildLog": "logs/unity-physics-release-final.log",
+  "browser": "isolated Chrome",
+  "userBrowserProfileWritten": false,
+  "checks": {
+    "fiveCostumeSelectionsPersist": true,
+    "desktop60FpsConfigured": true,
+    "landscape30FpsConfigured": true,
+    "visibilitySuspendResume": true,
+    "chromeMobileTouchEmulation": true,
+    "defaultCostumeRestored": true
+  },
+  "viewports": [[1280, 720], [844, 390]],
+  "console": {"pageErrors": 0, "errors": 0, "warningsAcrossTwoLoads": 18},
+  "mobileEmulation": {"viewport": [844, 390], "deviceScaleFactor": 2, "configuredFps": 30, "touchPoints": 1, "coarsePointer": true, "errors": 0, "physicalDevice": false},
+  "evidence": [
+    "output/playwright/physics-costume-0.png",
+    "output/playwright/physics-costume-1.png",
+    "output/playwright/physics-costume-2.png",
+    "output/playwright/physics-costume-3.png",
+    "output/playwright/physics-costume-4.png",
+    "output/playwright/physics-resume.png",
+    "output/playwright/physics-landscape-30.png",
+    "output/playwright/physics-mobile-touch.png"
+  ],
+  "scope": "Chrome visual checkpoints and save/state checks; quantitative rig and FPS invariance tested separately in Unity. Physical phones, Safari and PC visual physics parity are not verified."
+}

@@ -19,6 +19,14 @@ for path in paths:
   http.append({'path':path,'status':response.status,'bytes':response.headers.get('Content-Length'),'type':response.headers.get('Content-Type')})
 (root/'research/completion-http-check.json').write_text(json.dumps({'passed':True,'checks':http},indent=2)+'\n')
 p=root/'build-status.json';status=json.loads(p.read_text());status.update(stage='standalone-completion-browser-preview-ready',completedAt=datetime.now().astimezone().isoformat(),productVersion=version,playerBuildLog=logname,featureReleaseBuildBytes=int(match.group(1)),playerBytes=sum(f.stat().st_size for f in (root/'WebPlayer/Build').iterdir() if f.is_file()),automatedGameplayTests=True,browserGameplayCheck='research/browser-gameplay-check.json',browserStorageEndToEndTested=True,completionCheck='research/completion-check.json',completionHttpCheck='research/completion-http-check.json',cloudDeferredByUser=True,multiPageNotes=True,multipleTodoLists=True,calendarDiary=True,habits=True,dailyWeeklyMonthlyYearlyStatistics=True,roomPresets=True,sourceCostumes=True,localProfileAvatar=True,independentSpecialProgress=True,decorationRestoreDoesNotMutateUI=True,completeOriginalGameParity=False)
+status['browserGameplayCheckVersion']=browser.get('productVersion')
+physics_browser=root/'research/browser-physics-check.json'
+if 'HLC_PHYSICS_CHECK_PASSED' in log:
+ assert json.loads((root/'research/physics-check.json').read_text())['passed']
+ assert 'HLC_PHYSICS_BAKE_PASSED' in log and json.loads((root/'research/physics-bake-check.json').read_text())['passed']
+ assert physics_browser.is_file(),'Record browser physics evidence before finalizing the release'
+ evidence=json.loads(physics_browser.read_text());assert evidence['passed'] and evidence['productVersion']==version and evidence['finalBuildLog']==logname
+ status.update(physicsFixedHz=60,physicsRigCheck='research/physics-check.json',physicsBakeCheck='research/physics-bake-check.json',latestBrowserCheck='research/browser-physics-check.json',physicsSourceProfile='research/physics-source-profile.json',physicsNativeParityVerified=False,physicsPhysicalMobileVerified=False)
 p.write_text(json.dumps(status,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
 for name in ['bridge-check.js','profile-bridge-check.js']:
  helper=root/'WebPlayer/ui'/name

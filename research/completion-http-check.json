@@ -22,19 +22,19 @@
     {
       "path": "/Build/WebPlayer.framework.js",
       "status": 200,
-      "bytes": "441625",
+      "bytes": "441831",
       "type": "application/javascript"
     },
     {
       "path": "/Build/WebPlayer.wasm",
       "status": 200,
-      "bytes": "33684738",
+      "bytes": "33725860",
       "type": "application/wasm"
     },
     {
       "path": "/Build/WebPlayer.data",
       "status": 200,
-      "bytes": "104783400",
+      "bytes": "106726540",
       "type": "application/octet-stream"
     },
     {
