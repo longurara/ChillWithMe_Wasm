@@ -20,11 +20,20 @@ namespace Hlc.ChillPrototype
             else if(group=="HeroineStateBreakReadBook")actionWeights.AddRange(new[]{Weight("NextPage",new[]{"BreakBase002_NextPage"},"WantNextPageAddRatio"),Weight("PreviousPage",new[]{"BreakBase002_PreviousPage"},"WantPreviousPageAddRatio",cooldown:"PreviousInvalidSeconds"),Weight("Interest",new[]{"BreakBase002_Interest"},"InterestAddRatio")});
             else if(group=="HeroineStateBreakTeaTime")actionWeights.Add(Weight("Drink",new[]{"BreakBase004_DrinkTea"},"WantDrinkAddRatio"));
             else if(group=="HeroineStateBreakForward")actionWeights.AddRange(new[]{Weight("Next",new[]{"BreakBase006_Keyboard"},"NextAddRatio"),Weight("Suspenseful",new[]{"BreakBase006_Interest"},"SuspensefulAddRatio"),Weight("PlayPen",new[]{"BreakBase006_PlayPenLoop"},"PlayPenAddRatio")});
+            else if(group=="HeroineStateLeaveChairGoSofa")
+            {
+                baseWeight=Policy(group+"._initBaseAmount",10000);
+                actionWeights.AddRange(new[]{Weight("Thinking",new[]{"Wild003_LeaveChair_Sofa_Thinking"},"_thinkingChangingAmount","_thinkingSubtractRatio","_thinkingInvalidSeconds","_thinking"),Weight("LookOutside",new[]{"Wild003_LeaveChair_Sofa_Look_Outside"},"_lookOutsideChangingAmount","_lookOutsideSubtractRatio","_lookOutsideInvalidSeconds","_lookOutside"),Weight("ControlHeadphone",new[]{"Wild003_LeaveChair_Sofa_Control_Headphone"},"_controlHeadphoneChangingAmount","_controlHeadphoneSubtractRatio","_controlHeadphoneInvalidSeconds","_controlHeadphone")});
+            }
             foreach(var weight in actionWeights)weight.available=Now+(weight.key=="Break"?Policy(group+".StateStartBreakInvalidSeconds",0):0);
         }
         string WeightedVariant()
         {
-            string group=Resting?breakGroups[Mathf.Max(0,breakMode)]:workGroups[player.SelectedState];SetWeightGroup(group);
+            return PickWeightedVariant(Resting?breakGroups[Mathf.Max(0,breakMode)]:workGroups[player.SelectedState]);
+        }
+        string PickWeightedVariant(string group)
+        {
+            SetWeightGroup(group);
             if(actionWeights.Count==0)return null;
             float draw=UnityEngine.Random.value*(baseWeight+actionWeights.Sum(w=>w.amount));
             if(draw<baseWeight)

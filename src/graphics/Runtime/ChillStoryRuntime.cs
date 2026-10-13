@@ -144,7 +144,7 @@ namespace Hlc.ChillPrototype
             if (!Playing) { save.deskMode = player.SelectedState; save.timeMode = player.environment.selectedTime; save.windowMode = player.environment.selectedEnvironment; }
             CaptureFeatures();
             var persisted=save;
-            if(automaticDialogue){persisted=JsonUtility.FromJson<ChillSave>(JsonUtility.ToJson(save));persisted.chapter=suspendedChapter;persisted.cursor=suspendedCursor;persisted.sceneHistory=suspendedScene ?? new List<int>();}
+            if(automaticDialogue){persisted=JsonUtility.FromJson<ChillSave>(JsonUtility.ToJson(save));persisted.chapter=suspendedChapter;persisted.cursor=suspendedCursor;persisted.sceneHistory=suspendedScene ?? new List<int>();persisted.storyLive=suspendedStoryLive;}
             bool written = VerificationOnly || ChillBrowserSave.Write(persisted);
             if (!written) {status = "Trình duyệt không lưu được. Hãy xuất file save để giữ tiến trình.";Notify(status,true);}
             lastSave = Now;
@@ -154,9 +154,12 @@ namespace Hlc.ChillPrototype
         public void StopStory()
         {
             bool wasPlaying = Playing;
+            bool finishSnack=automaticDialogue && chapter!=null && (chapter.Scenario==2600 || chapter.Scenario==2601);
+            if(wasPlaying && previousMusic && player.music.clip==previousMusic)previousMusicTime=player.music.time;
             bool resumeActivity=automaticDialogue&&autonomyInstalled;int activityBreak=breakMode,activityTalks=selfTalkCount;
             double activityEnd=nextAction,variantEnd=nextVariant;bool activityRest=Resting;
-            ResetAutonomy();tutorialCommand=0;RestoreAutomaticResume();GetComponent<ChillNativeUI>()?.StopNativeCredits();
+            string activityBase=CurrentBaseMotion;float activitySleep=sleepiness;
+            ResetAutonomy();ResetCommandWaits();tutorialCommand=0;RestoreAutomaticResume();GetComponent<ChillNativeUI>()?.StopNativeCredits();
             generation++; if (reader != null) StopCoroutine(reader); reader = null;
             StopMotionSounds();
             choices.Clear(); loops.Clear(); voice.Stop(); voice.clip = null; ambient.Stop(); ambient.clip = null; sound.Stop(); sound.clip = null;
@@ -184,19 +187,21 @@ namespace Hlc.ChillPrototype
                 // A short reaction must not start a new break or reset its self-talk limit.
                 breakMode=activityBreak;selfTalkCount=activityTalks;previousMode=player.SelectedState;previousRest=Resting;
                 autonomyInstalled=true;nextAction=activityEnd;nextVariant=variantEnd;
-                SetNativeMotion(Resting?(breakMode==4?"BreakBase005_Sleep":breakBases[Mathf.Clamp(breakMode,0,5)]):workBases[player.SelectedState]);
+                sleepiness=activitySleep;
+                if(finishSnack && Application.isPlaying && !VerificationOnly)autonomousSequence=StartCoroutine(FinishSnackActivity());
+                else SetNativeMotion(activityBase);
             }
         }
 
-        void Begin(ChillChapter selected, bool resume,bool ambientDialogue=false)
+        void Begin(ChillChapter selected, bool resume,bool ambientDialogue=false,bool fromTalkLog=true)
         {
             if(MusicLoading){musicToken++;MusicLoading=false;wantsMusic=false;}
             int start = resume && save.chapter == selected.ID ? save.cursor : 0;
             if (!Playing) SaveNow();
             if(!ambientDialogue)StopStory();else {generation++;StopMotionSounds();choices.Clear();loops.Clear();}
             if(selected.Scenario>=50&&selected.Scenario<=56)Workspace.collaboration=selected.Scenario-49;
-            CancelRoom();automaticDialogue=ambientDialogue;player.library.visible = false; player.library.RestoreCharacter();
-            previousMusic = player.music.clip; previousMusicPlaying = player.music.isPlaying;previousMusicLoop=player.music.loop;previousMusicTime=previousMusic?player.music.time:0;talkLog=!ambientDialogue;
+            CancelRoom();automaticDialogue=ambientDialogue;invitedChapter=null;player.library.visible = false; player.library.RestoreCharacter();
+            previousMusic = player.music.clip; previousMusicPlaying = player.music.isPlaying;previousMusicLoop=player.music.loop;previousMusicTime=previousMusic?player.music.time:0;talkLog=resume?!save.storyLive:fromTalkLog&&!ambientDialogue;save.storyLive=!talkLog;
             if (!chapters.TryGetValue(selected.ID, out sentences)) { status = "Đoạn này không có kịch bản."; return; }
             chapter = selected; cursor = start; visible = true; selectedTab = 0;
             save.chapter = selected.ID; save.cursor = cursor;
@@ -227,7 +232,7 @@ namespace Hlc.ChillPrototype
                     int previous=Array.FindLastIndex(sentences,Mathf.Min(cursor-1,sentences.Length-1),r => r.BodyMotion != -1);
                     if (previous >= 0) indices.Add(previous);
                 }
-                ChillSentence lastMusic=null,lastAmbient=null;
+                ChillSentence lastMusic=null,lastAmbient=null,lastPlaylist=null,lastMusicVolume=null;
                 int restored=0;
                 foreach (int index in indices)
                 {
@@ -251,12 +256,20 @@ namespace Hlc.ChillPrototype
                     }
                     else if (row.Command == 11) SelectWindow(row.Arg1,row.Arg2 == 1);
                     else if (row.Command == 30) yield return decorations.Apply(row.Arg1);
-                    else if (row.Command == 5 || row.Command == 25 || row.Command == 26 || row.Command == 8) lastMusic=row;
+                    else if (AppliesStoryMusic(row) || row.Command == 8) {lastMusic=row;lastMusicVolume=null;}
+                    else if (row.Command == 26) lastPlaylist=row;
+                    else if (row.Command == 40) lastMusicVolume=row;
                     else if (row.Command == 7 || row.Command == 10) lastAmbient=row;
                     else effects.RestoreFinal(row);
                     if (++restored % 8 == 0) yield return null;
                 }
-                if (lastMusic != null && lastMusic.Command != 8) yield return LoadAudio("story-music",lastMusic.Arg1,player.music,true,lastMusic.Arg2 == 0 ? .35f : lastMusic.Arg2);
+                if(lastPlaylist!=null)yield return PlayPlaylistMusic(lastPlaylist);
+                if (lastMusic != null && lastMusic.Command != 8)
+                {
+                    float gain=lastMusicVolume!=null && lastMusicVolume.Arg1==lastMusic.Arg1 ? .35f*Mathf.Clamp01(lastMusicVolume.Arg2) : StoryMusicGain(lastMusic);
+                    yield return LoadAudio("story-music",lastMusic.Arg1,player.music,chapter.ID!="main_32",gain*(Settings.music/.35f));
+                    cachedStoryMusic=gain;RestoreMusicPosition(lastMusic);
+                }
                 else if (lastMusic != null) player.music.Stop();
                 if (lastAmbient != null && lastAmbient.Command == 7) yield return LoadAudio("story-ambient",lastAmbient.Arg1,ambient,true,lastAmbient.Arg2 == 0 ? .3f : lastAmbient.Arg2);
                 if (player.bones) player.bones.ResetDynamics();
@@ -267,7 +280,7 @@ namespace Hlc.ChillPrototype
             yield return Read();
         }
 
-        IEnumerator LoadAudio(string slot, string name, AudioSource source, bool loop, float volume)
+        IEnumerator LoadAudio(string slot, string name, AudioSource source, bool loop, float volume,int musicVersion=-1)
         {
             source.Stop(); source.clip = null;
             if (string.IsNullOrEmpty(name) || name == "0") yield break;
@@ -275,15 +288,15 @@ namespace Hlc.ChillPrototype
             var alias = data.music.FirstOrDefault(m => string.Equals(m.title, name, StringComparison.OrdinalIgnoreCase));
             if (alias != null) name = alias.clip;
             player.library.LoadExternal(slot, name, asset => {
-                if (token == generation && asset is AudioClip clip) { source.clip = clip; source.loop = loop; source.volume = volume;FeatureAudioGain(source,volume); source.Play(); }
+                if (token == generation && (musicVersion<0 || musicVersion==storyMusicVersion) && asset is AudioClip clip) { source.clip = clip; source.loop = loop; source.volume = volume;FeatureAudioGain(source,volume); source.Play(); }
                 done = true;
             });
             while (!done && token == generation) yield return null;
         }
 
-        IEnumerator Speak(ChillSentence row, bool waitForClick = true)
+        IEnumerator Speak(ChillSentence row, bool waitForClick = true,bool applyMotion=true)
         {
-            Motion(row); next = false;
+            if(applyMotion)Motion(row); next = false;
             if (row.Command == 0 && Number(row.Arg1) > 0) yield return new WaitForSecondsRealtime(Mathf.Min(120, Number(row.Arg1)));
             message = Text(row.LocalizationID); shownChars = 0; textClock = 0; typing = message.Length > 0;
             moveMouth = row.Command == 20 ? row.Arg1 == "1" : row.Command == 22 ? row.Arg3 != "-1" : row.Arg3 == "0";
@@ -292,7 +305,7 @@ namespace Hlc.ChillPrototype
             string name = texts.TryGetValue(row.LocalizationID, out var local) ? local.Voice : "";
             yield return LoadAudio("story-voice", name, voice, false, .8f);
             loadingAudio = false;
-            double finish = Now + Math.Max(.2f, row.Arg2);
+            double finish = Now + Math.Max(.2f, row.Command==22?0:row.Arg2);
             while (Playing)
             {
                 if (!waitForClick && chosen >= 0) { voice.Stop(); yield break; }
@@ -337,21 +350,21 @@ namespace Hlc.ChillPrototype
                 switch (current.Command)
                 {
                     case 0: case 20: yield return Speak(current); break;
-                    case 22: yield return Speak(current); if (current.BodyMotion != -1) yield return WaitForMotion(); break;
+                    case 22: yield return SpeakPomodoro(current); break;
                     case 1: yield return new WaitForSecondsRealtime(Mathf.Clamp(Number(current.Arg1), 0, 120)); break;
-                    case 50: yield return RunTutorial(50);break;
+                    case 50: yield return WaitForScript();break;
                     case 2:
                         next = false; status = current.Command == 50 ? "Bấm Tiếp để tiếp tục cảnh." : "Chờ thao tác tiếp theo.";
                         while (!next) yield return null; next = false; break;
                     case 3: case 15: yield return Choose(cursor, current.Command); advance = false; break;
                     case 4: cursor = Jump(current.Arg1); advance = false; break;
                     case 25: if(!talkLog)break;goto case 5;
-                    case 5: case 26:
-                        var music = data.music.FirstOrDefault(m => string.Equals(m.title, current.Arg1, StringComparison.OrdinalIgnoreCase));
-                        yield return LoadAudio("story-music", music == null ? current.Arg1 : music.clip, player.music, chapter.ID != "main_32", current.Arg2 == 0 ? .35f : Mathf.Clamp01(current.Arg2)); break;
+                    case 26: StartCoroutine(PlayPlaylistMusic(current));break;
+                    case 5:
+                        StartCoroutine(PlayStoryMusic(current));break;
                     case 6: yield return LoadAudio("story-sound", current.Arg1, sound, false, .7f); break;
                     case 7: yield return LoadAudio("story-ambient", current.Arg1, ambient, true, current.Arg2 == 0 ? .3f : Mathf.Clamp01(current.Arg2)); break;
-                    case 8: player.music.Stop(); break;
+                    case 8: storyMusicVersion++;player.music.Stop(); break;
                     case 9: sound.Stop(); break;
                     case 10: ambient.Stop(); break;
                     case 11: SelectWindow(current.Arg1, current.Arg2 == 1); break;
@@ -367,7 +380,7 @@ namespace Hlc.ChillPrototype
                         break;
                     case 30:
                         yield return decorations.Apply(current.Arg1); break;
-                    case 40: cachedStoryMusic=Mathf.Clamp01(current.Arg2);player.music.volume=cachedStoryMusic;break;
+                    case 40: StartCoroutine(ChangeStoryMusicVolume(current));break;
                     case 60: message = ""; typing = false; break;
                     case 70:
                         var range = current.Arg1.Split('~');

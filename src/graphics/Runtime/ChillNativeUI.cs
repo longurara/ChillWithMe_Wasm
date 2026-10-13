@@ -23,7 +23,7 @@ namespace Hlc.ChillPrototype
         public GameObject musicCell,storyCell,todoCell,selectionCell;
         public Sprite musicPlay,musicPause,timerPlay,timerPause;
         public Sprite musicAudible,musicMuted;
-        public Sprite countupPlay,countupPause;
+        public Sprite countupPlay,countupPause,wantTalkNormal;
         [Serializable]public class SpriteReplacement{public Sprite original,recovered;}
         public SpriteReplacement[] spriteReplacements;
         public TMP_FontAsset fallbackFont;
@@ -361,6 +361,9 @@ namespace Hlc.ChillPrototype
         void Dialogue()
         {
             bool main=state.playing && state.mainStoryText;
+            Set(RefOf("StorySystemUI","_transparentButton"),state.playing && !state.waitingForScript);
+            Show(RefOf("WantTalkUI","self")?.gameObject,state.waitingForScript || state.wantsToTalk);
+            var talkGuide=RefOf("WantTalkUI","_wantTalkImage")?.GetComponent<Image>();if(talkGuide && wantTalkNormal)talkGuide.sprite=RecoveredSprite(wantTalkNormal);
             Set(RefOf("StorySystemUI","self"),state.playing);Set(RefOf("StorySystemUI","_heroineNameObject"),main && !string.IsNullOrEmpty(state.speaker));
             Set(RefOf("StorySystemUI","_autoButton"),state.playing && !state.automaticDialogue);Set(RefOf("StorySystemUI","_skipButton"),state.playing && !state.automaticDialogue);
             Write("StorySystemUI","_heroineNameTextLocalizationBehavior",state.speaker);Write("StorySystemUI","_auteText",state.autoRead?"Auto ON":"Auto");Write("StorySystemUI","_skipText","Skip");

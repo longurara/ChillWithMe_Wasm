@@ -54,6 +54,8 @@ namespace Hlc.ChillPrototype
         public string requestedState;
         public int requestedMotion = -1;
         bool motionEntered, motionCompleted;
+        int motionStartHash,motionTypeAtRequest;
+        float motionRequestedAt;
         public bool MotionCompleted => motionCompleted;
         float lookWeight, lookTargetWeight, lookInitial, lookDuration, lookElapsed;
         int lookEase;
@@ -66,6 +68,7 @@ namespace Hlc.ChillPrototype
                 var mapped=statePaths?.FirstOrDefault(s => s.motion == row.BodyMotion);
                 name=name ?? mapped?.name;
                 requestedState = mapped?.path ?? statePaths?.FirstOrDefault(s => s.name == name)?.path ?? name; requestedMotion = row.BodyMotion;
+                motionStartHash=animator.GetCurrentAnimatorStateInfo(0).fullPathHash;motionTypeAtRequest=animator.GetInteger("MotionType");motionRequestedAt=Time.realtimeSinceStartup;
                 motionEntered=motionCompleted=false;
                 if (player.bones) player.bones.ResetDynamics();
                 if (!string.IsNullOrEmpty(name)) player.deskObjects.PrepareMotion(name);
@@ -104,6 +107,16 @@ namespace Hlc.ChillPrototype
             bool next=animator.IsInTransition(0) && animator.GetNextAnimatorStateInfo(0).IsName(requestedState);
             if (current || next) motionEntered=true;
             if (current && state.normalizedTime >= 1 || motionEntered && !current && !next) motionCompleted=true;
+            // Native sub-state machines can enter their loop without visiting the
+            // exported motion's named entry (for example Movie/Tea/Sofa). Match
+            // the active sibling loop, while excluding a previous unrelated
+            // loop or a transition that has not begun yet.
+            if(!motionCompleted && !animator.IsInTransition(0) && state.loop && state.normalizedTime>=1 && !string.IsNullOrEmpty(requestedState))
+            {
+                int separator=requestedState.LastIndexOf('.');string parent=separator<0?"":requestedState.Substring(0,separator+1);
+                bool related=!string.IsNullOrEmpty(parent) && statePaths.Any(s=>s.path.StartsWith(parent,StringComparison.Ordinal) && state.fullPathHash==Animator.StringToHash(s.path));
+                if(related && (state.fullPathHash!=motionStartHash || motionTypeAtRequest==requestedMotion && Time.realtimeSinceStartup-motionRequestedAt>.25f))motionCompleted=true;
+            }
         }
         public void ApplyLookIK()
         {

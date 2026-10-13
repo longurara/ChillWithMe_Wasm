@@ -13,6 +13,8 @@ namespace Hlc.ChillPrototype
         double nextAction,nextVariant,nextSelfTalk,nextLeave,nextLeaveLottery,nextWild,clickCooldown;
         int breakMode=-1,selfTalkCount,previousMode=-1;
         bool previousRest,autonomyInstalled;
+        float sleepiness;
+        string breakBaseMotion="";
         Coroutine autonomousSequence;
         readonly List<int> breakBag=new List<int>(),workBag=new List<int>();
         readonly Dictionary<int,List<string>> reactionBags=new Dictionary<int,List<string>>();
@@ -32,7 +34,7 @@ namespace Hlc.ChillPrototype
         public void ResetAutonomy()
         {
             if(autonomousSequence!=null){StopCoroutine(autonomousSequence);autonomousSequence=null;}
-            autonomyInstalled=false;previousMode=-1;breakMode=-1;nextAction=nextVariant=0;weightGroup="";
+            autonomyInstalled=false;previousMode=-1;breakMode=-1;nextAction=nextVariant=0;weightGroup="";invitedChapter=null;
             if(player && player.deskObjects)player.deskObjects.restoring=false;
         }
         void ScheduleSelfTalk()=>nextSelfTalk=Now+Delay("_talkLotteryDelaySecondsMin","_talkLotteryDelaySecondsMax",30,160);
@@ -73,7 +75,10 @@ namespace Hlc.ChillPrototype
             }
             if(Resting)
             {
+                if(WantsToTalk){if(NextInvitedChapter()!=null)return;invitedChapter=null;SetNativeMotion(CurrentBaseMotion);}
+                if(breakMode!=4 && presentation.MotionCompleted && InviteNextChapter())return;
                 if(Now>=nextAction){SelectBreak();return;}
+                if(breakMode==4){UpdateSleep();return;}
                 if(Settings.selfTalk && Workspace.profileStatus!="2" && breakMode!=4 && Now>=nextSelfTalk)
                 {ScheduleSelfTalk();if(selfTalkCount<Policy("_oneBreakSelfTalkMax",4) && Chance(Policy("_selfTalkProbability",75))){if(StartReaction(Chance(50)?21:2000+TimeOfDayIndex()))selfTalkCount++;}}
             }
@@ -82,10 +87,12 @@ namespace Hlc.ChillPrototype
                 nextAction=Now+Policy("_changeWorkLayoutDelaySeconds",300);
                 if(Chance(Policy("_changeWorkLayoutRatio",50)))
                 {
+                    workBag.RemoveAll(i=>i==player.SelectedState);
                     if(workBag.Count==0)workBag.AddRange(Enumerable.Range(0,3).Where(i=>i!=player.SelectedState).OrderBy(_=>UnityEngine.Random.value));
                     int selected=workBag[0];workBag.RemoveAt(0);autonomousSequence=StartCoroutine(ChangeWork(selected));return;
                 }
             }
+            if(Playing)return;
             if(Now>=nextVariant)
             {
                 nextVariant=Now+VariantDelay();
@@ -102,11 +109,12 @@ namespace Hlc.ChillPrototype
         int TimeOfDayIndex(){int h=DateTime.Now.Hour;return h>5&&h<11?0:h>=11&&h<=16?1:h>=17&&h<=19?2:3;}
         bool StartReaction(int scenario)
         {
+            if(Playing || autonomousSequence!=null)return false;
             if(!reactionBags.TryGetValue(scenario,out var bag))reactionBags[scenario]=bag=new List<string>();
             if(bag.Count==0)bag.AddRange(data.groups.Where(g=>g.Scenario==scenario&&Unlocked(g)&&chapters.ContainsKey(g.ID)).OrderBy(_=>UnityEngine.Random.value).Select(g=>g.ID));
             if(bag.Count==0)return false;string id=bag[0];bag.RemoveAt(0);
-            if(Playing)return false;var item=data.groups.First(g=>g.ID==id);
-            suspendedChapter=save.chapter;suspendedCursor=save.cursor;suspendedScene=new List<int>(save.sceneHistory);
+            var item=data.groups.First(g=>g.ID==id);
+            suspendedChapter=save.chapter;suspendedCursor=save.cursor;suspendedScene=new List<int>(save.sceneHistory);suspendedStoryLive=save.storyLive;
             Begin(item,false,true);return true;
         }
         void TrySatoneClick()
@@ -120,34 +128,53 @@ namespace Hlc.ChillPrototype
             if(!hit)return;TutorialSignal("satone");if(Playing)return;
             clickCooldown=Now+Policy("PlayerStatusReactionData.CooldownSeconds",5);
             if(autonomousSequence!=null)return;
-            if(Resting && breakMode==4){autonomousSequence=StartCoroutine(WakeAndReact());return;}
+            if(AcceptStoryInvitation())return;
+            if(Resting && breakMode==4 && AutonomyState=="BreakBase005_Sleep"){autonomousSequence=StartCoroutine(WakeAndReact());return;}
             StartReaction(RestingScenario());
         }
         int RestingScenario()=>Chance(50)?(Resting?10:9):(Resting?550:500)+TimeOfDayIndex();
         public void SetResting(bool value){Settings.resting=value;ResetAutonomy();SaveNow();}
         void SelectBreak()
         {
-            if(breakBag.Count==0)breakBag.AddRange((breakMode<0?new[]{0,1,3}:Enumerable.Range(0,6)).Where(i=>i!=breakMode&&(i!=4||Chance(Policy("_breakSleepOccurrenceProbability",10)))).OrderBy(_=>UnityEngine.Random.value));
-            breakMode=breakBag[0];breakBag.RemoveAt(0);player.StopAnimationAudio();SetNativeMotion(breakBases[breakMode]);
-            if(breakMode==2)SetNativeMotion(Chance(50)?"BreakBase003_ListenMusicLow":"BreakBase003_ListenMusicHigh");
+            breakBag.RemoveAll(i=>!BreakEligible(i));
+            if(breakBag.Count==0)breakBag.AddRange((breakMode<0?new[]{0,1,3}:Enumerable.Range(0,6)).Where(i=>BreakEligible(i)&&(i!=4||Chance(Policy("_breakSleepOccurrenceProbability",10)))).OrderBy(_=>UnityEngine.Random.value));
+            breakMode=breakBag[0];breakBag.RemoveAt(0);player.StopAnimationAudio();weightGroup="";
+            breakBaseMotion=breakMode==2?(Chance(50)?"BreakBase003_ListenMusicLow":"BreakBase003_ListenMusicHigh"):breakBases[breakMode];SetNativeMotion(breakBaseMotion);
             nextAction=Now+60*Delay("_changeBreak"+durationKeys[breakMode]+"TimeMinutesMin","_changeBreak"+durationKeys[breakMode]+"TimeMinutesMax",1,3);
             nextVariant=Now+VariantDelay();selfTalkCount=0;
-            if(breakMode==4)autonomousSequence=StartCoroutine(Sleep());
+            sleepiness=0;
+        }
+        bool BreakEligible(int mode)=>mode>=0 && mode<6 && mode!=breakMode && (mode!=5 || player.SelectedState==2);
+        string CurrentBaseMotion=>Resting?(breakMode==4 && AutonomyState=="BreakBase005_Sleep"?"BreakBase005_Sleep":string.IsNullOrEmpty(breakBaseMotion)?breakBases[Mathf.Max(0,breakMode)]:breakBaseMotion):workBases[player.SelectedState];
+        void UpdateSleep()
+        {
+            if(Now<nextVariant || !presentation.MotionCompleted)return;
+            nextVariant=Now+Delay("HeroineStateBreakSleep.BaseDelaySecondsMin","HeroineStateBreakSleep.BaseDelaySecondsMax",1,3);
+            if(AutonomyState=="BreakBase005_Sleep")
+            {
+                sleepiness=Mathf.Max(0,sleepiness-Policy("HeroineStateBreakSleep.SleepinessSubtractAmount",5));
+                if(sleepiness<Policy("HeroineStateBreakSleep.CanSleepEndProbabilityMin",50) && Chance(Policy("HeroineStateBreakSleep.SleepEndProbability",30)))SelectBreak();
+            }
+            else
+            {
+                sleepiness=Mathf.Min(100,sleepiness+Policy("HeroineStateBreakSleep.SleepinessAddAmount",5));
+                if(sleepiness>=100)SetNativeMotion("BreakBase005_Sleep");
+            }
         }
         IEnumerator WaitNative(float limit=30)
         {double end=Now+limit;yield return null;while(!Playing&&!presentation.MotionCompleted&&Now<end)yield return null;}
         IEnumerator Variant(string name)
         {
             if(SetNativeMotion(name))yield return WaitNative();
-            if(!Playing)SetNativeMotion(Resting?breakBases[Mathf.Max(0,breakMode)]:workBases[player.SelectedState]);autonomousSequence=null;
+            if(!Playing)SetNativeMotion(CurrentBaseMotion);autonomousSequence=null;
         }
-        IEnumerator Sleep()
-        {yield return new WaitForSecondsRealtime(2);if(!Playing)SetNativeMotion("BreakBase005_Sleep");autonomousSequence=null;}
         IEnumerator WakeAndReact()
         {AwardAchievement("WAKE_UP_HEROINE");SetNativeMotion("BreakBase005_JumpUp");yield return WaitNative(10);SetNativeMotion("BreakBase005_JumpUp_End");yield return WaitNative(10);autonomousSequence=null;breakMode=0;SetNativeMotion(breakBases[0]);StartReaction(10);}
         IEnumerator WildAction()
         {
-            var group=Features.actions.Where(a=>a.name.StartsWith("HeroineStateWild")).SelectMany(a=>a.motions).Distinct().Where(m=>presentation.statePaths.Any(s=>data.motions.Any(d=>d.name==m&&d.value==s.motion))).ToArray();if(group.Length==0){autonomousSequence=null;yield break;}
+            // NextActionSelector's ordinary lottery uses states 4..6. Window and
+            // musicbox actions have separate object readiness rules in the source.
+            var group=Features.actions.Where(a=>a.name=="HeroineStateWildStretchFullBody" || a.name=="HeroineStateWildStretchShoulder" || a.name=="HeroineStateWildTea").SelectMany(a=>a.motions).Distinct().Where(m=>presentation.statePaths.Any(s=>data.motions.Any(d=>d.name==m&&d.value==s.motion))).ToArray();if(group.Length==0){autonomousSequence=null;yield break;}
             yield return Variant(group[UnityEngine.Random.Range(0,group.Length)]);
         }
         IEnumerator ChangeWork(int selected)
@@ -163,7 +190,9 @@ namespace Hlc.ChillPrototype
             bool cup=kitchen&&Chance(Policy("LeaveChairData.PrepareColdDrinkLeaveProbability",50));
             SetNativeMotion(kitchen?(cup?"Wild003_LeaveChair_Cup":"Wild003_LeaveChair_Normal"):"Wild003_LeaveChair_Sofa");
             yield return WaitNative(30);
-            yield return new WaitForSecondsRealtime((float)Delay("LeaveChairData."+(kitchen?"Kitchen":"Sofa")+"StaySecondsMin","LeaveChairData."+(kitchen?"Kitchen":"Sofa")+"StaySecondsMax",kitchen?15:90,kitchen?25:180));
+            float stay=(float)Delay("LeaveChairData."+(kitchen?"Kitchen":"Sofa")+"StaySecondsMin","LeaveChairData."+(kitchen?"Kitchen":"Sofa")+"StaySecondsMax",kitchen?15:90,kitchen?25:180);
+            if(kitchen)yield return new WaitForSecondsRealtime(stay);else yield return SofaStay(stay);
+            if(Playing){autonomousSequence=null;yield break;}
             bool snack=kitchen&&!cup&&Chance(Policy("LeaveChairData."+(TimeOfDayIndex()==1?"NoonSnackTakeProbability":"SnackTakeProbability"),60));
             if(snack)
             {
@@ -172,7 +201,7 @@ namespace Hlc.ChillPrototype
                 if(!StartReaction(snackKind==2?2601:2600))SetNativeMotion("Base001");yield break;
             }
             SetNativeMotion("Base001");yield return WaitNative(30);
-            if(!Playing){player.deskObjects.Select(player.SelectedState);SetNativeMotion(Resting?breakBases[Mathf.Max(0,breakMode)]:workBases[player.SelectedState]);}
+            if(!Playing){player.deskObjects.Select(player.SelectedState);SetNativeMotion(CurrentBaseMotion);}
             nextLeave=Now+60*Delay("LeaveChairData."+(Resting?"Break":"Work")+"MinutesMin","LeaveChairData."+(Resting?"Break":"Work")+"MinutesMax",80,120);nextLeaveLottery=nextLeave;autonomousSequence=null;
         }
     }

@@ -42,6 +42,7 @@ public static class ChillNativeUIBuild
         ui.tutorialSprites=new Sprite[28];int tutorialIndex=0;
         foreach(string page in new[]{"screen","pomodoroTimer","levelAndStory","newEnvironment"})foreach(string locale in new[]{"EN","JP","SC","TC","PR","KR","RU"})ui.tutorialSprites[tutorialIndex++]=Sprite("TutorialView","_"+page+"Sprite"+locale);
         ui.countupPlay=Sprite("CountupTimerStateView","_playButtonSprite");ui.countupPause=Sprite("CountupTimerStateView","_pauseButtonSprite");
+        ui.wantTalkNormal=Sprite("WantTalkUI","_wantTalkNormalSprite");
         const string fontPath="Assets/Prototype/Fonts/NativeUIFallback.asset";
         ui.fallbackFont=AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(fontPath);
         if(!ui.fallbackFont)

@@ -10,7 +10,7 @@ namespace Hlc.ChillPrototype
     [Serializable] public class ChillStoryUiState
     {
         public bool ready,playing,typing,loadingAudio,autoRead,unlock,timerRunning,timerActive,breakTime,saveAllowed,countupRunning,countupActive;
-        public bool mainStoryText,automaticDialogue;
+        public bool mainStoryText,automaticDialogue,waitingForScript,wantsToTalk;
         public string status,language,chapter,title,speaker,text,note,timerText,workedText,countupText;
         public int level,completed,workMinutes,breakMinutes,rounds,page,chapterCount,kind,loopCount,timerMode;
         public ChillTimerPreset[] timerPresets;

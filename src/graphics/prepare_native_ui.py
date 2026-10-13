@@ -21,6 +21,7 @@ scripts={meta_guid(p):p.stem for p in (source/'Scripts/Assembly-CSharp').rglob('
 selected={'TutorialView','TimerParentUI','CountupTimerUI','CountupTimerStateView','PomodoroPresetUI','PomodoroPresetInstance','PlayerLevelUIService','AddExpMeterUI','MusicUI','MusicPlayListView','MusicVolumeUI','StorySelectUI','StorySystemUI','SentenceSelectionButtonsUI','NoteUI','CurrentPageUI','TodoListUI','PomodoroTimerUI','PomodoroTimerStateView','EnvironmentUI','SettingUI','DraggableUI','FacilityChangeStatus','FacilityHideUI'}
 selected.update({'HabitTrackerUI','HabitListUI','HabitItemUI','CalendarUI','CalenderCoreUI','CalendarCoreUI','TotalWorkStatisticsUI','StatisticsCoreUI','PlayerProfileView','HeroineProfileView','TimerSoundSettingView','SelectPageListUI','ProfileIconSettingView','SpecialView','SpecialSelectListUI','FacilityDecoration'})
 selected.update({'DecorationListUI','DecorationPresetUI','HabitItemDateUI','HabitWeekLabelUI','ProfileView'})
+selected.add('WantTalkUI')
 selected.update({'FacilityProfile','StatusChangeView','ProfilePresetIconButton','ItemSkinSelectorUI','ItemSkinButton','PurchasePopover','BirthdaySettingDialog','ProfilePresetIconButtonView','PlayerStatusSelectButtonView','HabitDateLabelUI'})
 bindings=[]
 for t,i,b in blocks:

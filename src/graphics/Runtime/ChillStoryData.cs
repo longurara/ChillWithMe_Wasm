@@ -41,6 +41,7 @@ namespace Hlc.ChillPrototype
         public int version = 1, level = 1, cursor, deskMode, timeMode, windowMode;
         public string language = "En", chapter = "", note = "";
         public bool autoRead, previewUnlock;
+        public bool storyLive;
         public List<string> completed = new List<string>();
         public List<float> usedChoices = new List<float>();
         public List<int> sceneHistory = new List<int>();

@@ -17,6 +17,7 @@ namespace Hlc.ChillPrototype
             if (name == "OnChangeHeroineLookCamera" && presentation) presentation.cameras.Switch(item.intParameter);
             if (presentation && name.StartsWith("AdjustWhen")) presentation.AdjustSleeve(name);
             if (story && Application.isPlaying) story.MotionSound(name);
+            if(story && name=="PlayPomodoroVoice")story.OnPomodoroVoiceEvent(item.intParameter);
         }
         void OnAnimatorIK(int layer) { if (presentation && layer == 0) presentation.ApplyLookIK(); }
     }

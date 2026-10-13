@@ -23,7 +23,7 @@
     }
     createUnityInstance(document.getElementById('unity-canvas'),{
       dataUrl:'Build/WebPlayer.data',frameworkUrl:'Build/WebPlayer.framework.js',codeUrl:'Build/WebPlayer.wasm',streamingAssetsUrl:'StreamingAssets',
-      companyName:'HLC',productName:'Chill Graphics Prototype',productVersion:'1.19.0',devicePixelRatio:Math.min(window.devicePixelRatio||1,2),showBanner:showWarning
+      companyName:'HLC',productName:'Chill Graphics Prototype',productVersion:'1.19.1',devicePixelRatio:Math.min(window.devicePixelRatio||1,2),showBanner:showWarning
     },progress=>{document.getElementById('unity-progress').value=progress;document.getElementById('load-percent').textContent=Math.floor(progress*100)+'%';}).then(instance=>{
       window.chillUnityInstance=instance;
       document.getElementById('unity-loading-bar').hidden=true;

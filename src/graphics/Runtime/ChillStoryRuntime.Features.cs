@@ -32,7 +32,7 @@ namespace Hlc.ChillPrototype
         readonly List<string> shuffleBag=new List<string>();
         readonly Dictionary<int,AudioSource> ambienceSources=new Dictionary<int,AudioSource>();
         readonly Dictionary<int,int> ambienceTokens=new Dictionary<int,int>();
-        bool automaticDialogue,talkLog=true;
+        bool automaticDialogue,talkLog=true,suspendedStoryLive;
         int tutorialCommand;
         string suspendedChapter="";int suspendedCursor;List<int> suspendedScene;
 
@@ -258,15 +258,15 @@ namespace Hlc.ChillPrototype
         }
         public bool StartAutomaticScenario(int scenario)
         {
-            if(!FeatureReady || Playing)return false;
+            if(!FeatureReady || Playing || autonomousSequence!=null)return false;
             var list=data.groups.Where(g=>g.Scenario==scenario&&Unlocked(g)&&chapters.ContainsKey(g.ID)).ToArray();if(list.Length==0)return false;
             var unseen=list.Where(g=>!save.completed.Contains(g.ID)).ToArray();if(unseen.Length>0)list=unseen;
             var selected=list[UnityEngine.Random.Range(0,list.Length)];
-            suspendedChapter=save.chapter;suspendedCursor=save.cursor;suspendedScene=new List<int>(save.sceneHistory);
+            suspendedChapter=save.chapter;suspendedCursor=save.cursor;suspendedScene=new List<int>(save.sceneHistory);suspendedStoryLive=save.storyLive;
             Begin(selected,false,true);return true;
         }
         void RestoreAutomaticResume()
-        {if(!automaticDialogue)return;automaticDialogue=false;save.chapter=suspendedChapter;save.cursor=suspendedCursor;save.sceneHistory=suspendedScene??new List<int>();suspendedChapter="";talkLog=true;ResetAutonomy();}
+        {if(!automaticDialogue)return;automaticDialogue=false;save.chapter=suspendedChapter;save.cursor=suspendedCursor;save.sceneHistory=suspendedScene??new List<int>();save.storyLive=suspendedStoryLive;suspendedChapter="";talkLog=!save.storyLive;ResetAutonomy();}
         bool TryCalendarEvent()
         {
             var date=DateTime.Now;
@@ -285,7 +285,7 @@ namespace Hlc.ChillPrototype
         public void Tutorial(){if(!Playing){var item=data.groups.FirstOrDefault(g=>g.Scenario==18);if(item!=null)Begin(item,false);}}
         public int TutorialCommand=>tutorialCommand;
         public void TutorialSignal(string action)
-        {if((tutorialCommand==14||tutorialCommand==50)&&action=="satone" || tutorialCommand==16&&action=="timer-toggle" || tutorialCommand==17&&action=="todos" || tutorialCommand==18&&action=="notes" || tutorialCommand==19&&action=="environment")next=true;}
+        {if(tutorialCommand==50 && action=="satone")ReadNextForScript();else if(tutorialCommand==14&&action=="satone" || tutorialCommand==16&&action=="timer-toggle" || tutorialCommand==17&&action=="todos" || tutorialCommand==18&&action=="notes" || tutorialCommand==19&&action=="environment")next=true;}
         IEnumerator RunTutorial(int command)
         {
             tutorialCommand=command;next=false;typing=false;message="";shownChars=0;
