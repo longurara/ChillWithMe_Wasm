@@ -83,6 +83,12 @@ namespace Hlc.ChillPrototype
             if (story) story.StopMotionSounds();
             if (library) library.RestoreCharacter();
             selected = index;
+            if(story && story.TryPlayRoomMotion(index))
+            {
+                if(deskObjects)deskObjects.SelectSmooth(index,.25f);
+                character.SetBool("Enable_Talk",false);
+                return;
+            }
             if (bones) bones.ResetDynamics();
             if (deskObjects) deskObjects.Select(index);
             if (character && states != null && states.Length > index)

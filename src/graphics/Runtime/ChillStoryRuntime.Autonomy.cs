@@ -41,20 +41,21 @@ namespace Hlc.ChillPrototype
             if(player && player.deskObjects)player.deskObjects.restoring=false;
         }
         void ScheduleSelfTalk()=>nextSelfTalk=Now+Delay("_talkLotteryDelaySecondsMin","_talkLotteryDelaySecondsMax",30,160);
+        public bool TryPlayRoomMotion(int mode)=>data!=null&&presentation&&storyController&&mode>=0&&mode<workBases.Length&&SetNativeMotion(workBases[mode]);
         bool SetNativeMotion(string name)
         {
             var motion=data.motions.FirstOrDefault(m=>m.name==name);
             if(motion==null || !presentation.statePaths.Any(s=>s.motion==motion.value))return false;
             if(player.character.runtimeAnimatorController!=storyController){player.character.runtimeAnimatorController=storyController;player.character.Rebind();}
             player.StopAnimationAudio();
-            presentation.Motion(new ChillSentence{BodyMotion=motion.value,FacialMotion=0,LookScale=0},name,false);
+            presentation.Motion(new ChillSentence{BodyMotion=motion.value,FacialMotion=0,LookScale=0,LookSpeedSeconds=.25f},name,false);
             AutonomyState=name;return true;
         }
         void InstallAutonomy()
         {
             if(!storyController)return;
-            player.character.runtimeAnimatorController=storyController;player.character.Rebind();
-            player.deskObjects.Select(player.SelectedState);autonomyInstalled=true;
+            if(player.character.runtimeAnimatorController!=storyController){player.character.runtimeAnimatorController=storyController;player.character.Rebind();}
+            player.deskObjects.SelectSmooth(player.SelectedState,.25f);autonomyInstalled=true;
             previousMode=player.SelectedState;previousRest=Resting;
             if(Resting)SelectBreak();else SetNativeMotion(workBases[player.SelectedState]);
             nextAction=Now+Policy("_changeWorkLayoutDelaySeconds",300);
@@ -66,7 +67,7 @@ namespace Hlc.ChillPrototype
             if(pointer)TrySatoneClick();
             if(Playing)return;
             if(!Settings.autonomy)
-            {if(autonomyInstalled){ResetAutonomy();player.character.runtimeAnimatorController=deskController;player.character.Rebind();player.PlayState(save.deskMode);}return;}
+            {if(autonomyInstalled){ResetAutonomy();player.PlayState(save.deskMode);}return;}
             if(!autonomyInstalled || previousMode!=player.SelectedState || previousRest!=Resting)
             {ResetAutonomy();InstallAutonomy();selfTalkCount=0;ScheduleSelfTalk();}
             if(autonomousSequence!=null)return;

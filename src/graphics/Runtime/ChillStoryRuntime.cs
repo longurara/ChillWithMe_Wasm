@@ -100,9 +100,9 @@ namespace Hlc.ChillPrototype
             return string.IsNullOrEmpty(value) ? text.En ?? text.Ja ?? "" : value;
         }
 
-        void ApplyPreferences()
+        void ApplyPreferences(bool applyMotion=true)
         {
-            player.PlayState(save.deskMode);
+            if(applyMotion)player.PlayState(save.deskMode);
             player.environment.SelectTime(save.timeMode);
             player.environment.SelectEnvironment(save.windowMode);
             if(presentation&&presentation.cameras)presentation.cameras.SelectRoomView(Settings.cameraView);
@@ -174,15 +174,13 @@ namespace Hlc.ChillPrototype
             voice.pitch = 1; voiceDefect = 0;cachedStorySound=1;
             if (effects) effects.ResetEffects();
             if (decorations) decorations.Restore();
-            if (presentation) presentation.ResetPresentation();
+            if (presentation && wasPlaying) presentation.ResetPresentation(true);
             Replaying=false;
             player.deskObjects.restoring=false;
             player.library.ReleaseExternal("story-voice"); player.library.ReleaseExternal("story-ambient"); player.library.ReleaseExternal("story-sound");
-            player.character.runtimeAnimatorController = deskController;
-            player.character.Rebind(); player.PlayState(save.deskMode);
             chapter = null; current = null; loadingAudio = false; typing = false;
             GetComponent<ChillNativeUI>()?.EndTutorialPresentation();
-            ApplyPreferences();
+            ApplyPreferences(false);
             RestoreRoom();
             if (wasPlaying)
             {
@@ -200,6 +198,15 @@ namespace Hlc.ChillPrototype
                 if(finishSnack && Application.isPlaying && !VerificationOnly)autonomousSequence=StartCoroutine(FinishSnackActivity());
                 else SetNativeMotion(activityBase);
             }
+            else if(wasPlaying)
+            {
+                if(Settings.autonomy&&FeatureReady)InstallAutonomy();
+                else player.PlayState(save.deskMode);
+            }
+            // HeroineService has an explicit Play path for story boundaries.
+            // Blend into that same destination without resetting the Animator,
+            // including script-only poses with no ordinary exit to work.
+            if(presentation&&wasPlaying&&!finishSnack)presentation.BlendToRequested(.25f);
         }
 
         void Begin(ChillChapter selected, bool resume,bool ambientDialogue=false,bool fromTalkLog=true)

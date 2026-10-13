@@ -57,11 +57,19 @@ namespace Hlc.ChillPrototype
         int motionStartHash,motionTypeAtRequest;
         float motionRequestedAt;
         public bool MotionCompleted => motionCompleted;
+        public void BlendToRequested(float seconds)
+        {
+            var animator=player.character;
+            if(requestedMotion>=0&&!string.IsNullOrEmpty(requestedState)&&animator.HasState(0,Animator.StringToHash(requestedState)))
+                animator.CrossFadeInFixedTime(requestedState,seconds,0,0);
+        }
         float lookWeight, lookTargetWeight, lookInitial, lookDuration, lookElapsed;
         int lookEase;
+        bool retireManualLook;
 
         public void Motion(ChillSentence row, string name, bool immediate = false)
         {
+            if(player.story&&player.story.Playing)retireManualLook=false;
             var animator = player.character;
             if (row.BodyMotion != -1)
             {
@@ -70,7 +78,7 @@ namespace Hlc.ChillPrototype
                 requestedState = mapped?.path ?? statePaths?.FirstOrDefault(s => s.name == name)?.path ?? name; requestedMotion = row.BodyMotion;
                 motionStartHash=animator.GetCurrentAnimatorStateInfo(0).fullPathHash;motionTypeAtRequest=animator.GetInteger("MotionType");motionRequestedAt=Time.realtimeSinceStartup;
                 motionEntered=motionCompleted=false;
-                if (player.bones) player.bones.ResetDynamics();
+                if (immediate && player.bones) player.bones.ResetDynamics();
                 if (!string.IsNullOrEmpty(name)) player.deskObjects.PrepareMotion(name);
                 foreach (var p in animator.parameters)
                     if (p.type == AnimatorControllerParameterType.Trigger) animator.ResetTrigger(p.name);
@@ -95,8 +103,13 @@ namespace Hlc.ChillPrototype
         void Update()
         {
             TrackMotion();
+            AdvanceLook(Time.unscaledDeltaTime);
+        }
+        public void AdvanceLook(float seconds)
+        {
             if (lookElapsed < lookDuration)
-            { lookElapsed += Time.unscaledDeltaTime; SetLook(Mathf.Lerp(lookInitial,lookTargetWeight,ChillEase.Evaluate(lookElapsed/lookDuration,lookEase))); }
+            { lookElapsed += Mathf.Max(0,seconds); SetLook(Mathf.Lerp(lookInitial,lookTargetWeight,ChillEase.Evaluate(lookElapsed/lookDuration,lookEase))); }
+            if(retireManualLook&&lookElapsed>=lookDuration){manualLook=false;retireManualLook=false;}
         }
         public void TrackMotion()
         {
@@ -137,13 +150,15 @@ namespace Hlc.ChillPrototype
             face.SetBlendShapeWeight(37,Mathf.InverseLerp(0,3,vertical)*100);
             face.SetBlendShapeWeight(38,Mathf.InverseLerp(0,11,-vertical)*100);
         }
-        public void ResetPresentation()
+        public void ResetPresentation(bool smooth=false)
         {
-            StopAllCoroutines(); manualLook = false; lookWeight = lookDuration = lookElapsed = 0; requestedMotion = -1; requestedState = "";
+            StopAllCoroutines();requestedMotion = -1; requestedState = "";
+            if(smooth){retireManualLook=manualLook;lookInitial=manualLook?lookWeight:player.character.GetFloat("LookScale");lookTargetWeight=0;lookDuration=.25f;lookElapsed=0;}
+            else{manualLook=retireManualLook=false;lookWeight=lookDuration=lookElapsed=0;}
             motionEntered=motionCompleted=false;
-            if (player.character) player.character.SetFloat("LookScale",0);
+            if (!smooth && player.character) player.character.SetFloat("LookScale",0);
             if (cameras) cameras.ResetCamera();
-            if (player.bones) player.bones.ResetDynamics();
+            if (!smooth && player.bones) player.bones.ResetDynamics();
         }
         public void AdjustSleeve(string action)
         {

@@ -19,6 +19,35 @@ namespace Hlc.ChillPrototype
         struct Pose { public Transform bone; public Vector3 position,scale; public Quaternion rotation; }
         readonly List<Pose> defaults = new List<Pose>();
         readonly HashSet<Transform> captured = new HashSet<Transform>();
+        sealed class ReturnPose {public Pose from,target;public bool applied;}
+        readonly List<ReturnPose> returning=new List<ReturnPose>();
+        float returnElapsed,returnDuration;
+        static Pose Snapshot(Transform t)=>new Pose{bone=t,position=t.localPosition,rotation=t.localRotation,scale=t.localScale};
+        static void Apply(Pose p){if(p.bone){p.bone.localPosition=p.position;p.bone.localRotation=p.rotation;p.bone.localScale=p.scale;}}
+        void RestoreReturnTargets(){foreach(var item in returning)if(item.applied){Apply(item.target);item.applied=false;}}
+        void Update(){RestoreReturnTargets();}
+        void LateUpdate(){BlendReturn(Time.deltaTime);}
+        public void BlendReturn(float seconds)
+        {
+            if(returning.Count==0)return;returnElapsed+=Mathf.Max(0,seconds);float t=Mathf.SmoothStep(0,1,Mathf.Clamp01(returnElapsed/returnDuration));
+            foreach(var item in returning)
+            {
+                var bone=item.from.bone;if(!bone)continue;if(!item.applied)item.target=Snapshot(bone);
+                bone.localPosition=Vector3.Lerp(item.from.position,item.target.position,t);bone.localRotation=Quaternion.Slerp(item.from.rotation,item.target.rotation,t);bone.localScale=Vector3.Lerp(item.from.scale,item.target.scale,t);item.applied=true;
+            }
+            if(returnElapsed>=returnDuration){RestoreReturnTargets();returning.Clear();}
+        }
+        public void SelectSmooth(int mode,float seconds)
+        {
+            // Keep each visible prop pose while Select establishes its new desk
+            // state; blend into the animator's live target over the return.
+            CaptureDefaults();var before=new Dictionary<Transform,Pose>();
+            foreach(var pose in defaults)if(pose.bone)before[pose.bone]=Snapshot(pose.bone);
+            foreach(var animator in new[]{deskObjectAnimator,workBookAnimator})if(animator)foreach(var t in animator.GetComponentsInChildren<Transform>(true))before[t]=Snapshot(t);
+            Select(mode);if(seconds<=0)return;
+            foreach(var pose in before.Values)if(pose.bone){var item=new ReturnPose{from=pose,target=Snapshot(pose.bone),applied=true};returning.Add(item);Apply(pose);}
+            returnElapsed=0;returnDuration=seconds;
+        }
         bool windowOpen;
         public bool WindowOpen=>windowOpen;
         public bool restoring;
@@ -121,6 +150,7 @@ namespace Hlc.ChillPrototype
 
         public void Select(int mode)
         {
+            RestoreReturnTargets();returning.Clear();
             CaptureDefaults();
             foreach (var animator in new[] { chairAnimator,penAnimator,breakBookAnimator,musicboxAnimator }) if (animator) animator.enabled=false;
             foreach (var pose in defaults) if (pose.bone) { pose.bone.localPosition=pose.position; pose.bone.localRotation=pose.rotation; pose.bone.localScale=pose.scale; }
