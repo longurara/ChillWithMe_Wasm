@@ -122,8 +122,11 @@ public static class ChillNativeUIBuild
         foreach(string name in new[]{"AutoSettingButton","AutoButton"}){var auto=environmentRoot.Find("EnviromentOther/WeatherChangeButtons/"+name);if(auto)auto.gameObject.SetActive(false);}
         ui.clearEnvironmentButton=CopyButton(environmentRoot,"WebClearEnvironment","Sky only",Vector2.zero,new Vector2(200,45));
         var clear=(RectTransform)ui.clearEnvironmentButton.transform;clear.anchorMin=clear.anchorMax=new Vector2(.5f,0);clear.pivot=new Vector2(.5f,0);clear.anchoredPosition=new Vector2(0,15);
-        var root=ui.canvas.transform.Find("UI/ChangeOrderObjects");var note=root.Find("UI_FacilityNote");var history=root.Find("WebStoryHistory");
+        var root=ui.canvas.transform.Find("UI/ChangeOrderObjects");var note=root.Find("UI_FacilityNote");var history=ui.canvas.transform.Find("WebStoryHistory") ?? root.Find("WebStoryHistory");
         if(!history){history=UnityEngine.Object.Instantiate(note,root,false);history.name="WebStoryHistory";}
+        // Long stories hide ChangeOrderObjects in the source. Keep the web
+        // conversation history alongside dialogue so its button still works.
+        history.SetParent(ui.canvas.transform,false);
         ui.historyPanel=history.gameObject;history.gameObject.SetActive(false);
         var historyRect=(RectTransform)history;historyRect.anchorMin=historyRect.anchorMax=new Vector2(.5f,.5f);historyRect.pivot=new Vector2(.5f,.5f);historyRect.anchoredPosition=Vector2.zero;historyRect.sizeDelta=new Vector2(660,560);
         ui.historyCloseButton=history.Find("CloseButtonUI").GetComponent<Button>();

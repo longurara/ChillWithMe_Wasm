@@ -16,7 +16,7 @@ namespace Hlc.ChillPrototype
         [Serializable] public class Binding { public string script,path; public Ref[] refs; }
         [Serializable] public class Label {public string key,en,ja;}
         [Serializable] public class Interaction {public string path;public string[] hover,use,baseline;public float hoverAlpha,useAlpha,baseAlpha;public bool hideHoverOnUse;}
-        [Serializable] public class Configuration { public Binding[] bindings;public Label[] labels;public Interaction[] interactions; }
+        [Serializable] public class Configuration { public Binding[] bindings;public Label[] labels;public Interaction[] interactions;public string[] storyHiddenObjects; }
         public ChillGraphicsPlayer player;
         public Canvas canvas;
         public TextAsset configuration;
@@ -65,6 +65,7 @@ namespace Hlc.ChillPrototype
             foreach(var t in UnityEngine.Object.FindObjectsOfType<Transform>(true)) paths[PathOf(t)]=t;
             nativeUiRoot=canvas.transform.Find("UI");if(nativeUiRoot)nativeUiSibling=nativeUiRoot.GetSiblingIndex();
             var config=JsonUtility.FromJson<Configuration>(configuration.text);
+            InitializeStoryHud(config);
             FixSprites(canvas.gameObject);
             CleanEvents(canvas.gameObject);
             foreach(var binding in config.bindings) if(!bindings.ContainsKey(binding.script)) bindings[binding.script]=binding;
@@ -204,20 +205,20 @@ namespace Hlc.ChillPrototype
             if(pane==name){Close();return;}player.story.TutorialSignal(name);Close();pane=name;
             player.story.HistoryVisible=name=="history";
             string script=name=="music"?"MusicPlayListView":name=="notes"?"NoteUI":name=="todos"?"TodoListUI":name=="story"?"StorySelectUI":name=="environment"?"EnvironmentUI":name=="presets"?"PomodoroPresetUI":name=="calendar"?"CalendarUI":name=="habits"?"HabitTrackerUI":name=="statistics"?"TotalWorkStatisticsUI":name=="timer-audio"?"TimerSoundSettingView":name=="profile"?"PlayerProfileView":name=="heroine-profile"?"HeroineProfileView":name=="special"?"SpecialView":name=="decorations"?"DecorationListUI":"SettingUI";
-            openPane=name=="history"||name=="achievements"?historyPanel:RefOf(script,"self")?.gameObject;if(name=="timer-audio"&&timerAudioPane){Show(openPane,true);openPane=timerAudioPane;}Show(openPane,true);if(openPane){openPane.transform.SetAsLastSibling();if(nativeUiRoot)nativeUiRoot.SetAsLastSibling();}
+            openPane=name=="history"||name=="achievements"?historyPanel:RefOf(script,"self")?.gameObject;if(name=="timer-audio"&&timerAudioPane){Show(openPane,true);openPane=timerAudioPane;}Show(openPane,true);if(openPane){if(nativeUiRoot)nativeUiRoot.SetAsLastSibling();openPane.transform.SetAsLastSibling();}
             ShowWorkspacePane();
             if(name=="achievements"){if(historyTitle)historyTitle.SetTextWithoutNotify("Achievements");if(historyInput)historyInput.SetTextWithoutNotify(string.Join("\n\n",player.story.Workspace.achievements.Select(a=>"✓ "+a.Replace('_',' '))));}
             if(name=="story")storySignature=null;if(name=="todos")todoSignature=null;if(name=="music")musicSignature=null;Refresh(true);
         }
         public void Close(){if(skinPopup)Show(skinPopup.gameObject,false);Set(RefOf("ProfileIconSettingView","self"),false);Set(RefOf("StatusChangeView","self"),false);Show(openPane,false);openPane=null;pane="";player.story.HistoryVisible=false;SetLanguageOpen(false);if(nativeUiRoot)nativeUiRoot.SetSiblingIndex(nativeUiSibling);}
-        void ToggleHidden(){hidden=!hidden;Set(Find("Paremt/PCPlatform/Canvas/UI"),!hidden);if(reveal)reveal.SetActive(hidden);Close();}
+        void ToggleHidden(){if(StoryHudHidden)return;hidden=!hidden;Set(Find("Paremt/PCPlatform/Canvas/UI"),!hidden);if(reveal)reveal.SetActive(hidden);Close();}
         void NextMusic(int step)
         {if(player.story.Playing || player.library.Busy)return;var entries=player.library.MusicEntries;if(entries.Length==0)return;int current=Array.FindIndex(entries,t=>player.music.clip && t.name==player.music.clip.name);int index=shuffle?UnityEngine.Random.Range(0,entries.Length):(current+step+entries.Length)%entries.Length;player.library.SelectMusic(entries[index].guid);}
         void Update()
         {
             if(pane=="presets" && Input.GetMouseButtonUp(0) && openPane && !Contains(openPane.transform as RectTransform))Close();
             if(volumeSlider && volumeSlider.gameObject.activeInHierarchy && !Input.GetMouseButton(0) && !Contains(volumePadding) && !Contains(volumeButton))SetVolumePopup(false);
-            if(Input.GetKeyDown(KeyCode.Escape)){if(hidden)ToggleHidden();else Close();}
+            if(Input.GetKeyDown(KeyCode.Escape)){if(hidden && !StoryHudHidden)ToggleHidden();else Close();}
             if(Time.unscaledTime>=nextUpdate){nextUpdate=Time.unscaledTime+.2f;Refresh(false);}
         }
         static bool Contains(RectTransform rect)=>rect && RectTransformUtility.RectangleContainsScreenPoint(rect,Input.mousePosition);
@@ -364,6 +365,7 @@ namespace Hlc.ChillPrototype
         void Dialogue()
         {
             bool main=state.playing && state.mainStoryText;
+            ApplyStoryHud(main);
             Set(RefOf("StorySystemUI","_transparentButton"),state.playing && !state.waitingForScript);
             Show(RefOf("WantTalkUI","self")?.gameObject,state.waitingForScript || state.wantsToTalk);
             var talkGuide=RefOf("WantTalkUI","_wantTalkImage")?.GetComponent<Image>();if(talkGuide && wantTalkNormal)talkGuide.sprite=RecoveredSprite(wantTalkNormal);

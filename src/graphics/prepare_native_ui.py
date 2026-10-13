@@ -45,7 +45,13 @@ for t,i,b in blocks:
     raw=yaml.safe_load(b)['MonoBehaviour']
     interactions.append({'path':p,'hover':[reference(r) for r in raw.get('_mouseOverImage',[])],'use':[reference(r) for r in raw.get('_usingImage',[])],'baseline':[reference(r) for r in raw.get('_baseImage',[])],
         'hoverAlpha':raw.get('_mouseOverImageAlpha',1),'useAlpha':raw.get('_usingImageAlpha',1),'baseAlpha':raw.get('_baseImageAlpha',1),'hideHoverOnUse':bool(raw.get('_hideMouseOverOnUse',False))})
-config={'bindings':bindings,'interactions':interactions,'labels':[{'key':r['ID'],'en':r['En'],'ja':r['Ja']} for r in story['localizations'] if r['ID'].startswith('ui_') or r['ID']=='heroine_name']}
+story_hidden=[]
+for t,i,b in blocks:
+    script=re.search(r'm_Script: .*guid: ([a-f0-9]+)',b)
+    if t==114 and script and scripts.get(script.group(1))=='UIShowManagerForPC':
+        story_hidden.extend(reference(r) for r in yaml.safe_load(b)['MonoBehaviour'].get('_deactivationUIObjectsForStoryPlay',[]))
+if not story_hidden or any(not p for p in story_hidden):raise RuntimeError('Source story HUD references are missing')
+config={'bindings':bindings,'interactions':interactions,'storyHiddenObjects':story_hidden,'labels':[{'key':r['ID'],'en':r['En'],'ja':r['Ja']} for r in story['localizations'] if r['ID'].startswith('ui_') or r['ID']=='heroine_name']}
 (ROOT/'UnityProject/Assets/Prototype/native-ui.json').write_text(json.dumps(config,ensure_ascii=False,indent=2),encoding='utf-8')
-(ROOT/'research/native-ui-binding-report.json').write_text(json.dumps({'controllers':len(bindings),'references':sum(len(b['refs']) for b in bindings),'nativeCanvas':'Paremt/PCPlatform/Canvas','source':str(source/'App/Scenes/RoomScene.unity')},indent=2),encoding='utf-8')
+(ROOT/'research/native-ui-binding-report.json').write_text(json.dumps({'controllers':len(bindings),'references':sum(len(b['refs']) for b in bindings),'storyHiddenObjects':len(story_hidden),'nativeCanvas':'Paremt/PCPlatform/Canvas','source':str(source/'App/Scenes/RoomScene.unity')},indent=2),encoding='utf-8')
 print('Native UI controllers',len(bindings),'references',sum(len(b['refs']) for b in bindings))
