@@ -17,8 +17,9 @@ async (page) => {
   await page.goto('http://127.0.0.1:8093/');
   await page.waitForFunction(() => !!window.chillUnityInstance, null, {timeout:90000});
   await page.waitForTimeout(6500);
+  await page.waitForFunction(()=>window.ChillStartup?.phase==='done',null,{timeout:90000});
   await page.waitForFunction(()=>{window.chillUnityInstance.SendMessage('ChillPrototype','SaveFromBrowser');return JSON.parse(localStorage.getItem('chill-with-you-save-v1')).settings.lastVisit>Date.now()/1000-3;},null,{timeout:60000});
-  if(!await page.evaluate(()=>document.documentElement.innerHTML.includes("productVersion:'1.22.0'")))throw new Error('Wrong player version');
+  if(!await page.evaluate(()=>document.documentElement.innerHTML.includes("productVersion:'1.23.0'")))throw new Error('Wrong player version');
   const send=async(method,value)=>page.evaluate(({method,value})=>window.chillUnityInstance.SendMessage('ChillPrototype',method,...(value===undefined?[]:[value])),{method,value});
   for(const costume of [1,2,3,4,0]){
     await send('ChooseCostume',costume);await page.waitForTimeout(1000);
@@ -34,6 +35,7 @@ async (page) => {
   await page.evaluate(()=>{const k='chill-with-you-save-v1',s=JSON.parse(localStorage.getItem(k));s.settings.activeFps=30;s.settings.lastVisit=0;localStorage.setItem(k,JSON.stringify(s));});
   await page.setViewportSize({width:844,height:390});await page.goto('http://127.0.0.1:8093/');
   await page.waitForFunction(()=>!!window.chillUnityInstance,null,{timeout:90000});await page.waitForTimeout(6500);
+  await page.waitForFunction(()=>window.ChillStartup?.phase==='done',null,{timeout:90000});
   await page.waitForFunction(()=>{window.chillUnityInstance.SendMessage('ChillPrototype','SaveFromBrowser');return JSON.parse(localStorage.getItem('chill-with-you-save-v1')).settings.lastVisit>Date.now()/1000-3;},null,{timeout:60000});
   await send('ChooseCostume',3);await page.waitForTimeout(1200);await send('ChooseCostume',0);await page.waitForTimeout(1200);
   await page.screenshot({path:'output/playwright/physics-landscape-30.png'});
@@ -42,5 +44,5 @@ async (page) => {
   if(save.settings.activeFps!==30||save.workspace.costume!==0)throw new Error('30 FPS fixture not restored');
   const errors=messages.filter(m=>m.type==='error');
   if(failures.length||errors.length)throw new Error(JSON.stringify({failures,errors}));
-  return {passed:true,version:'1.22.0',outfits:5,desktopFps:60,landscapeFps:30,visibilityRoundTrip:true,pageErrors:failures.length,consoleErrors:errors.length,warnings:messages.filter(m=>m.type==='warning').length,mobileScope:'Chrome resized viewport; no physical device or Safari claim'};
+  return {passed:true,version:'1.23.0',outfits:5,desktopFps:60,landscapeFps:30,visibilityRoundTrip:true,pageErrors:failures.length,consoleErrors:errors.length,warnings:messages.filter(m=>m.type==='warning').length,mobileScope:'Chrome resized viewport; no physical device or Safari claim'};
 }

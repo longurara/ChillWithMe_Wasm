@@ -11,6 +11,8 @@ version=re.search(r"productVersion:\s*'([^']+)'",(root/'WebPlayer/index.html').r
 browser=json.loads((root/'research/browser-gameplay-check.json').read_text());assert browser['passed']
 catalog=json.loads((root/'WebPlayer/StreamingAssets/chill-library.json').read_text())
 paths=['/','/ui/native.css','/Build/WebPlayer.loader.js','/Build/WebPlayer.framework.js','/Build/WebPlayer.wasm','/Build/WebPlayer.data','/StreamingAssets/chill-story.json','/StreamingAssets/chill-library.json']
+if 'HLC_STARTUP_CHECK_PASSED' in log:
+ paths+=['/ui/startup.js','/ui/loading/screen.json','/ui/loading/t_ui_loading_icon.png','/ui/loading/t_ui_loading_phone_active.png','/ui/loading/t_ui_loading_halo.png','/ui/loading/t_ui_loading_logo.png']
 paths+=['/assetpacks/'+b['name'] for b in catalog['bundles'][:3]]
 http=[]
 for path in paths:
@@ -30,9 +32,17 @@ if 'HLC_PHYSICS_CHECK_PASSED' in log:
 if 'HLC_WINDOW_COAT_CHECK_PASSED' in log:
  for name,marker in [('window-coat-check','HLC_WINDOW_COAT_CHECK_PASSED'),('pane-layout-check','HLC_PANE_LAYOUT_CHECK_PASSED'),('hover-check','HLC_HOVER_CHECK_PASSED'),('story-flow-check','HLC_STORY_FLOW_CHECK_PASSED'),('break-props-check','HLC_BREAK_PROPS_CHECK_PASSED')]:
   assert marker in log and json.loads((root/'research'/f'{name}.json').read_text())['passed'],name
- story_ui=json.loads((root/'research/browser-story-ui-check.json').read_text())
- assert story_ui['passed'] and story_ui['productVersion']==version and story_ui['finalBuildLog']==logname
- status.update(storyFlowCheck='research/story-flow-check.json',paneLayoutCheck='research/pane-layout-check.json',hoverCheck='research/hover-check.json',windowCoatCheck='research/window-coat-check.json',latestBrowserCheck='research/browser-story-ui-check.json')
+ if 'HLC_STARTUP_CHECK_PASSED' not in log:
+  story_ui=json.loads((root/'research/browser-story-ui-check.json').read_text())
+  assert story_ui['passed'] and story_ui['productVersion']==version and story_ui['finalBuildLog']==logname
+  status['latestBrowserCheck']='research/browser-story-ui-check.json'
+ status.update(storyFlowCheck='research/story-flow-check.json',paneLayoutCheck='research/pane-layout-check.json',hoverCheck='research/hover-check.json',windowCoatCheck='research/window-coat-check.json')
+if 'HLC_STARTUP_CHECK_PASSED' in log:
+ for name in ['startup-gate-check','loading-screen-source-check']:
+  assert json.loads((root/'research'/f'{name}.json').read_text())['passed']
+ startup=json.loads((root/'research/browser-startup-check.json').read_text())
+ assert startup['passed'] and startup['productVersion']==version and startup['finalBuildLog']==logname
+ status.update(originalStartupScreen=True,startupWaitsForRoomReady=True,startupGateCheck='research/startup-gate-check.json',startupSourceCheck='research/loading-screen-source-check.json',latestBrowserCheck='research/browser-startup-check.json')
 p.write_text(json.dumps(status,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
 for name in ['bridge-check.js','profile-bridge-check.js']:
  helper=root/'WebPlayer/ui'/name

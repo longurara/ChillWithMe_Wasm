@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "source": "Boot.unity / Loading.controller",
+  "layouts": [
+    "landscape",
+    "portrait"
+  ],
+  "sprites": 7,
+  "clips": {
+    "loop": {
+      "name": "anim_ui_loading",
+      "seconds": 1.5,
+      "tracks": 11
+    },
+    "finish": {
+      "name": "anim_ui_loading_finish",
+      "seconds": 1.3333334,
+      "tracks": 13
+    },
+    "fade": {
+      "name": "anim_ui_loading_fadein",
+      "seconds": 0.56666666,
+      "tracks": 12
+    }
+  },
+  "originalPixels": true,
+  "originalRectTransforms": true,
+  "originalHermiteKeyframes": true,
+  "transitions": {
+    "SplashFinish": {
+      "waitLoopEnd": true,
+      "blendSeconds": 0
+    },
+    "SplashFadeIn": {
+      "waitLoopEnd": false,
+      "blendSeconds": 0
+    }
+  }
+}

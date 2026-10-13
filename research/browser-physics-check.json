@@ -1,7 +1,7 @@
 {
   "passed": true,
-  "productVersion": "1.22.0",
-  "finalBuildLog": "logs/unity-window-coat-release22.log",
+  "productVersion": "1.23.0",
+  "finalBuildLog": "logs/unity-startup-release23.log",
   "browser": "isolated Chrome",
   "userBrowserProfileWritten": false,
   "checks": {
@@ -10,7 +10,8 @@
     "landscape30FpsConfigured": true,
     "visibilitySuspendResume": true,
     "chromeMobileTouchEmulation": true,
-    "defaultCostumeRestored": true
+    "defaultCostumeRestored": true,
+    "startupCompletesBeforeInteractions": true
   },
   "viewports": [
     [

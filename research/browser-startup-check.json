@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "productVersion": "1.23.0",
+  "finalBuildLog": "logs/unity-startup-release23.log",
+  "browser": "isolated headed Chrome",
+  "userBrowserProfileWritten": false,
+  "checks": {
+    "sourceLoopBeforeEngine": true,
+    "sourceFinishAndFade": true,
+    "portraitAndLandscapeComposition": true,
+    "enginePromiseDoesNotDismissLoading": true,
+    "realDelayedStoryKeepsLoading": true,
+    "realDelayedCatalogKeepsLoading": true,
+    "normalInitializationReachesRoom": true,
+    "settingsCanBeClickedAfterReveal": true,
+    "catalog503ShowsRetry": true,
+    "failedRoomInputBlocked": true,
+    "retryLoadsActualRoom": true,
+    "chromeTouchStartupAndRoomInput": true
+  },
+  "console": {
+    "pageErrorsNormalRun": 0,
+    "consoleErrorsNormalRun": 0,
+    "warningsNormalRun": 9,
+    "expectedFailureFixtureHttpStatus": 503
+  },
+  "evidence": [
+    "output/playwright/23-loading-loop-a.png",
+    "output/playwright/23-loading-loop-b.png",
+    "output/playwright/23-loading-finish.png",
+    "output/playwright/23-loading-portrait.png",
+    "output/playwright/23-real-waiting-story.png",
+    "output/playwright/23-real-waiting-catalog.png",
+    "output/playwright/23-real-ready-room.png",
+    "output/playwright/23-real-settings-after-startup.png",
+    "output/playwright/23-real-catalog-error.png",
+    "output/playwright/23-real-retry-success.png"
+  ],
+  "scope": "Mock engine for before-Wasm composition/clip checkpoints; actual WebGL player for held requests, readiness, input and failure/retry. Native Unity callback checks and source curve extraction are separate. No physical phone, Safari or complete Windows boot/state-machine parity claim."
+}

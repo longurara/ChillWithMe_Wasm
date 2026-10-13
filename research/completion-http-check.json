@@ -4,13 +4,13 @@
     {
       "path": "/",
       "status": 200,
-      "bytes": "2549",
+      "bytes": "2664",
       "type": "text/html"
     },
     {
       "path": "/ui/native.css",
       "status": 200,
-      "bytes": "1448",
+      "bytes": "1354",
       "type": "text/css"
     },
     {
@@ -22,19 +22,19 @@
     {
       "path": "/Build/WebPlayer.framework.js",
       "status": 200,
-      "bytes": "442064",
+      "bytes": "442588",
       "type": "application/javascript"
     },
     {
       "path": "/Build/WebPlayer.wasm",
       "status": 200,
-      "bytes": "33794913",
+      "bytes": "33798593",
       "type": "application/wasm"
     },
     {
       "path": "/Build/WebPlayer.data",
       "status": 200,
-      "bytes": "106782709",
+      "bytes": "106783333",
       "type": "application/octet-stream"
     },
     {
@@ -48,6 +48,42 @@
       "status": 200,
       "bytes": "2767249",
       "type": "application/json"
+    },
+    {
+      "path": "/ui/startup.js",
+      "status": 200,
+      "bytes": "4959",
+      "type": "application/javascript"
+    },
+    {
+      "path": "/ui/loading/screen.json",
+      "status": 200,
+      "bytes": "16402",
+      "type": "application/json"
+    },
+    {
+      "path": "/ui/loading/t_ui_loading_icon.png",
+      "status": 200,
+      "bytes": "15839",
+      "type": "image/png"
+    },
+    {
+      "path": "/ui/loading/t_ui_loading_phone_active.png",
+      "status": 200,
+      "bytes": "7824",
+      "type": "image/png"
+    },
+    {
+      "path": "/ui/loading/t_ui_loading_halo.png",
+      "status": 200,
+      "bytes": "89064",
+      "type": "image/png"
+    },
+    {
+      "path": "/ui/loading/t_ui_loading_logo.png",
+      "status": 200,
+      "bytes": "6191",
+      "type": "image/png"
     },
     {
       "path": "/assetpacks/animationclip/pack-0000",
