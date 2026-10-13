@@ -308,7 +308,7 @@ namespace Hlc.ChillPrototype
             if(current)current.text=LanguageCaption(state.language);
             foreach(string key in new[]{"_languageENInteractableUI","_languageJPInteractableUI"}){var button=Get<Button>("SettingUI",key);if(button)button.interactable=available;}
             var languageToggle=languageRoot?languageRoot.Find("PulldownButton")?.GetComponent<Button>():null;if(languageToggle)languageToggle.interactable=available;
-            if(historyDialogueButton){historyDialogueButton.gameObject.SetActive(state.playing);historyDialogueButton.interactable=state.ready;var caption=historyDialogueButton.GetComponentInChildren<TMP_Text>(true);if(caption)caption.text=state.language=="Ja"?"履歴":"History";}
+            if(historyDialogueButton){historyDialogueButton.gameObject.SetActive(state.playing && !state.automaticDialogue);historyDialogueButton.interactable=state.ready;var caption=historyDialogueButton.GetComponentInChildren<TMP_Text>(true);if(caption)caption.text=state.language=="Ja"?"履歴":"History";}
             if(pane=="history" && historyInput)
             {
                 var snapshot=player.story.UISnapshot("history");string text=snapshot.history.Length==0?(state.language=="Ja"?"会話履歴はまだありません。":"No conversation history yet."):string.Join("\n\n",snapshot.history);
@@ -360,11 +360,16 @@ namespace Hlc.ChillPrototype
         }
         void Dialogue()
         {
-            Set(RefOf("StorySystemUI","self"),state.playing);Set(RefOf("StorySystemUI","_heroineNameObject"),state.playing && !string.IsNullOrEmpty(state.speaker));
-            Set(RefOf("StorySystemUI","_autoButton"),state.playing);Set(RefOf("StorySystemUI","_skipButton"),state.playing);
+            bool main=state.playing && state.mainStoryText;
+            Set(RefOf("StorySystemUI","self"),state.playing);Set(RefOf("StorySystemUI","_heroineNameObject"),main && !string.IsNullOrEmpty(state.speaker));
+            Set(RefOf("StorySystemUI","_autoButton"),state.playing && !state.automaticDialogue);Set(RefOf("StorySystemUI","_skipButton"),state.playing && !state.automaticDialogue);
             Write("StorySystemUI","_heroineNameTextLocalizationBehavior",state.speaker);Write("StorySystemUI","_auteText",state.autoRead?"Auto ON":"Auto");Write("StorySystemUI","_skipText","Skip");
-            Set(RefOf("StorySystemUI","_mainStoryTextParent"),state.playing);Set(RefOf("StorySystemUI","_normalTextParent"),false);
-            var target=RefOf("StorySystemUI","_mainStoryTextMessage");var label=target ? target.GetComponent<TMP_Text>() ?? target.GetComponentInChildren<TMP_Text>(true) : null;
+            // Source StorySystemUI uses NormalTextParent for greetings/reactions,
+            // and MainStoryTextMessage only for main/after/DLC/extra/special stories.
+            Set(RefOf("StorySystemUI","_mainStoryTextParent"),main);
+            Show(RefOf("StorySystemUI","_normalTextParent")?.gameObject,state.playing && !main);
+            var bottom=RefOf("StorySystemUI","_bottomBackImage") as RectTransform;if(bottom)bottom.sizeDelta=new Vector2(bottom.sizeDelta.x,main?308:180);
+            var target=RefOf("StorySystemUI",main?"_mainStoryTextMessage":"_normalTextMessage");var label=target ? target.GetComponent<TMP_Text>() ?? target.GetComponentInChildren<TMP_Text>(true) : null;
             if(label){label.richText=false;label.text=state.text;}
             string signature=JsonUtility.ToJson(new ChillStoryUiState{choices=state.choices});if(signature==choiceSignature)return;choiceSignature=signature;Clear(choiceRows);
             var parent=RefOf("SentenceSelectionButtonsUI","self");if(!parent || !selectionCell)return;

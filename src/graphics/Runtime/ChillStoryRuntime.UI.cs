@@ -16,6 +16,7 @@ namespace Hlc.ChillPrototype
             double remaining=save.timerRunning?Math.Max(0,save.timerEnd-Now):save.pausedRemaining;
             float remainingFraction=Mathf.Clamp01((float)(remaining/Math.Max(60,(save.breakTime?save.breakMinutes:save.workMinutes)*60)));
             var result=new ChillStoryUiState { ready=data != null,status=status,playing=Playing,typing=typing,loadingAudio=loadingAudio,autoRead=autoRead,
+                mainStoryText=chapter != null && (chapter.Scenario>=1 && chapter.Scenario<=3 || chapter.Scenario==24 || chapter.Scenario>=50 && chapter.Scenario<=56),automaticDialogue=automaticDialogue,
                 language=save.language,level=DisplayLevel,completed=save.completed.Count,unlock=save.previewUnlock,saveAllowed=saveAllowed,
                 noticeMessage=noticeMessage,noticeError=noticeError,noticeRevision=noticeRevision,
                 chapter=save.chapter,title=chapter != null ? Text(chapter.TitleLocalizationID) : "",speaker=current != null && current.Talker == 1 ? "Satone" : "",

@@ -70,6 +70,7 @@ public static class ChillFeaturesCheck
             var point=RectTransformUtility.WorldToScreenPoint(camera,targetRect.TransformPoint(targetRect.rect.center));var es=UnityEngine.Object.FindObjectsOfType<EventSystem>().First(e=>e.gameObject.activeInHierarchy);var hits=new List<RaycastResult>();ui.canvas.GetComponent<GraphicRaycaster>().Raycast(new PointerEventData(es){position=point},hits);
             Require(hits.Count>0,"Favorite receives no raycast");var target=ExecuteEvents.GetEventHandler<IPointerClickHandler>(hits[0].gameObject);Require(target==favorite.gameObject,"Favorite click intercepted by "+(target?target.name:hits[0].gameObject.name));
         });ui.Close();
+        CheckDialogue(story,ui,data);
         string[] required={"WorkBase001","WorkBase002","WorkBase003","BreakBase001","BreakBase002","BreakBase003_ListenMusicLow","BreakBase004","BreakBase005","BreakBase006","BreakBase005_Sleep","BreakBase005_JumpUp","Wild003_LeaveChair_Cup","Wild003_LeaveChair_Normal","Wild003_LeaveChair_Sofa","Wild003_LeaveChair_Cupcake_Comeback","Wild003_LeaveChair_Cookie_Comeback","Wild003_LeaveChair_BreadA_Comeback"};
         player.character.runtimeAnimatorController=story.storyController;player.character.Rebind();
         foreach(var name in required)
@@ -82,6 +83,32 @@ public static class ChillFeaturesCheck
         story.UIAction(new ChillUiCommand{action="story-skip"});Require(Get<int>(story,"breakMode")==2&&Get<int>(story,"selfTalkCount")==3&&Get<double>(story,"nextAction")==123456789d,"Automatic dialogue reset break activity or self-talk limit");
         File.WriteAllText(Path.GetFullPath("../research/features-check.json"),JsonUtility.ToJson(new Report{passed=true,userSaveWritten=false,browserGameplayRun=false,musicTracks=features.music.Length,ambientTracks=features.ambient.Length,nativeHooks=ui.HookCount,musicPlaylist=true,favorites=true,seek=true,settingsRoundTrip=true,invalidSettingsRejected=true,nativeTutorial=true,nativeRaycasts=true,animationPaths=true,storySkip=true,resumePreserved=true},true));
         UnityEngine.Object.DestroyImmediate(clip);Debug.Log("HLC_FEATURES_CHECK_PASSED music=43 ambient=30 sourceAnimations="+required.Length+" userSaveWritten=false");
+    }
+    static void CheckDialogue(ChillStoryRuntime story,ChillNativeUI ui,ChillStoryData data)
+    {
+        var config=JsonUtility.FromJson<ChillNativeUI.Configuration>(ui.configuration.text);
+        Transform Ref(string script,string key){var binding=config.bindings.First(b=>b.script==script);return ui.Find(key=="self"?binding.path:binding.refs.First(r=>r.name==key).path);}
+        foreach(var group in data.groups)
+        {
+            Set(story,"chapter",group);bool main=group.Scenario>=1&&group.Scenario<=3||group.Scenario==24||group.Scenario>=50&&group.Scenario<=56;
+            Require(story.UISnapshot("").mainStoryText==main,"Wrong source message type for "+group.ID);
+        }
+        Set(story,"chapter",data.groups.First(g=>g.Scenario==13||g.Scenario==1401));Set(story,"automaticDialogue",true);
+        Set(story,"current",new ChillSentence{Talker=1});string text="Welcome back. Let's both do our best. A longer greeting must wrap above the music controls without covering the track title, playback buttons, or progress bar.";
+        Set(story,"message",text);Set(story,"shownChars",text.Length);ui.RefreshNow();Canvas.ForceUpdateCanvases();
+        var normal=Ref("StorySystemUI","_normalTextMessage").GetComponent<TMPro.TMP_Text>();normal.ForceMeshUpdate();
+        Require(Ref("StorySystemUI","_normalTextParent").gameObject.activeInHierarchy&&!Ref("StorySystemUI","_mainStoryTextParent").gameObject.activeSelf,"Greeting uses the main story window");
+        Require(Ref("StorySystemUI","_normalTextCanvasGroup").GetComponent<CanvasGroup>().alpha==1,"Greeting is invisible");
+        Require(!Ref("StorySystemUI","_heroineNameObject").gameObject.activeSelf&&!Ref("StorySystemUI","_autoButton").gameObject.activeSelf&&!Ref("StorySystemUI","_skipButton").gameObject.activeSelf&&!ui.historyDialogueButton.gameObject.activeSelf,"Greeting retains episode-only controls");
+        var characters=normal.textInfo.characterInfo.Take(normal.textInfo.characterCount).Where(c=>c.isVisible).ToArray();Require(characters.Length>0,"Greeting text has no visible glyphs");
+        float bottom=characters.Min(c=>normal.transform.TransformPoint(c.bottomLeft).y);var corners=new Vector3[4];((RectTransform)Ref("MusicUI","_playOrPauseButtonImage")).GetWorldCorners(corners);
+        Require(bottom>corners.Max(c=>c.y)+2,"Greeting overlaps music playback controls");
+        Set(story,"chapter",data.groups.First(g=>g.Scenario==1));Set(story,"automaticDialogue",false);ui.RefreshNow();
+        Require(Ref("StorySystemUI","_mainStoryTextParent").gameObject.activeInHierarchy&&!Ref("StorySystemUI","_normalTextParent").gameObject.activeSelf,"Episode did not restore main story text");
+        Set(story,"chapter",null);Set(story,"current",null);Set(story,"message","");Set(story,"shownChars",0);ui.RefreshNow();
+        Require(!Ref("StorySystemUI","self").gameObject.activeSelf&&!Ref("StorySystemUI","_autoButton").gameObject.activeSelf,"Dialogue remains open after ending");
+        File.WriteAllText(Path.GetFullPath("../research/dialogue-layout-check.json"),"{\"passed\":true,\"sourceMessageClassification\":true,\"greetingAboveMusic\":true,\"episodeControlsHiddenDuringGreeting\":true,\"mainStoryRestored\":true,\"clearedOnEnd\":true,\"browserGameplayRun\":false,\"userSaveWritten\":false}");
+        Debug.Log("HLC_DIALOGUE_LAYOUT_CHECK_PASSED sourceMessageClassification=true greetingAboveMusic=true");
     }
     public static void BuildChecked(){Run();ChillNativeUIBuild.Build();}
 }
