@@ -23,9 +23,11 @@
     }
     createUnityInstance(document.getElementById('unity-canvas'),{
       dataUrl:'Build/WebPlayer.data',frameworkUrl:'Build/WebPlayer.framework.js',codeUrl:'Build/WebPlayer.wasm',streamingAssetsUrl:'StreamingAssets',
-      companyName:'HLC',productName:'Chill Graphics Prototype',productVersion:'1.19.3',devicePixelRatio:Math.min(window.devicePixelRatio||1,2),showBanner:showWarning
+      companyName:'HLC',productName:'Chill with You Web',productVersion:'1.20.0',devicePixelRatio:Math.min(window.devicePixelRatio||1,matchMedia('(pointer: coarse)').matches?1.5:2),showBanner:showWarning
     },progress=>{document.getElementById('unity-progress').value=progress;document.getElementById('load-percent').textContent=Math.floor(progress*100)+'%';}).then(instance=>{
       window.chillUnityInstance=instance;
+      document.addEventListener('visibilitychange',()=>instance.SendMessage('ChillPrototype','BrowserVisibility',document.hidden?'hidden':'visible'));
+      window.addEventListener('pagehide',()=>instance.SendMessage('ChillPrototype','SaveFromBrowser'));
       document.getElementById('unity-loading-bar').hidden=true;
     }).catch(error=>{showWarning('Không mở được game. '+error,'error');document.getElementById('unity-loading-bar').hidden=true;});
   </script>
