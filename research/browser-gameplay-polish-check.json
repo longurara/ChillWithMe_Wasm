@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "productVersion": "1.20.0",
+  "finalBuildLog": "logs/unity-timer-raycast-final.log",
+  "browser": "isolated Chrome",
+  "viewport": [
+    1280,
+    720
+  ],
+  "userBrowserProfileWritten": false,
+  "checks": {
+    "timerModeBothDirections": true,
+    "oneSelectedHighlightAtRest": true,
+    "countupStartPauseReset": true,
+    "pomodoroStartPauseReset": true,
+    "nativePlayHover": true,
+    "resumedMain32ChoiceLayout": true,
+    "resumedMain32ChoiceClick": {
+      "beforeCursor": 11,
+      "afterCursor": 20
+    },
+    "longStoryHudHidden": true
+  },
+  "console": {
+    "errors": 0,
+    "warnings": 9
+  },
+  "additionalVisualCoverage": {
+    "sourceTimeOfDayProfiles": 4,
+    "roomViewpoints": 3,
+    "costume": true,
+    "musicPanel": true,
+    "chromeMobilePortraitRoomRenders": true
+  },
+  "evidence": [
+    "output/playwright/parity-timer-pomodoro-return.png",
+    "output/playwright/parity-timer-countup-return.png",
+    "output/playwright/parity-timer-play-hover.png",
+    "output/playwright/parity-loop-resume-choices.png",
+    "output/playwright/parity-loop-choice-click.png"
+  ],
+  "limitations": [
+    "Gameplay checkpoints, not a playthrough of every episode.",
+    "Exact Windows graphics/physics parity is not established.",
+    "Portrait HUD remains small; full native mobile UI is not ported.",
+    "Windows WebKit emulator lacks Web Audio API; physical iOS Safari audio is unverified."
+  ]
+}

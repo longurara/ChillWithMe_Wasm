@@ -4,13 +4,13 @@
     {
       "path": "/",
       "status": 200,
-      "bytes": "2254",
+      "bytes": "2549",
       "type": "text/html"
     },
     {
       "path": "/ui/native.css",
       "status": 200,
-      "bytes": "1257",
+      "bytes": "1448",
       "type": "text/css"
     },
     {
@@ -22,25 +22,25 @@
     {
       "path": "/Build/WebPlayer.framework.js",
       "status": 200,
-      "bytes": "441156",
+      "bytes": "441625",
       "type": "application/javascript"
     },
     {
       "path": "/Build/WebPlayer.wasm",
       "status": 200,
-      "bytes": "33583158",
+      "bytes": "33654269",
       "type": "application/wasm"
     },
     {
       "path": "/Build/WebPlayer.data",
       "status": 200,
-      "bytes": "104764963",
+      "bytes": "104782194",
       "type": "application/octet-stream"
     },
     {
       "path": "/StreamingAssets/chill-story.json",
       "status": 200,
-      "bytes": "1601192",
+      "bytes": "1601328",
       "type": "application/json"
     },
     {
