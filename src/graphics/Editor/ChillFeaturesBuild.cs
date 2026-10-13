@@ -12,6 +12,15 @@ public static class ChillFeaturesBuild
 {
     public static void Configure(ChillGraphicsPlayer player)
     {
+        var cursor=player.GetComponent<ChillCursor>()??player.gameObject.AddComponent<ChillCursor>();cursor.player=player;
+        Texture2D CursorTexture(string name)
+        {
+            string path="Assets/Recovered/Texture2D/"+name+".png";var importer=AssetImporter.GetAtPath(path) as TextureImporter;
+            if(!importer)throw new InvalidOperationException("Missing native cursor "+name);
+            if(!importer.isReadable||importer.textureCompression!=TextureImporterCompression.Uncompressed){importer.isReadable=true;importer.textureCompression=TextureImporterCompression.Uncompressed;importer.mipmapEnabled=false;importer.SaveAndReimport();}
+            return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+        }
+        cursor.normal=CursorTexture("t_ui_cursor");cursor.talk=CursorTexture("t_ui_cursor_talk");cursor.blocked=CursorTexture("t_ui_cursor_talkblock");
         ResolveNativeMotions(player);
         player.story.featureConfiguration=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/chill-features.json");
         if(!player.story.featureConfiguration)throw new InvalidOperationException("Run prepare_features.py before building.");

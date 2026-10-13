@@ -75,8 +75,15 @@ public static class ChillFeaturesCheck
         ChillGameplayParityCheck.Run(story,ui,player,data);
         ChillStoryCommandCheck.Run(story,ui,player,data);
         ChillDailyLifeCheck.Run(story,player,data);
+        ChillPaneLayoutCheck.Run(story,ui,player);
+        ChillHoverCheck.Run(story,ui);
+        ChillBreakPropsCheck.Run(story,player,data);save=Get<ChillSave>(story,"save");
+        ChillStoryFlowCheck.Run(story,player,data);
+        ChillStoryMotionSweep.Run(player,data);
         ChillMotionContinuityCheck.Run(story,player,data);
         ChillPhysicsCheck.Run(player,data);
+        ChillCoatGravityCheck.Run(player);
+        ChillWindowCoatCheck.Run(player);
         string[] required={"WorkBase001","WorkBase002","WorkBase003","BreakBase001","BreakBase002","BreakBase003_ListenMusicLow","BreakBase004","BreakBase005","BreakBase006","BreakBase005_Sleep","BreakBase005_JumpUp","Wild003_LeaveChair_Cup","Wild003_LeaveChair_Normal","Wild003_LeaveChair_Sofa","Wild003_LeaveChair_Cupcake_Comeback","Wild003_LeaveChair_Cookie_Comeback","Wild003_LeaveChair_BreadA_Comeback"};
         player.character.runtimeAnimatorController=story.storyController;player.character.Rebind();
         foreach(var name in required)
@@ -85,7 +92,7 @@ public static class ChillFeaturesCheck
         {Invoke(story,"SetNativeMotion",name);var path=story.presentation.statePaths.First(s=>s.name==name);player.character.Play(path.path,0,.35f);player.character.Update(0);ChillNativeUIPreview.RenderCurrent(player,ui.canvas,"preview-features-"+name+".png",1,0,0,true);}
         var sourceChapter=data.groups.First(g=>g.Scenario==9);Set(story,"chapter",sourceChapter);Set(story,"automaticDialogue",true);Set(story,"suspendedChapter",data.groups.First(g=>g.Scenario==1).ID);Set(story,"suspendedCursor",0);Set(story,"suspendedScene",new List<int>());
         story.UIAction(new ChillUiCommand{action="story-skip"});Require(!story.Playing&&save.completed.Contains(sourceChapter.ID)&&save.chapter==data.groups.First(g=>g.Scenario==1).ID,"Skip destroyed a resumable story");
-        story.Settings.resting=true;Set(story,"chapter",sourceChapter);Set(story,"automaticDialogue",true);Set(story,"autonomyInstalled",true);Set(story,"breakMode",2);Set(story,"selfTalkCount",3);Set(story,"nextAction",123456789d);Set(story,"suspendedChapter",save.chapter);Set(story,"suspendedScene",new List<int>());
+        story.Settings.resting=true;Set(story,"chapter",sourceChapter);Set(story,"automaticDialogue",true);Set(story,"autonomyInstalled",true);Set(story,"previousRest",true);Set(story,"breakMode",2);Set(story,"selfTalkCount",3);Set(story,"nextAction",123456789d);Set(story,"suspendedChapter",save.chapter);Set(story,"suspendedScene",new List<int>());
         story.UIAction(new ChillUiCommand{action="story-skip"});Require(Get<int>(story,"breakMode")==2&&Get<int>(story,"selfTalkCount")==3&&Get<double>(story,"nextAction")==123456789d,"Automatic dialogue reset break activity or self-talk limit");
         File.WriteAllText(Path.GetFullPath("../research/features-check.json"),JsonUtility.ToJson(new Report{passed=true,userSaveWritten=false,browserGameplayRun=false,musicTracks=features.music.Length,ambientTracks=features.ambient.Length,nativeHooks=ui.HookCount,musicPlaylist=true,favorites=true,seek=true,settingsRoundTrip=true,invalidSettingsRejected=true,nativeTutorial=true,nativeRaycasts=true,animationPaths=true,storySkip=true,resumePreserved=true},true));
         UnityEngine.Object.DestroyImmediate(clip);Debug.Log("HLC_FEATURES_CHECK_PASSED music=43 ambient=30 sourceAnimations="+required.Length+" userSaveWritten=false");
