@@ -60,6 +60,8 @@ namespace Hlc.ChillPrototype
         public void BlendToRequested(float seconds)
         {
             var animator=player.character;
+            var target=statePaths?.FirstOrDefault(s=>s.motion==requestedMotion);
+            if(target!=null)player.deskObjects.RestoreActivityProps(target.name);
             if(requestedMotion>=0&&!string.IsNullOrEmpty(requestedState)&&animator.HasState(0,Animator.StringToHash(requestedState)))
                 animator.CrossFadeInFixedTime(requestedState,seconds,0,0);
         }

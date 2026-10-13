@@ -48,7 +48,7 @@ public static class ChillMotionContinuityCheck
             Require(story.presentation.MotionCompleted,"Native story exit does not reach the selected work loop: mode="+mode+" ai="+ai+" state="+story.presentation.statePaths.FirstOrDefault(p=>Animator.StringToHash(p.path)==animator.GetCurrentAnimatorStateInfo(0).fullPathHash)?.path+" requested="+story.presentation.requestedState+" time="+animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
             Require(worst<35,"Story exit contains a one-frame bone rotation jump: "+worst);
         }
-        settings.resting=settings.autonomy=true;Set(story,"autonomyInstalled",true);Set(story,"breakMode",2);Set(story,"breakBaseMotion","BreakBase003_ListenMusicHigh");Set(story,"selfTalkCount",2);Set(story,"nextAction",123456d);Set(story,"nextVariant",123457d);
+        settings.resting=settings.autonomy=true;Set(story,"autonomyInstalled",true);Set(story,"previousRest",true);Set(story,"breakMode",2);Set(story,"breakBaseMotion","BreakBase003_ListenMusicHigh");Set(story,"selfTalkCount",2);Set(story,"nextAction",123456d);Set(story,"nextVariant",123457d);
         animator.Play(sceneState,0,.6f);animator.Update(0);var shortPose=bones.Select(t=>t.localRotation).ToArray();Set(story,"chapter",data.groups.First(g=>g.Scenario==13));Set(story,"automaticDialogue",true);story.StopStory();
         Require(Get<int>(story,"breakMode")==2&&Get<int>(story,"selfTalkCount")==2&&Get<double>(story,"nextAction")==123456&&Get<double>(story,"nextVariant")==123457&&story.AutonomyState=="BreakBase003_ListenMusicHigh","Short reaction changes the activity/posture or restarts its schedule");
         Require(bones.Select((t,i)=>Quaternion.Angle(t.localRotation,shortPose[i])<.1f).All(v=>v),"Short reaction resets the visible pose");

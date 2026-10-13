@@ -30,7 +30,7 @@ namespace Hlc.ChillPrototype
         IEnumerator FinishSnackActivity()
         {
             SetNativeMotion("Base001");yield return WaitNative();
-            if(!Playing){player.deskObjects.HideSnacks();player.deskObjects.Select(player.SelectedState);SetNativeMotion(CurrentBaseMotion);}
+            if(!Playing){player.deskObjects.HideSnacks();player.deskObjects.SelectSmooth(player.SelectedState,.25f);SetNativeMotion(CurrentBaseMotion);}
             autonomousSequence=null;
         }
         IEnumerator SofaStay(float seconds)

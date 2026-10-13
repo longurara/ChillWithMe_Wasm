@@ -6,6 +6,7 @@ namespace Hlc.ChillPrototype
 {
     public sealed partial class ChillStoryRuntime
     {
+        public int RoomLevel=>save.level;
         public string UITranslate(string key) => texts != null && texts.ContainsKey(key) ? Text(key) : key;
         static string TimerLabel(double seconds)
         { long total=(long)Math.Max(0,Math.Min(seconds,7*24*3600)); return (total/3600).ToString("00")+":"+(total/60%60).ToString("00")+":"+(total%60).ToString("00"); }

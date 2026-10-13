@@ -280,7 +280,7 @@ namespace Hlc.ChillPrototype
         bool TryCalendarEvent()
         {
             var date=DateTime.Now;
-            if(Settings.birthdayMonth==date.Month&&Settings.birthdayDay==date.Day&&CalendarScenario(103,"birthday:"+DateKey(date)))return true;
+            if(BirthdayMatches(date,Settings.birthdayMonth,Settings.birthdayDay)&&CalendarScenario(103,"birthday:"+DateKey(date)))return true;
             // Source scenarios are date-specific releases, not generic annual events.
             if(date.Year==2025&&date.Month==12&&date.Day==25)return CalendarScenario(100,"event:"+DateKey(date));
             if(date.Year==2026&&date.Month==4&&date.Day==1)return CalendarScenario(102,"event:"+DateKey(date));
@@ -288,10 +288,18 @@ namespace Hlc.ChillPrototype
             return false;
         }
         bool CalendarScenario(int scenario,string key){if(Workspace.calendarEvents.Contains(key)||!StartAutomaticScenario(scenario))return false;Workspace.calendarEvents.Add(key);SaveNow();return true;}
-        public void Farewell(){if(Playing){Notify("Finish or skip the current conversation first.");return;}double hours=(Now-sessionStarted)/3600;int scenario=19;
+        public static bool BirthdayMatches(DateTime date,int month,int day)
+        {if(month==2&&day==29&&!DateTime.IsLeapYear(date.Year))return date.Month==3&&date.Day==1;return month>0&&day>0&&date.Month==month&&date.Day==day;}
+        public void Farewell(){if(Playing){Notify("Finish or skip the current conversation first.");return;}if(farewellPending)return;ResetAutonomy();double hours=(Now-sessionStarted)/3600;int scenario=19;
             if(hours>=Policy("GameEndTalkData.gameLongTimeEndTalkData.judgeLongHours",4)&&Chance(Policy("GameEndTalkData.gameLongTimeEndTalkData.selectionProbability",50)))scenario=1500;
             else if(hours<=Policy("GameEndTalkData.gameShortTimeEndTalkData.judgeShortHours",1)&&Chance(Policy("GameEndTalkData.gameShortTimeEndTalkData.selectionProbability",65)))scenario=1501;
-            AwardAchievement("EXIT_GAME_COUNT");if(!StartAutomaticScenario(scenario))StartAutomaticScenario(19);SaveNow();}
+            farewellPending=true;SetNativeMotion("GameEnd_Base_001");autonomousSequence=StartCoroutine(FarewellAfterPose(scenario));SaveNow();}
+        IEnumerator FarewellAfterPose(int scenario)
+        {
+            yield return new WaitForSecondsRealtime(1);autonomousSequence=null;
+            if(StartAutomaticScenario(scenario)||StartAutomaticScenario(19))AwardAchievement("EXIT_GAME_COUNT");
+            else{farewellPending=false;Notify("The farewell conversation is unavailable.",true);}SaveNow();
+        }
         public void Tutorial(){if(!Playing){var item=data.groups.FirstOrDefault(g=>g.Scenario==18);if(item!=null)Begin(item,false);}}
         public int TutorialCommand=>tutorialCommand;
         public void TutorialSignal(string action)

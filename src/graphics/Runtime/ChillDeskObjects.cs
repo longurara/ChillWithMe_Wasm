@@ -119,7 +119,14 @@ namespace Hlc.ChillPrototype
                 case "ActivatePen": if (handPen) handPen.enabled = true; if (handPenForSpin) handPenForSpin.enabled = false; if (roomPen) roomPen.enabled = false; break;
                 case "ActivatePenForSpin": if (handPen) handPen.enabled = false; if (handPenForSpin) handPenForSpin.enabled = true; if (roomPen) roomPen.enabled = false; break;
                 case "DeactivatePen": if (handPen) handPen.enabled = false; if (handPenForSpin) handPenForSpin.enabled = false; if (roomPen) roomPen.enabled = true; break;
-                case "ActivateBook": if (handNote) handNote.SetActive(true); break;
+                case "ActivateBook":
+                    if (handNote) handNote.SetActive(true);
+                    // The native controller stays enabled, including its idle page
+                    // pose. Select disables it on the web; resample that pose when
+                    // taking the book instead of showing the exported bind pose.
+                    if (breakBookAnimator && !breakBookAnimator.enabled)
+                    { Play(breakBookAnimator,"anim_item_novel_loop"); breakBookAnimator.Update(0); }
+                    break;
                 case "DeactivateBook": if (handNote) handNote.SetActive(false); break;
                 case "ActivateCop": case "TakeCopFromCoffeeMaker": if (handCop) handCop.SetActive(true); if (roomCop) roomCop.SetActive(false); if (coffeeMakerCop) coffeeMakerCop.SetActive(false); break;
                 case "DeactivateCop": if (handCop) handCop.SetActive(false); if (roomCop) roomCop.SetActive(true); if (coffeeMakerCop) coffeeMakerCop.SetActive(false); break;
@@ -137,6 +144,14 @@ namespace Hlc.ChillPrototype
         }
         static void Play(Animator animator, string state)
         { if (animator) { animator.enabled = true; animator.speed = 1; animator.Play(state,0,0); } }
+        public void RestoreActivityProps(string motion)
+        {
+            // HeroineUseObjectController.ImmediateChangeDeskUseObjectAnimation.
+            // Direct story returns bypass the entry clip's activation events.
+            if (motion.StartsWith("BreakBase002")) Action("ActivateBook");
+            else if (motion.StartsWith("BreakBase004")) Action("ActivateCop");
+            else if (motion.StartsWith("WorkBase003")) Action("ActivatePen");
+        }
         static void Trigger(Animator animator, string name)
         { if (animator) { animator.enabled = true; animator.speed = 1; animator.SetTrigger(name); } }
         IEnumerator StopPouring() { yield return new WaitForSecondsRealtime(2); Action("DeactivateDropCoffee"); }

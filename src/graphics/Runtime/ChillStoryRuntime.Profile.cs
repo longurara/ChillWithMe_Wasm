@@ -4,6 +4,7 @@ namespace Hlc.ChillPrototype
 {
     public sealed partial class ChillStoryRuntime
     {
+        bool farewellPending;
         public void SelectProfileIcon(int index){Workspace.profileIcon="preset:"+index;WorkspaceChanged();}
         public void ProfileIconImported(string data)
         {if(!data.StartsWith("data:image/png;base64,")||data.Length>90000){Notify("Avatar image is too large.",true);return;}Workspace.profileIcon=data;WorkspaceChanged();}

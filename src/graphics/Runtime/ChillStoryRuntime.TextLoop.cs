@@ -6,6 +6,13 @@ namespace Hlc.ChillPrototype
 {
     public sealed partial class ChillStoryRuntime
     {
+        int loopChoiceVersion;
+        IEnumerator ShowLoopChoices(ChillSentence setup,int token,int version)
+        {
+            float delay=Mathf.Max(0,Number(setup.Arg4));
+            if(delay>0)yield return new WaitForSecondsRealtime(delay);
+            if(Playing&&token==generation&&version==loopChoiceVersion&&current==setup)PrepareChoices(Jump(setup.Arg3),3);
+        }
         IEnumerator RunTextLoop(ChillSentence setup)
         {
             chosen=-1;
@@ -17,25 +24,21 @@ namespace Hlc.ChillPrototype
                 if(bag.Count>1&&bag[0]==previous){var first=bag[0];bag.RemoveAt(0);bag.Add(first);}
                 var row=bag[0];bag.RemoveAt(0);previous=row;return row;
             }
-            // Source shows choices only after the first loop voice/text finishes.
-            yield return LoopSpeech(Pick(),Mathf.Max(0,Number(setup.Arg1)));
+            // The first line has its own Arg1. The setup's min/max only separate repeats.
+            yield return Speak(Pick(),false);
             if(!Playing)yield break;
-            PrepareChoices(Jump(setup.Arg3),3);
+            int version=++loopChoiceVersion;
+            StartCoroutine(ShowLoopChoices(setup,generation,version));
             while(Playing&&chosen<0)
             {
                 float min=Mathf.Max(0,Number(setup.Arg1)),max=Mathf.Max(min,setup.Arg2);
                 double end=Now+UnityEngine.Random.Range(min,max);
                 while(Playing&&chosen<0&&Now<end)yield return null;
                 if(!Playing||chosen>=0)break;
-                yield return LoopSpeech(Pick(),min);
+                yield return Speak(Pick(),false);
             }
+            loopChoiceVersion++;
             if(Playing)CommitChoice(3);
-        }
-        IEnumerator LoopSpeech(ChillSentence row,float delay)
-        {
-            double until=Now+delay;while(Playing&&chosen<0&&Now<until)yield return null;
-            if(!Playing||chosen>=0)yield break;
-            yield return Speak(row,false);
         }
     }
 }

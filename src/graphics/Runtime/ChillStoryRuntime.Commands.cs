@@ -127,6 +127,7 @@ namespace Hlc.ChillPrototype
 
         void ResetCommandWaits()
         {
+            loopChoiceVersion++;
             waitingForScript=scriptReady=pomodoroVoiceReady=false;pomodoroVoiceType=-1;storyMusicVersion++;
             if(Playing && MusicLoading){musicToken++;MusicLoading=false;}
         }

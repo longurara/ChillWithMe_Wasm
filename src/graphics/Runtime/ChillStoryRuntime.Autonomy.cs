@@ -17,6 +17,7 @@ namespace Hlc.ChillPrototype
         string breakBaseMotion="";
         Coroutine autonomousSequence;
         ChillCharacterPicking characterPicking;
+        public bool CanReactToPointer=>Now>=clickCooldown&&autonomousSequence==null;
         readonly List<int> breakBag=new List<int>(),workBag=new List<int>();
         readonly Dictionary<int,List<string>> reactionBags=new Dictionary<int,List<string>>();
         static readonly string[] breakGroups={"HeroineStateBreakMovie","HeroineStateBreakReadBook","HeroineStateBreakListenMusic","HeroineStateBreakTeaTime","HeroineStateBreakSleep","HeroineStateBreakForward"};
@@ -209,7 +210,7 @@ namespace Hlc.ChillPrototype
                 if(!StartReaction(snackKind==2?2601:2600))SetNativeMotion("Base001");yield break;
             }
             SetNativeMotion("Base001");yield return WaitNative(30);
-            if(!Playing){player.deskObjects.Select(player.SelectedState);SetNativeMotion(CurrentBaseMotion);}
+            if(!Playing){player.deskObjects.SelectSmooth(player.SelectedState,.25f);SetNativeMotion(CurrentBaseMotion);}
             nextLeave=Now+60*Delay("LeaveChairData."+(Resting?"Break":"Work")+"MinutesMin","LeaveChairData."+(Resting?"Break":"Work")+"MinutesMax",80,120);nextLeaveLottery=nextLeave;autonomousSequence=null;
         }
     }

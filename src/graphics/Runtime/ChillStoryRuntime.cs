@@ -159,14 +159,19 @@ namespace Hlc.ChillPrototype
 
         public void StopStory()
         {
+            bool finishedFarewell=farewellPending&&Playing;farewellPending=false;
             bool wasPlaying = Playing;
             bool finishSnack=automaticDialogue && chapter!=null && (chapter.Scenario==2600 || chapter.Scenario==2601);
             if(wasPlaying && previousMusic && player.music.clip==previousMusic)previousMusicTime=player.music.time;
             bool resumeActivity=automaticDialogue&&autonomyInstalled;int activityBreak=breakMode,activityTalks=selfTalkCount;
-            double activityEnd=nextAction,variantEnd=nextVariant;bool activityRest=Resting;
+            // Timer flags can change before their voice line begins. Preserve
+            // only an activity that was installed for the current phase.
+            double activityEnd=nextAction,variantEnd=nextVariant;bool activityRest=previousRest;
             string activityBase=CurrentBaseMotion;float activitySleep=sleepiness;
             ResetAutonomy();ResetCommandWaits();tutorialCommand=0;RestoreAutomaticResume();GetComponent<ChillNativeUI>()?.StopNativeCredits();
             generation++; if (reader != null) StopCoroutine(reader); reader = null;
+            if(HistoryVisible)GetComponent<ChillNativeUI>()?.Close();
+            chosen=-1;next=false;HistoryVisible=false;
             StopMotionSounds();
             choices.Clear(); loops.Clear(); voice.Stop(); voice.clip = null; ambient.Stop(); ambient.clip = null; sound.Stop(); sound.clip = null;
             if(storyMusic){storyMusic.Stop();storyMusic.clip=null;}
@@ -207,6 +212,7 @@ namespace Hlc.ChillPrototype
             // Blend into that same destination without resetting the Animator,
             // including script-only poses with no ordinary exit to work.
             if(presentation&&wasPlaying&&!finishSnack)presentation.BlendToRequested(.25f);
+            if(finishedFarewell&&SaveNow())Notify("Saved. You can close this tab.");
         }
 
         void Begin(ChillChapter selected, bool resume,bool ambientDialogue=false,bool fromTalkLog=true)
@@ -221,6 +227,7 @@ namespace Hlc.ChillPrototype
             if(!ambientDialogue){player.music.Pause();foreach(var source in ambienceSources.Values)if(source&&source.isPlaying){pausedStoryAmbience.Add(source);source.Pause();}}
             if (!chapters.TryGetValue(selected.ID, out sentences)) { status = "Đoạn này không có kịch bản."; return; }
             chapter = selected; cursor = start; visible = true; selectedTab = 0;
+            chosen=-1;next=false;message="";shownChars=0;typing=false;loadingAudio=false;
             save.chapter = selected.ID; save.cursor = cursor;
             if (!resume) save.usedChoices.Clear();
             if (!resume) save.sceneHistory.Clear();
@@ -229,6 +236,7 @@ namespace Hlc.ChillPrototype
             string scenario=data.scenarios.FirstOrDefault(s => s.value == selected.Scenario)?.name ?? "";
             presentation.manualLook=scenario.StartsWith("HeroineClick") || scenario.StartsWith("HeroineSelfShortTalk") || scenario.StartsWith("SpeakWord_Player_");
             if (storyController && player.character.runtimeAnimatorController!=storyController) { player.character.runtimeAnimatorController = storyController; player.character.Rebind(); }
+            if(!resume || start==0)PrepareStoryEntry();
             status = "Đang đọc: " + selected.ID; SaveNow(); reader = StartCoroutine(ReadFromSavedScene(resume));
         }
 
@@ -255,7 +263,7 @@ namespace Hlc.ChillPrototype
                 foreach (int index in indices)
                 {
                     var row=sentences[index];
-                    if (row.Command == 0 || row.Command == 20 || row.Command == 21 || row.Command == 22)
+                    if (row.Command == 0 || row.Command == 21 || row.Command == 22)
                     {
                         Motion(row); player.character.Update(0);
                         if (row.BodyMotion != -1)
@@ -279,6 +287,7 @@ namespace Hlc.ChillPrototype
                     else if (row.Command == 40) lastMusicVolume=row;
                     else if (row.Command == 7 || row.Command == 10) lastAmbient=row;
                     else if(row.Command==80&&!loops.Contains(row))loops.Add(row);
+                    else if(row.Command==240)voiceDefect=Mathf.Clamp01(Number(row.Arg1));
                     else effects.RestoreFinal(row);
                     if (++restored % 8 == 0) yield return null;
                 }
@@ -315,8 +324,9 @@ namespace Hlc.ChillPrototype
 
         IEnumerator Speak(ChillSentence row, bool waitForClick = true,bool applyMotion=true)
         {
-            if(applyMotion)Motion(row); next = false;
-            if (row.Command == 0 && Number(row.Arg1) > 0) yield return new WaitForSecondsRealtime(Mathf.Min(120, Number(row.Arg1)));
+            // VoiceText deliberately leaves body/facial/look state unchanged in ScenarioReader.
+            if(applyMotion&&row.Command!=20)Motion(row); next = false;
+            if ((row.Command == 0 || row.Command==80) && Number(row.Arg1) > 0) yield return new WaitForSecondsRealtime(Mathf.Min(120, Number(row.Arg1)));
             typewriter.Start(Text(row.LocalizationID),(data.parameters?.TalkSpeedData ?? new ChillTalkSpeed()).Delay(save.language),data.parameters?.typing);
             message = typewriter.Text; shownChars = 0; textClock = 0; typing = !typewriter.Complete;
             moveMouth = row.Command == 20 ? row.Arg1 == "1" : row.Command == 22 ? row.Arg3 != "-1" : row.Arg3 == "0";
@@ -331,17 +341,18 @@ namespace Hlc.ChillPrototype
             }
             yield return null; // Let the audio source apply its queued Play.
             loadingAudio = false;
-            var autoWait=new ChillAutoAdvanceGate();float afterVoice=row.Command==0?Mathf.Max(0,row.Arg2):0;
+            bool showSelection=waitForClick&&NextSentenceIsSelection();
+            var autoWait=new ChillAutoAdvanceGate();float afterVoice=row.Command==0&&!showSelection?Mathf.Max(0,row.Arg2):0;
             while (Playing)
             {
-                if (!waitForClick && chosen >= 0) { voice.Stop(); yield break; }
+                if (!waitForClick && choices.Count>0 && chosen >= 0) { voice.Stop(); yield break; }
                 if (next)
                 {
                     next = false;
                     if (typing) {if(typewriter.WaitingForInput)shownChars=typewriter.Advance(0,true);else typewriter.Accelerate(.01f);typing=!typewriter.Complete;}
                     else { voice.Stop(); yield break; }
                 }
-                bool ready=wasFocused && !HistoryVisible && !typing && !voice.isPlaying && (autoRead || automaticDialogue || !waitForClick);
+                bool ready=wasFocused && !HistoryVisible && !typing && !voice.isPlaying && (autoRead || automaticDialogue || !waitForClick || showSelection);
                 if(autoWait.Ready(ready,Now,afterVoice))yield break;
                 yield return null;
             }
@@ -364,12 +375,15 @@ namespace Hlc.ChillPrototype
         void PrepareChoices(int start,int command)
         {
             choices.Clear();chosen=-1;
+            while(start>0&&sentences[start-1].Command==command)start--;
             for(int i=start;i<sentences.Length&&sentences[i].Command==command;i++)choices.Add(sentences[i]);
         }
         void CommitChoice(int command)
         {
             if(chosen<0||chosen>=choices.Count)return;
+            if(command==15&&save.usedChoices.Contains(choices[chosen].Arg2)){chosen=-1;return;}
             var selected = choices[chosen]; choices.Clear();
+            chosen=-1;next=false;
             if (command == 15) save.usedChoices.Add(selected.Arg2);
             cursor = Jump(selected.Arg1); save.cursor = cursor; SaveNow();
         }

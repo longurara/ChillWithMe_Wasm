@@ -48,6 +48,6 @@ namespace Hlc.ChillPrototype
             pendingTimerScenario=scenario;pendingTimerUntil=Now+20;UpdateTimerVoice();
         }
         void UpdateTimerVoice()
-        {if(pendingTimerScenario==0)return;if(Now>pendingTimerUntil){pendingTimerScenario=0;return;}if(!Playing&&Application.isPlaying&&!VerificationOnly){int scenario=pendingTimerScenario;pendingTimerScenario=0;StartReaction(scenario);}}
+        {if(pendingTimerScenario==0)return;if(Now>pendingTimerUntil){pendingTimerScenario=0;return;}if(!Playing&&Application.isPlaying&&!VerificationOnly&&StartReaction(pendingTimerScenario))pendingTimerScenario=0;}
     }
 }
