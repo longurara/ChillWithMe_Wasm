@@ -57,12 +57,22 @@ namespace Hlc.ChillPrototype
         readonly Dictionary<Transform,float> rowHeights=new Dictionary<Transform,float>();
         ChillStoryUiState state;
         static string PathOf(Transform t) => t.parent ? PathOf(t.parent)+"/"+t.name : t.name;
+        public static string BindingPathOf(Transform t)
+        {
+            string name=t.name;
+            if(t.parent&&t.parent.name=="ChangeTimerUI")
+            {
+                var siblings=t.parent.Cast<Transform>().Where(child=>child.name==t.name).ToArray();
+                if(siblings.Length>1)name+="["+Array.IndexOf(siblings,t)+"]";
+            }
+            return t.parent?BindingPathOf(t.parent)+"/"+name:name;
+        }
         void Start() { Initialize(); }
         public void Initialize()
         {
             if (initialized) return; initialized=true;
             ChillGameplayUI.UseNativeUI(true);
-            foreach(var t in UnityEngine.Object.FindObjectsOfType<Transform>(true)) paths[PathOf(t)]=t;
+            foreach(var t in UnityEngine.Object.FindObjectsOfType<Transform>(true)){paths[PathOf(t)]=t;paths[BindingPathOf(t)]=t;}
             nativeUiRoot=canvas.transform.Find("UI");if(nativeUiRoot)nativeUiSibling=nativeUiRoot.GetSiblingIndex();
             var config=JsonUtility.FromJson<Configuration>(configuration.text);
             InitializeStoryHud(config);
@@ -177,6 +187,10 @@ namespace Hlc.ChillPrototype
              Graphic[] Images(string[] refs)=>(refs ?? Array.Empty<string>()).Select(p=>Find(p)?.GetComponent<Graphic>()).Where(g=>g).ToArray();
              interaction.hover=Images(settings.hover);interaction.use=Images(settings.use);interaction.baseline=Images(settings.baseline);interaction.hoverAlpha=settings.hoverAlpha;interaction.useAlpha=settings.useAlpha;interaction.baseAlpha=settings.baseAlpha;interaction.hideHoverOnUse=settings.hideHoverOnUse;interaction.SetUsing(false);
              var button=target.GetComponent<Button>();if(button)button.transition=UnityEngine.UI.Selectable.Transition.None;}
+            var modeRoots=new[]{RefOf("TimerParentUI","_changePomodoroTimerButton")?.parent,RefOf("TimerParentUI","_changeCountupTimerButton")?.parent};
+            var modeParent=modeRoots.FirstOrDefault(t=>t)?.parent;
+            if(modeParent)foreach(Transform child in modeParent)if(child.GetComponentInChildren<Button>(true)&&!modeRoots.Contains(child))child.gameObject.SetActive(false);
+            foreach(var root in modeRoots.Where(t=>t))foreach(var graphic in root.GetComponentsInChildren<Graphic>(true))graphic.raycastTarget=graphic.GetComponent<Button>();
             InitializeFeatureControls();InitializeWorkspaceControls();InitializeCompletionControls();Show(RefOf("FacilityProfile","_canvasGroup")?.gameObject,true);Set(RefOf("FacilityProfile","_background"),false);Set(RefOf("PlayerProfileView","self"),false);Set(RefOf("HeroineProfileView","self"),false);Close();Refresh(true);
         }
         class Hook {public Button button;public Action action;}

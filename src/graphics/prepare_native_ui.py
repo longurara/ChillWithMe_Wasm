@@ -11,9 +11,14 @@ components={i:(t,b) for t,i,b in blocks}
 objects={i:field(b,'m_Name') for t,i,b in blocks if t==1}
 transforms={i:(go_id(b),re.search(r'm_Father: \{fileID: (-?\d+)\}',b).group(1)) for t,i,b in blocks if t in (4,224)}
 bygo={g:i for i,(g,parent) in transforms.items()}
+children={i:[str(r['fileID']) for r in yaml.safe_load(b).get('RectTransform',yaml.safe_load(b).get('Transform',{})).get('m_Children',[])] for t,i,b in blocks if t in (4,224)}
 def path(go):
     tid=bygo.get(go);parent=transforms[tid][1] if tid else '0'
-    return (path(transforms[parent][0])+'/' if parent in transforms else '')+objects.get(go,'')
+    name=objects.get(go,'')
+    if parent in transforms and objects.get(transforms[parent][0])=='ChangeTimerUI':
+        siblings=[i for i in children.get(parent,[]) if objects.get(transforms[i][0])==name]
+        if len(siblings)>1:name+=f'[{siblings.index(tid)}]'
+    return (path(transforms[parent][0])+'/' if parent in transforms else '')+name
 def reference(value):
     i=str(value.get('fileID',0))
     return path(i if components[i][0]==1 else go_id(components[i][1])) if i in components else ''

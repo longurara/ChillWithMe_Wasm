@@ -42,10 +42,17 @@ public static class ChillGameplayParityCheck
         var timer=config.bindings.First(b=>b.script=="TimerParentUI");
         ChillNativeInteraction Mode(string key)=>ui.Find(timer.refs.First(r=>r.name==key).path).GetComponent<ChillNativeInteraction>();
         var pomodoro=Mode("_changePomodoroTimerInteractiveUI");var countup=Mode("_changeCountupTimerInteractiveUI");
+        Require(timer.refs.First(r=>r.name=="_changePomodoroTimerButton").path.Contains("ChangePomodoroTimer[1]")&&timer.refs.First(r=>r.name=="_changeCountupTimerButton").path.Contains("ChangeCountupTimer[1]"),"Timer references ignore the original duplicate sibling identity");
+        Require(pomodoro.transform.parent.parent.GetComponentsInChildren<UnityEngine.UI.Button>().Length==2,"Unused duplicate timer buttons still render/catch pointer events");
         void Selected(ChillNativeInteraction selected,ChillNativeInteraction inactive)
         {
             Require(selected.use.All(g=>g.color.a>.99f)&&inactive.use.All(g=>g.color.a<.01f),"Timer mode highlights retain the previous selection");
             Require(selected.GetComponent<UnityEngine.UI.Button>().transition==UnityEngine.UI.Selectable.Transition.None,"Selectable tint can overwrite timer highlight alpha");
+            ChillNativeUIPreview.RenderCurrent(player,ui.canvas,"preview-parity-timer.png",0,0,0,true,camera=>{
+                var target=(RectTransform)inactive.transform;var point=RectTransformUtility.WorldToScreenPoint(camera,target.TransformPoint(target.rect.center));var hits=new List<UnityEngine.EventSystems.RaycastResult>();var system=UnityEngine.Object.FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
+                ui.canvas.GetComponent<UnityEngine.UI.GraphicRaycaster>().Raycast(new UnityEngine.EventSystems.PointerEventData(system){position=point},hits);
+                Require(hits.Count>0&&UnityEngine.EventSystems.ExecuteEvents.GetEventHandler<UnityEngine.EventSystems.IPointerClickHandler>(hits[0].gameObject)==inactive.gameObject,"Selected timer decoration blocks the other mode button");
+            });
         }
         save.timerMode=0;ui.RefreshNow();Selected(pomodoro,countup);Call(countup,"Enter");Require(countup.hover.All(g=>g.color.a>.99f),"Inactive use layer erases the shared hover image");
         save.timerMode=1;ui.RefreshNow();Selected(countup,pomodoro);Call(pomodoro,"Enter");save.timerMode=0;ui.RefreshNow();Selected(pomodoro,countup);
@@ -55,7 +62,7 @@ public static class ChillGameplayParityCheck
             start.DeactivateAll();Require(start.hover.All(g=>g.color.a<.01f),"Idle Play ring should be hidden before hover");Call(start,"Enter");Require(start.hover.All(g=>g.color.a>.99f),"Native Play hover ring does not appear");start.OnPointerExit(null);Require(start.hover.All(g=>g.color.a<.01f),"Play ring remains after pointer exit");
         }
         save.timerMode=oldMode;save.timerRunning=oldRunning;save.countupActive=oldCountup;save.pausedRemaining=oldRemaining;ui.RefreshNow();
-        File.WriteAllText(Path.GetFullPath("../research/gameplay-parity-check.json"),"{\"passed\":true,\"mainEpisodes\":36,\"sourcePunctuationPolicy\":true,\"lastCharacterWait\":true,\"richTextAndWaitActions\":true,\"unicodeTyping\":true,\"separateStoryMusic\":true,\"tutorialGuides\":3,\"drinkReadiness\":true,\"windowCooldown\":true,\"musicboxCooldown\":true,\"sourceRoomViews\":3,\"meshPicking\":true,\"textLoopResumeAndCancellation\":true,\"choiceRaycastAndLayout\":true,\"exclusiveTimerSelection\":true,\"nativePlayHoverRing\":true,\"userSaveWritten\":false,\"browserGameplayRun\":false}");
+        File.WriteAllText(Path.GetFullPath("../research/gameplay-parity-check.json"),"{\"passed\":true,\"mainEpisodes\":36,\"sourcePunctuationPolicy\":true,\"lastCharacterWait\":true,\"richTextAndWaitActions\":true,\"unicodeTyping\":true,\"separateStoryMusic\":true,\"tutorialGuides\":3,\"drinkReadiness\":true,\"windowCooldown\":true,\"musicboxCooldown\":true,\"sourceRoomViews\":3,\"meshPicking\":true,\"textLoopResumeAndCancellation\":true,\"choiceRaycastAndLayout\":true,\"exclusiveTimerSelection\":true,\"sourceTimerSiblingIdentity\":true,\"unusedTimerCopiesHidden\":true,\"nativePlayHoverRing\":true,\"userSaveWritten\":false,\"browserGameplayRun\":false}");
         Debug.Log("HLC_GAMEPLAY_PARITY_CHECK_PASSED episodes=36 typewriter=true storyMusicSeparate=true objectReadiness=true cameraViews=3");
     }
 }
