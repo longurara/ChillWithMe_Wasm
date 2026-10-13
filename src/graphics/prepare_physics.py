@@ -13,9 +13,10 @@ if __name__ == '__main__':
               'profiles': [{k: v for k, v in g.items() if k not in ('roots', 'colliders', 'sourceConstraints')}
                            for g in profile['groups']],
               'webDifferences': ['Rotation-only CPU solver; no MeshCloth or self-collision',
-                                'Angle caps: hair 30, coat 40, hat 25, custom sleeves 12 degrees',
+                                'Angle caps: hair 30, coat 90, hat 25, custom sleeves 12 degrees',
                                 '60 Hz solver; source depth curves evaluated with Hermite interpolation',
-                                'Original tapered capsules plus five neck/arm capsules',
+                                'Original capsule separation, direction and center flags; five neck/arm supplements',
+                                'Twenty coat cross edges retain source non-loop strip order and distance-depth stiffness; sampled edge contacts',
                                 'Custom sleeves have authored source tweens and a web-only secondary chain']}
     (ROOT / 'research/physics-source-profile.json').write_text(json.dumps(report, indent=2) + '\n', 'utf-8')
     print(json.dumps(result))

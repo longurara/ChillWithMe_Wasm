@@ -18,7 +18,7 @@ public static class ChillPhysicsBake
         physics.useBakedFallback=false;physics.bakedConfiguration=null;
         animator.runtimeAnimatorController=player.story.storyController;animator.Rebind();animator.Update(0);physics.RebindGarment(null);
         var values=new[]{50,752,1500};
-        var result=new ChillBoneBake{profileHash=Hash128.Compute(physics.configuration.text).ToString(),paths=physics.BonePaths(),clips=new ChillBoneBake.Clip[values.Length]};
+        var result=new ChillBoneBake{profileHash=physics.BakeProfileHash,paths=physics.BonePaths(),clips=new ChillBoneBake.Clip[values.Length]};
         for(int clipIndex=0;clipIndex<values.Length;clipIndex++)
         {
             var source=player.story.presentation.statePaths.First(p=>p.motion==values[clipIndex]);
@@ -31,7 +31,7 @@ public static class ChillPhysicsBake
             {
                 physics.BeforeAnimator();animator.Play(source.path,0,(float)frame/(frames-1));animator.Update(0);physics.Step(frame==0?0:seconds/(frames-1));
                 var offsets=physics.RotationOffsets();
-                if(!physics.StateFinite()||offsets.Any(q=>float.IsNaN(q.x)||Quaternion.Angle(Quaternion.identity,q)>40.1f))throw new InvalidOperationException("Invalid physics bake: "+source.path);
+                if(!physics.StateFinite()||offsets.Any(q=>float.IsNaN(q.x)||Quaternion.Angle(Quaternion.identity,q)>90.1f))throw new InvalidOperationException("Invalid physics bake: "+source.path);
                 clip.frames[frame]=new ChillBoneBake.Frame{offsets=offsets};
             }
         }

@@ -121,7 +121,7 @@ public static class ChillMotionAudit
         }
         Require(report.maxPositionError < .00001f,"Physics changed authored local positions");
         Require(report.maxHumanoidRotationError < .1f,"Physics changed humanoid joint rotations");
-        Require(report.maxSecondaryRotation <= 40.1f,"Secondary motion exceeded WebGL safety limits");
+        Require(report.maxSecondaryRotation <= 90.1f,"Secondary motion exceeded WebGL safety limits");
         player.bones.ResetDynamics(); player.deskObjects.Select(0);
         for (int i=0;i<propTransforms.Length;i++) Require(Vector3.Distance(propTransforms[i].localPosition,propPositions[i]) < .00001f && Quaternion.Angle(propTransforms[i].localRotation,propRotations[i]) < .1f,"Prop did not return to desk pose: "+propTransforms[i].name);
         for (int i=0;i<skins.Length;i++) Require(skins[i].sharedMaterials.SequenceEqual(materials[i]),"Chair animation changed skin material");

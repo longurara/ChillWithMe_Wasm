@@ -30,6 +30,7 @@ namespace Hlc.ChillPrototype
         }
         [Serializable] class Group
         {
+            public int connectionMode; public Curve distanceCurve;
             public string name; public string[] roots,colliders;
             public float gravity,damping,radius,worldInertia=1,localInertia=1,velocityAttenuation=.7f;
             public float teleportDistance=.5f,teleportRotation=90;
@@ -37,17 +38,17 @@ namespace Hlc.ChillPrototype
             public bool useAngleLimit,useRestoration,useMaxDistance;
             public Curve dampingCurve,radiusCurve,angleCurve,restorationCurve,speedLimit,maxDistance;
         }
-        [Serializable] class Collision { public string id,path; public bool sphere; public float[] center,size; public int axis; }
+        [Serializable] class Collision { public string id,path; public bool sphere,radiusSeparation,reverseDirection,alignedOnCenter=true; public float[] center,size; public int axis; }
         class Body
         {
             public Transform transform,end; public Vector3 center,a,b; public float radius,radiusEnd,height,ra,rb;
-            public int axis; public bool sphere,active;
+            public int axis; public bool sphere,active,reverseDirection,alignedOnCenter=true;
         }
         class Node
         {
             public Transform bone; public Group group; public Body[] bodies;
             public float[] allowances; public int parent=-1,root,depth; public readonly List<int> children=new List<int>();
-            public bool pinned,applied;
+            public bool pinned,applied,coat;
             public Vector3 position,previous,goal,previousGoal,tickGoal,lastTickGoal,renderFrom,anchorPosition;
             public Quaternion anchorRotation,frameRotation,frameLocalRotation,outputLocalRotation;
             public float angleLimit,radius,damping,restoration,speedLimit,maxDistance;
@@ -58,6 +59,7 @@ namespace Hlc.ChillPrototype
         public Animator character;
         public bool simulation=true,lowQuality;
         readonly List<Node> nodes=new List<Node>();
+        readonly List<(int a,int b,float stiffness)> crossLinks=new List<(int,int,float)>();
         readonly List<Transform> garmentRoots=new List<Transform>();
         Body[] frameBodies=Array.Empty<Body>();
         bool initialized,needsReset=true,suspended,resuming;
@@ -78,6 +80,7 @@ namespace Hlc.ChillPrototype
         public int DynamicRootCount=>garmentRoots.Count(t=>t);
         public bool IsSuspended=>suspended;
         public bool BakedFallbackActive=>activeBake!=null&&bakeWeight>0;
+        public string BakeProfileHash=>Hash128.Compute(configuration.text+"|coat-cross-edges-v5").ToString();
         public void ResetDynamics(){BeforeAnimator();needsReset=true;accumulator=0;activeBake=null;bakeWeight=0;}
         public void InitializeForPreview(){if(!initialized)Initialize();}
         public void SetSuspended(bool value){if(value==suspended)return;suspended=value;accumulator=0;resuming=true;}
@@ -92,11 +95,11 @@ namespace Hlc.ChillPrototype
         {
             if(!configuration||!character)return;
             var retained=nodes.Where(n=>n.bone&&n.bone.gameObject.activeInHierarchy).ToDictionary(n=>n.bone);
-            nodes.Clear();var profile=JsonUtility.FromJson<Profile>(configuration.text);
+            nodes.Clear();crossLinks.Clear();var profile=JsonUtility.FromJson<Profile>(configuration.text);
             var transforms=FindObjectsByType<Transform>(FindObjectsInactive.Include,FindObjectsSortMode.None).GroupBy(PathOf).ToDictionary(g=>g.Key,g=>g.First());
             var bodies=new Dictionary<string,Body>();
             foreach(var source in profile.colliders??Array.Empty<Collision>())if(transforms.TryGetValue(source.path,out var t))
-                bodies[source.id]=new Body{transform=t,center=Vec(source.center),radius=source.size[0],radiusEnd=source.size[1],height=source.size[2],axis=source.axis,sphere=source.sphere};
+                bodies[source.id]=new Body{transform=t,center=Vec(source.center),radius=source.size[0],radiusEnd=source.radiusSeparation?source.size[1]:source.size[0],height=source.size[2],axis=source.axis,sphere=source.sphere,reverseDirection=source.reverseDirection,alignedOnCenter=source.alignedOnCenter};
             var humanBones=new HashSet<Transform>();
             if(character.isHuman)for(int i=0;i<(int)HumanBodyBones.LastBone;i++){var t=character.GetBoneTransform((HumanBodyBones)i);if(t)humanBones.Add(t);}
             var supplements=new List<Body>();
@@ -115,7 +118,7 @@ namespace Hlc.ChillPrototype
                 {
                     if(humanBones.Contains(bone)||indices.ContainsKey(bone)||(!dynamic&&bone!=root&&!skinnedBones.Contains(bone)))continue;
                     var contacts=(group.colliders??Array.Empty<string>()).Where(bodies.ContainsKey).Select(id=>bodies[id]).Concat(supplements).ToArray();
-                    var node=new Node{bone=bone,group=group,pinned=bone==root,root=rootIndex,bodies=contacts};
+                    var node=new Node{bone=bone,group=group,pinned=bone==root,root=rootIndex,bodies=contacts,coat=group.roots.Any(r=>r.Contains("Character_Paka_"))};
                     if(!node.pinned&&bone.parent&&indices.TryGetValue(bone.parent,out int parent)){node.parent=parent;node.depth=nodes[parent].depth+1;}
                     else{node.pinned=true;node.root=nodes.Count;}
                     int index=nodes.Count;nodes.Add(node);indices[bone]=index;if(node.parent>=0)nodes[node.parent].children.Add(index);
@@ -132,7 +135,11 @@ namespace Hlc.ChillPrototype
             foreach(var node in nodes)
             {
                 int maxDepth=nodes.Where(n=>n.root==node.root).Max(n=>n.depth);float depth=maxDepth>0?(float)node.depth/maxDepth:0;
-                float cap=node.group.name.Contains("Hair")?30:node.group.name=="Web sleeve"?12:node.group.roots.Any(r=>r.Contains("christmashat"))?25:40;
+                // Source coat limits rise from 0 to 120 degrees down the hem.
+                // A 40-degree ceiling on every joint kept the distal hem rigid
+                // when the hips bend. Retain the depth curve with a 90-degree
+                // web ceiling; human joints and translations remain Animator-owned.
+                float cap=node.group.name.Contains("Hair")?30:node.group.name=="Web sleeve"?12:node.group.roots.Any(r=>r.Contains("christmashat"))?25:90;
                 node.angleLimit=node.group.useAngleLimit&&node.group.angleCurve!=null?Mathf.Clamp(node.group.angleCurve.At(depth),0,cap):cap;
                 node.radius=Mathf.Max(0,node.group.radiusCurve!=null&&node.group.radiusCurve.value>0?node.group.radiusCurve.At(depth):node.group.radius);
                 node.damping=Mathf.Clamp(node.group.dampingCurve!=null&&node.group.dampingCurve.value>0?node.group.dampingCurve.At(depth):node.group.damping,.03f,.85f);
@@ -153,12 +160,28 @@ namespace Hlc.ChillPrototype
                     node.allowances[j]=Mathf.Max(0,Mathf.Lerp(ra,rb,t)+node.radius-Vector3.Distance(node.bone.position,p));
                 }
             }
+            // Native coat uses Sequential Non Loop Mesh (connectionMode 3).
+            // Retain the open front and connect neighboring strips in source order.
+            foreach(var group in profile.groups??Array.Empty<Group>())if(group.connectionMode==3)
+            {
+                var roots=(group.roots??Array.Empty<string>()).Select(path=>transforms.TryGetValue(path,out var t)&&indices.TryGetValue(t,out int i)?i:-1).ToArray();
+                for(int strip=1;strip<roots.Length;strip++)if(roots[strip-1]>=0&&roots[strip]>=0)
+                {
+                    int a=roots[strip-1],b=roots[strip];
+                    while(nodes[a].children.Count==1&&nodes[b].children.Count==1)
+                    {
+                        a=nodes[a].children[0];b=nodes[b].children[0];
+                        int depth=nodes.Where(n=>n.root==nodes[a].root).Max(n=>n.depth);
+                        crossLinks.Add((a,b,Mathf.Clamp01(group.distanceCurve?.At((float)nodes[a].depth/depth)??.3f)));
+                    }
+                }
+            }
             frameBodies=nodes.SelectMany(n=>n.bodies).Distinct().ToArray();
             // Outfit changes rebuild the small rig map, not the multi-MB recording.
             if(loadedBake!=bakedConfiguration)
             {loadedBake=bakedConfiguration;cachedBake=bakedConfiguration?JsonUtility.FromJson<ChillBoneBake>(bakedConfiguration.text):null;}
             bake=cachedBake;
-            if(bake!=null&&(bake.profileHash!=Hash128.Compute(configuration.text).ToString()||!bake.paths.SequenceEqual(BonePaths())))bake=null;
+            if(bake!=null&&(bake.profileHash!=BakeProfileHash||!bake.paths.SequenceEqual(BonePaths())))bake=null;
             presentation=GetComponent<ChillGraphicsPlayer>()?.story?.presentation;
             activeBake=null;bakeWeight=0;initialized=true;
         }
@@ -209,16 +232,29 @@ namespace Hlc.ChillPrototype
                     float attenuation=1-node.restoration*(1-Mathf.Clamp01(node.group.velocityAttenuation));
                     var velocity=Vector3.ClampMagnitude((node.position-node.previous)*(1-node.damping)*attenuation,node.speedLimit*FixedStep);
                     var next=node.position+velocity+Gravity(node.group)*FixedStep*FixedStep;
-                    next+=(node.tickGoal-node.position)*(1-Mathf.Exp(-(2+node.restoration*30)*FixedStep));node.previous=node.position;node.position=next;
+                    // Source coat restoration is zero. A baseline spring kept
+                    // pulling its hem back to the stiff exported pose.
+                    float stiffness=(node.coat?0:2)+node.restoration*30;
+                    next+=(node.tickGoal-node.position)*(1-Mathf.Exp(-stiffness*FixedStep));node.previous=node.position;node.position=next;
                 }
-                for(int iteration=0;iteration<(lowQuality?2:4);iteration++)foreach(var node in nodes)if(node.bone&&!node.pinned&&node.parent>=0&&node.bone.gameObject.activeInHierarchy)
+                for(int iteration=0;iteration<(lowQuality?2:4);iteration++)
                 {
+                  foreach(var node in nodes)if(node.bone&&!node.pinned&&node.parent>=0&&node.bone.gameObject.activeInHierarchy)
+                  {
                     var parent=nodes[node.parent];var authored=node.tickGoal-parent.tickGoal;var direction=node.position-parent.position;
                     if(direction.sqrMagnitude<1e-10f)direction=authored;
                     direction=Vector3.RotateTowards(authored,direction,node.angleLimit*Mathf.Deg2Rad,0).normalized;
                     node.position=parent.position+direction*authored.magnitude;
                     node.position=node.tickGoal+Vector3.ClampMagnitude(node.position-node.tickGoal,node.maxDistance);
                     for(int j=0;j<node.bodies.Length;j++)ResolveBody(node,parent,node.bodies[j],node.allowances[j]);
+                  }
+                  foreach(var link in crossLinks)
+                  {
+                    var a=nodes[link.a];var b=nodes[link.b];if(!a.bone.gameObject.activeInHierarchy||!b.bone.gameObject.activeInHierarchy)continue;
+                    var edge=b.position-a.position;float length=edge.magnitude;
+                    if(length>1e-6f){var correction=edge*((length-Vector3.Distance(a.tickGoal,b.tickGoal))/length*link.stiffness*.5f);a.position+=correction;b.position-=correction;}
+                    for(int j=0;j<a.bodies.Length;j++)ResolveCrossEdge(a,b,a.bodies[j],Mathf.Min(a.allowances[j],b.allowances[j]));
+                  }
                 }
                 accumulator=Math.Max(0,accumulator-TickDuration);LastStepCount++;SimulationTicks++;
             }
@@ -262,7 +298,9 @@ namespace Hlc.ChillPrototype
             ra=Mathf.Max(0,body.radius*largest);rb=body.sphere?ra:Mathf.Max(0,body.radiusEnd*largest);
             if(body.end){a=body.transform.position;b=body.end.position;return;}if(body.sphere)return;
             var axis=body.axis==0?Vector3.right:body.axis==2?Vector3.forward:Vector3.up;float half=Mathf.Max(0,body.height*.5f-Mathf.Max(body.radius,body.radiusEnd));
-            a=body.transform.TransformPoint(body.center-axis*half);b=body.transform.TransformPoint(body.center+axis*half);
+            if(body.reverseDirection)axis=-axis;
+            var origin=body.alignedOnCenter?body.center:body.center-axis*body.height*.5f;
+            a=body.transform.TransformPoint(origin+axis*half);b=body.transform.TransformPoint(origin-axis*half);
         }
         static void ResolveBody(Node node,Node parent,Body body,float allowance)
         {
@@ -277,6 +315,23 @@ namespace Hlc.ChillPrototype
                 node.position+=normal*(radius-delta.magnitude)/weight;
                 var velocity=node.position-node.previous;float inward=Vector3.Dot(velocity,normal);if(inward<0)velocity-=normal*inward;
                 node.previous=node.position-velocity*.9f;
+            }
+        }
+        static void ResolveCrossEdge(Node a,Node b,Body body,float allowance)
+        {
+            if(!body.active)return;
+            for(int sample=1;sample<=3;sample++)
+            {
+                float t=sample*.25f;var point=Vector3.Lerp(a.position,b.position,t);
+                var closest=Closest(point,body.a,body.b,out float along);
+                float radius=Mathf.Max(0,Mathf.Lerp(body.ra,body.rb,along)+Mathf.Lerp(a.radius,b.radius,t)-allowance);
+                var delta=point-closest;if(delta.sqrMagnitude>=radius*radius)continue;
+                var normal=delta.sqrMagnitude>1e-10f?delta.normalized:(Vector3.Lerp(a.tickGoal,b.tickGoal,t)-closest).normalized;
+                if(normal.sqrMagnitude<.1f)normal=Vector3.forward;
+                float wa=1-t,wb=t,denominator=wa*wa+wb*wb;var correction=normal*(radius-delta.magnitude)/denominator;
+                a.position+=correction*wa;b.position+=correction*wb;
+                // Contact must not inject velocity into both strips.
+                a.previous+=correction*wa;b.previous+=correction*wb;
             }
         }
         public string[] BonePaths()=>nodes.Where(n=>n.bone).Select(n=>RelativePath(n.bone)).ToArray();

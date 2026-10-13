@@ -1,0 +1,15 @@
+{
+    "passed": true,
+    "userSaveWritten": false,
+    "motions": [
+        57,
+        58
+    ],
+    "samples": 8,
+    "settleFrames": 180,
+    "crossEdges": 20,
+    "nativeCapsuleFlags": true,
+    "maximumBackHemHipPenetrationMeters": 0.0,
+    "maximumSecondaryAngle": 68.3765869140625,
+    "scope": "Actual transformed back-hem edges against the native hip capsule in eight fixed window poses. Web solver, not PC runtime parity."
+}

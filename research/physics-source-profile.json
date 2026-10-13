@@ -6,6 +6,25 @@
   "profiles": [
     {
       "name": "Magica Cloth",
+      "connectionMode": 0,
+      "distanceCurve": {
+        "value": 0.242,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": -0.5
+          },
+          {
+            "time": 1,
+            "value": 0.5,
+            "inSlope": -0.5,
+            "outSlope": 0
+          }
+        ]
+      },
       "gravity": 10.0,
       "damping": 0.6,
       "radius": 0.02,
@@ -120,6 +139,25 @@
     },
     {
       "name": "Magica Cloth",
+      "connectionMode": 3,
+      "distanceCurve": {
+        "value": 0.3,
+        "useCurve": true,
+        "keys": [
+          {
+            "time": 0,
+            "value": 0,
+            "inSlope": 1,
+            "outSlope": 1
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 1,
+            "outSlope": 1
+          }
+        ]
+      },
       "gravity": 7.0,
       "damping": 0.1,
       "radius": 0.025,
@@ -240,6 +278,25 @@
     },
     {
       "name": "Magica Cloth Hair",
+      "connectionMode": 0,
+      "distanceCurve": {
+        "value": 1,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": -0.5
+          },
+          {
+            "time": 1,
+            "value": 0.5,
+            "inSlope": -0.5,
+            "outSlope": 0
+          }
+        ]
+      },
       "gravity": 3.0,
       "damping": 0.1,
       "radius": 0.004,
@@ -354,6 +411,25 @@
     },
     {
       "name": "Cloth",
+      "connectionMode": 0,
+      "distanceCurve": {
+        "value": 1,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": -0.5
+          },
+          {
+            "time": 1,
+            "value": 0.5,
+            "inSlope": -0.5,
+            "outSlope": 0
+          }
+        ]
+      },
       "gravity": 5.0,
       "damping": 0.1,
       "radius": 0.02,
@@ -469,9 +545,10 @@
   ],
   "webDifferences": [
     "Rotation-only CPU solver; no MeshCloth or self-collision",
-    "Angle caps: hair 30, coat 40, hat 25, custom sleeves 12 degrees",
+    "Angle caps: hair 30, coat 90, hat 25, custom sleeves 12 degrees",
     "60 Hz solver; source depth curves evaluated with Hermite interpolation",
-    "Original tapered capsules plus five neck/arm capsules",
+    "Original capsule separation, direction and center flags; five neck/arm supplements",
+    "Twenty coat cross edges retain source non-loop strip order and distance-depth stiffness; sampled edge contacts",
     "Custom sleeves have authored source tweens and a web-only secondary chain"
   ]
 }

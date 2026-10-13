@@ -1,0 +1,9 @@
+{
+    "passed": true,
+    "userSaveWritten": false,
+    "meanHemDropMeters": 0.029418742284178735,
+    "maxSecondaryAngle": 41.183631896972659,
+    "hems": 6,
+    "settleFrames": 180,
+    "scope": "Web secondary bone solver in a fixed leave-chair pose; not a PC MagicaCloth comparison."
+}

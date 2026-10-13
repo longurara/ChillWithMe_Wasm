@@ -89,6 +89,7 @@ def bone_physics(source,project):
             collider_list=re.search(r'      colliderList:\n(.*?)(?=^      \w)',body,re.S|re.M)
             scalar=lambda pattern,default:float(match.group(1)) if (match:=re.search(pattern,body,re.M)) else default
             groups.append({'name':objects[go_id(body)],'roots':[hierarchy(i) for i in re.findall(r'fileID: (\d+)',roots.group(1))],
+                'connectionMode':data.get('connectionMode',0),'distanceCurve':curve(data['distanceConstraint']['stiffness']),
                 'gravity':scalar(r'^    gravity: ([\d.]+)',5),'damping':scalar(r'^    damping:\n      value: ([\d.]+)',0.2),
                 'radius':scalar(r'^    radius:\n      value: ([\d.]+)',0.02),
                 'colliders':re.findall(r'fileID: (\d+)',collider_list.group(1)) if collider_list else [],
@@ -114,7 +115,10 @@ def bone_physics(source,project):
                 return [float(x) for x in match.groups()]
             direction=re.search(r'^  direction: (\d+)',body,re.M)
             colliders.append({'id':identifier,'path':hierarchy(by_gameobject[go_id(body)]),'sphere':name=='MagicaSphereCollider',
-                'center':vector('center'),'size':vector('size'),'axis':int(direction.group(1)) if direction else 1})
+                'center':vector('center'),'size':vector('size'),'axis':int(direction.group(1)) if direction else 1,
+                'radiusSeparation':field(body,'radiusSeparation')=='1',
+                'reverseDirection':field(body,'reverseDirection')=='1',
+                'alignedOnCenter':field(body,'alignedOnCenter')!='0'})
     report={'implementation':'Fixed-step CPU secondary bone rotations; original Magica parameters are a baseline, not solver parity',
             'groups':groups,'colliders':colliders}
     (project/'Assets/Prototype/bone-physics.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
