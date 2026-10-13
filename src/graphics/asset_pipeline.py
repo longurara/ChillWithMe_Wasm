@@ -62,6 +62,7 @@ def restore_ui_document(text, scripts):
 def bone_physics(source,project):
     from prepare_project import split_yaml,go_id,field
     from Crypto.Hash import MD4
+    import yaml
     _,blocks=split_yaml((source/'App/Scenes/RoomScene.unity').read_text('utf-8'))
     objects={identifier:field(body,'m_Name') for typ,identifier,body in blocks if typ==1}
     transforms={identifier:body for typ,identifier,body in blocks if typ==4}
@@ -79,13 +80,34 @@ def bone_physics(source,project):
         if not reference or reference.group(2)!=dll:continue
         name=types.get(reference.group(1))
         if name=='MagicaCloth':
+            data=yaml.safe_load(body)['MonoBehaviour']['serializeData']
+            def curve(value):
+                return {'value':value.get('value',0),'useCurve':bool(value.get('useCurve',False)),
+                        'keys':[{'time':k['time'],'value':k['value'],'inSlope':k.get('inSlope',0),
+                                 'outSlope':k.get('outSlope',0)} for k in value.get('curve',{}).get('m_Curve',[])]}
             roots=re.search(r'    rootBones:\n(.*?)(?=    connectionMode)',body,re.S)
             collider_list=re.search(r'      colliderList:\n(.*?)(?=^      \w)',body,re.S|re.M)
             scalar=lambda pattern,default:float(match.group(1)) if (match:=re.search(pattern,body,re.M)) else default
             groups.append({'name':objects[go_id(body)],'roots':[hierarchy(i) for i in re.findall(r'fileID: (\d+)',roots.group(1))],
                 'gravity':scalar(r'^    gravity: ([\d.]+)',5),'damping':scalar(r'^    damping:\n      value: ([\d.]+)',0.2),
                 'radius':scalar(r'^    radius:\n      value: ([\d.]+)',0.02),
-                'colliders':re.findall(r'fileID: (\d+)',collider_list.group(1)) if collider_list else []})
+                'colliders':re.findall(r'fileID: (\d+)',collider_list.group(1)) if collider_list else [],
+                'gravityDirection':list(data.get('gravityDirection',{'x':0,'y':-1,'z':0}).values()),
+                'dampingCurve':curve(data['damping']),'radiusCurve':curve(data['radius']),
+                'angleCurve':curve(data['angleLimitConstraint']['limitAngle']),
+                'useAngleLimit':bool(data['angleLimitConstraint']['useAngleLimit']),
+                'restorationCurve':curve(data['angleRestorationConstraint']['stiffness']),
+                'useRestoration':bool(data['angleRestorationConstraint']['useAngleRestoration']),
+                'velocityAttenuation':data['angleRestorationConstraint']['velocityAttenuation'],
+                'worldInertia':data['inertiaConstraint']['worldInertia'],
+                'localInertia':data['inertiaConstraint']['localInertia'],
+                'speedLimit':curve(data['inertiaConstraint']['particleSpeedLimit']),
+                'teleportDistance':data['inertiaConstraint']['teleportDistance'],
+                'teleportRotation':data['inertiaConstraint']['teleportRotation'],
+                'maxDistance':curve(data['motionConstraint']['maxDistance']),
+                'useMaxDistance':bool(data['motionConstraint']['useMaxDistance']),
+                'sourceConstraints':{key:data[key] for key in ('angleLimitConstraint','angleRestorationConstraint',
+                    'inertiaConstraint','motionConstraint','springConstraint','triangleBendingConstraint') if key in data}})
         elif name:
             def vector(key):
                 match=re.search(r'^  '+key+r': \{x: ([^,]+), y: ([^,]+), z: ([^}]+)\}',body,re.M)
@@ -93,7 +115,7 @@ def bone_physics(source,project):
             direction=re.search(r'^  direction: (\d+)',body,re.M)
             colliders.append({'id':identifier,'path':hierarchy(by_gameobject[go_id(body)]),'sphere':name=='MagicaSphereCollider',
                 'center':vector('center'),'size':vector('size'),'axis':int(direction.group(1)) if direction else 1})
-    report={'implementation':'CPU spring bones with distance and body collision constraints; not original MagicaCloth solver',
+    report={'implementation':'Fixed-step CPU secondary bone rotations; original Magica parameters are a baseline, not solver parity',
             'groups':groups,'colliders':colliders}
     (project/'Assets/Prototype/bone-physics.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
     return {'groups':len(groups),'roots':sum(len(g['roots']) for g in groups),'colliders':len(colliders)}

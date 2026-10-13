@@ -16,6 +16,8 @@ python "$taskSources\prepare_lighting.py"
 if ($LASTEXITCODE -ne 0) { throw 'Lighting extraction failed.' }
 python "$taskSources\prepare_controls.py"
 if ($LASTEXITCODE -ne 0) { throw 'Desk binding extraction failed.' }
+python "$taskSources\prepare_physics.py"
+if ($LASTEXITCODE -ne 0) { throw 'Physics profile extraction failed.' }
 python "$taskSources\prepare_motion_scene.py"
 if ($LASTEXITCODE -ne 0) { throw 'Motion binding extraction failed.' }
 Copy-Item -LiteralPath "$taskSources\Runtime\ChillAnimationActions.Events.generated.cs" -Destination "$taskProject\Assets\Prototype\Runtime\ChillAnimationActions.Events.generated.cs" -Force

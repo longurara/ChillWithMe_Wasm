@@ -5,187 +5,284 @@ using UnityEngine;
 
 namespace Hlc.ChillPrototype
 {
-    // Bounded secondary rotations, using recovered cloth roots and colliders.
-    // Animator owns the humanoid pose and every local bone position.
+    // Rotation-only CPU adaptation. Animator owns human joints and local positions.
+    // Source Magica parameters are retained; topology and solver differ on WebGL.
     [DefaultExecutionOrder(200)]
     public sealed class ChillBonePhysics : MonoBehaviour
     {
         [Serializable] class Profile { public Group[] groups; public Collision[] colliders; }
-        [Serializable] class Group { public string name; public string[] roots,colliders; public float gravity,damping,radius; }
+        [Serializable] class Key { public float time,value,inSlope,outSlope; }
+        [Serializable] class Curve
+        {
+            public float value; public bool useCurve; public Key[] keys;
+            public float At(float depth)
+            {
+                if(!useCurve||keys==null||keys.Length==0)return value;
+                if(depth<=keys[0].time)return value*keys[0].value;
+                for(int i=1;i<keys.Length;i++)if(depth<=keys[i].time)
+                {
+                    var a=keys[i-1];var b=keys[i];float span=b.time-a.time;
+                    float t=Mathf.Clamp01((depth-a.time)/Mathf.Max(span,1e-6f)),t2=t*t,t3=t2*t;
+                    return value*((2*t3-3*t2+1)*a.value+(t3-2*t2+t)*span*a.outSlope+(-2*t3+3*t2)*b.value+(t3-t2)*span*b.inSlope);
+                }
+                return value*keys[keys.Length-1].value;
+            }
+        }
+        [Serializable] class Group
+        {
+            public string name; public string[] roots,colliders;
+            public float gravity,damping,radius,worldInertia=1,localInertia=1,velocityAttenuation=.7f;
+            public float teleportDistance=.5f,teleportRotation=90;
+            public float[] gravityDirection;
+            public bool useAngleLimit,useRestoration,useMaxDistance;
+            public Curve dampingCurve,radiusCurve,angleCurve,restorationCurve,speedLimit,maxDistance;
+        }
         [Serializable] class Collision { public string id,path; public bool sphere; public float[] center,size; public int axis; }
-        class Body { public Transform transform; public Vector3 center; public float radius,height; public int axis; public bool sphere; }
+        class Body
+        {
+            public Transform transform,end; public Vector3 center,a,b; public float radius,radiusEnd,height,ra,rb;
+            public int axis; public bool sphere,active;
+        }
         class Node
         {
-            public Transform bone;
-            public Group group;
-            public Body[] bodies;
-            public int parent=-1;
-            public List<int> children=new List<int>();
-            public bool pinned;
-            public Vector3 restPosition,position,previous,goal;
-            public Quaternion restRotation,frameRotation,frameLocalRotation;
-            public Quaternion outputLocalRotation;
-            public bool applied;
-            public float angleLimit;
+            public Transform bone; public Group group; public Body[] bodies;
+            public float[] allowances; public int parent=-1,root,depth; public readonly List<int> children=new List<int>();
+            public bool pinned,applied;
+            public Vector3 position,previous,goal,previousGoal,tickGoal,lastTickGoal,renderFrom,anchorPosition;
+            public Quaternion anchorRotation,frameRotation,frameLocalRotation,outputLocalRotation;
+            public float angleLimit,radius,damping,restoration,speedLimit,maxDistance;
         }
         public TextAsset configuration;
+        public TextAsset bakedConfiguration;
+        public bool useBakedFallback=true;
         public Animator character;
-        public bool simulation=true;
-        public bool lowQuality;
+        public bool simulation=true,lowQuality;
         readonly List<Node> nodes=new List<Node>();
-        Vector3 previousAnchor;
-        bool initialized;
-        bool needsReset = true;
-        public int NodeCount => nodes.Count;
-        public void ResetDynamics() { BeforeAnimator(); needsReset = true; }
-        public void InitializeForPreview() { if (!initialized) Initialize(); }
-
-        static string PathOf(Transform t) => t.parent ? PathOf(t.parent)+"/"+t.name : t.name;
-        static Vector3 Vec(float[] v) => new Vector3(v[0],v[1],v[2]);
-        void Start() { Initialize(); }
+        readonly List<Transform> garmentRoots=new List<Transform>();
+        Body[] frameBodies=Array.Empty<Body>();
+        bool initialized,needsReset=true,suspended,resuming;
+        double accumulator;
+        ChillBoneBake bake;
+        ChillBoneBake cachedBake;
+        TextAsset loadedBake;
+        ChillBoneBake.Clip activeBake;
+        ChillStoryPresentation presentation;
+        float bakeWeight,bakeTime;
+        const float FixedStep=1f/60f;
+        const double TickDuration=1d/60d;
+        const int MaxCatchUp=6;
+        public int NodeCount=>nodes.Count;
+        public int LastStepCount { get; private set; }
+        public long SimulationTicks { get; private set; }
+        public float DroppedSeconds { get; private set; }
+        public int DynamicRootCount=>garmentRoots.Count(t=>t);
+        public bool IsSuspended=>suspended;
+        public bool BakedFallbackActive=>activeBake!=null&&bakeWeight>0;
+        public void ResetDynamics(){BeforeAnimator();needsReset=true;accumulator=0;activeBake=null;bakeWeight=0;}
+        public void InitializeForPreview(){if(!initialized)Initialize();}
+        public void SetSuspended(bool value){if(value==suspended)return;suspended=value;accumulator=0;resuming=true;}
+        // Called before deferred destruction, then after attachment of a costume.
+        public void RebindGarment(IEnumerable<Transform> roots)
+        {BeforeAnimator();garmentRoots.Clear();if(roots!=null)garmentRoots.AddRange(roots.Where(t=>t).Distinct());Initialize();}
+        static string PathOf(Transform t)=>t.parent?PathOf(t.parent)+"/"+t.name:t.name;
+        static Vector3 Vec(float[] v)=>v!=null&&v.Length>=3?new Vector3(v[0],v[1],v[2]):Vector3.zero;
+        static bool Finite(Vector3 v)=>!float.IsNaN(v.x)&&!float.IsInfinity(v.x)&&!float.IsNaN(v.y)&&!float.IsInfinity(v.y)&&!float.IsNaN(v.z)&&!float.IsInfinity(v.z);
+        void Start(){if(!initialized)Initialize();}
         void Initialize()
         {
-            if (!configuration || !character) return;
-            var profile=JsonUtility.FromJson<Profile>(configuration.text);
-            var transforms=FindObjectsByType<Transform>(FindObjectsInactive.Include,FindObjectsSortMode.None)
-                .GroupBy(PathOf).ToDictionary(g => g.Key,g => g.First());
+            if(!configuration||!character)return;
+            var retained=nodes.Where(n=>n.bone&&n.bone.gameObject.activeInHierarchy).ToDictionary(n=>n.bone);
+            nodes.Clear();var profile=JsonUtility.FromJson<Profile>(configuration.text);
+            var transforms=FindObjectsByType<Transform>(FindObjectsInactive.Include,FindObjectsSortMode.None).GroupBy(PathOf).ToDictionary(g=>g.Key,g=>g.First());
             var bodies=new Dictionary<string,Body>();
-            foreach(var source in profile.colliders)
-            {
-                if (!transforms.TryGetValue(source.path,out var transform)) continue;
-                bodies[source.id]=new Body { transform=transform,center=Vec(source.center),radius=source.size[0],
-                    height=source.size[2],axis=source.axis,sphere=source.sphere };
-            }
+            foreach(var source in profile.colliders??Array.Empty<Collision>())if(transforms.TryGetValue(source.path,out var t))
+                bodies[source.id]=new Body{transform=t,center=Vec(source.center),radius=source.size[0],radiusEnd=source.size[1],height=source.size[2],axis=source.axis,sphere=source.sphere};
             var humanBones=new HashSet<Transform>();
-            if (character.isHuman)
-                for(int i=0;i<(int)HumanBodyBones.LastBone;i++)
-                { var bone=character.GetBoneTransform((HumanBodyBones)i); if(bone) humanBones.Add(bone); }
+            if(character.isHuman)for(int i=0;i<(int)HumanBodyBones.LastBone;i++){var t=character.GetBoneTransform((HumanBodyBones)i);if(t)humanBones.Add(t);}
+            var supplements=new List<Body>();
+            void Limb(HumanBodyBones a,HumanBodyBones b,float radius)
+            {if(!character.isHuman)return;var start=character.GetBoneTransform(a);var end=character.GetBoneTransform(b);if(start&&end)supplements.Add(new Body{transform=start,end=end,radius=radius,radiusEnd=radius*.8f});}
+            // Original profile has head/torso/legs; supplement arm and neck crossings.
+            Limb(HumanBodyBones.Neck,HumanBodyBones.Head,.035f);
+            Limb(HumanBodyBones.LeftUpperArm,HumanBodyBones.LeftLowerArm,.035f);Limb(HumanBodyBones.RightUpperArm,HumanBodyBones.RightLowerArm,.035f);
+            Limb(HumanBodyBones.LeftLowerArm,HumanBodyBones.LeftHand,.025f);Limb(HumanBodyBones.RightLowerArm,HumanBodyBones.RightHand,.025f);
             var indices=new Dictionary<Transform,int>();
-            var skinnedBones = new HashSet<Transform>(character.GetComponentsInChildren<SkinnedMeshRenderer>(true).SelectMany(r => r.bones).Where(b => b));
-            foreach(var group in profile.groups)
-                foreach(string path in group.roots)
+            var skinnedBones=new HashSet<Transform>(character.GetComponentsInChildren<SkinnedMeshRenderer>(true).SelectMany(r=>r.bones).Where(b=>b));
+            void AddRoot(Group group,Transform root,bool dynamic)
+            {
+                if(!root||!root.IsChildOf(character.transform))return;int rootIndex=nodes.Count;
+                foreach(var bone in root.GetComponentsInChildren<Transform>(true))
                 {
-                    if(!transforms.TryGetValue(path,out var root) || !root.IsChildOf(character.transform)) continue;
-                    foreach(var bone in root.GetComponentsInChildren<Transform>(true))
-                    {
-                        if(humanBones.Contains(bone) || indices.ContainsKey(bone) || (bone != root && !skinnedBones.Contains(bone))) continue;
-                        var node=new Node { bone=bone,group=group,pinned=bone==root,
-                            restPosition=bone.localPosition,restRotation=bone.localRotation,
-                            position=bone.position,previous=bone.position,
-                            bodies=group.colliders.Where(bodies.ContainsKey).Select(id => bodies[id]).ToArray(),
-                            angleLimit=group.name.Contains("Hair") ? 25 : 15 };
-                        if(bone.parent && indices.TryGetValue(bone.parent,out int parent) && !node.pinned) node.parent=parent;
-                        else node.pinned=true;
-                        int index=nodes.Count;nodes.Add(node);indices[bone]=index;
-                        if(node.parent>=0) nodes[node.parent].children.Add(index);
-                    }
+                    if(humanBones.Contains(bone)||indices.ContainsKey(bone)||(!dynamic&&bone!=root&&!skinnedBones.Contains(bone)))continue;
+                    var contacts=(group.colliders??Array.Empty<string>()).Where(bodies.ContainsKey).Select(id=>bodies[id]).Concat(supplements).ToArray();
+                    var node=new Node{bone=bone,group=group,pinned=bone==root,root=rootIndex,bodies=contacts};
+                    if(!node.pinned&&bone.parent&&indices.TryGetValue(bone.parent,out int parent)){node.parent=parent;node.depth=nodes[parent].depth+1;}
+                    else{node.pinned=true;node.root=nodes.Count;}
+                    int index=nodes.Count;nodes.Add(node);indices[bone]=index;if(node.parent>=0)nodes[node.parent].children.Add(index);
+                    if(retained.TryGetValue(bone,out var old))
+                    {node.position=old.position;node.previous=old.previous;node.previousGoal=old.previousGoal;node.tickGoal=old.tickGoal;node.lastTickGoal=old.lastTickGoal;node.renderFrom=old.renderFrom;node.anchorPosition=old.anchorPosition;node.anchorRotation=old.anchorRotation;}
+                    else{node.position=node.previous=node.previousGoal=node.tickGoal=node.lastTickGoal=node.renderFrom=bone.position;node.anchorPosition=root.position;node.anchorRotation=root.rotation;}
                 }
-            previousAnchor=character.transform.position;
-            initialized=true;
+            }
+            foreach(var group in profile.groups??Array.Empty<Group>())foreach(var path in group.roots??Array.Empty<string>())if(transforms.TryGetValue(path,out var root))AddRoot(group,root,false);
+            // Source custom sleeves are tweens. Only unmatched secondary chains get
+            // a small additive offset; shared/default bones are never registered twice.
+            var sleeve=new Group{name="Web sleeve",gravity=2,damping=.35f,radius=.006f,worldInertia=.35f,localInertia=.4f,teleportDistance=.5f,teleportRotation=90,colliders=bodies.Keys.ToArray(),roots=Array.Empty<string>()};
+            foreach(var root in garmentRoots)AddRoot(sleeve,root,true);
+            foreach(var node in nodes)
+            {
+                int maxDepth=nodes.Where(n=>n.root==node.root).Max(n=>n.depth);float depth=maxDepth>0?(float)node.depth/maxDepth:0;
+                float cap=node.group.name.Contains("Hair")?30:node.group.name=="Web sleeve"?12:node.group.roots.Any(r=>r.Contains("christmashat"))?25:40;
+                node.angleLimit=node.group.useAngleLimit&&node.group.angleCurve!=null?Mathf.Clamp(node.group.angleCurve.At(depth),0,cap):cap;
+                node.radius=Mathf.Max(0,node.group.radiusCurve!=null&&node.group.radiusCurve.value>0?node.group.radiusCurve.At(depth):node.group.radius);
+                node.damping=Mathf.Clamp(node.group.dampingCurve!=null&&node.group.dampingCurve.value>0?node.group.dampingCurve.At(depth):node.group.damping,.03f,.85f);
+                node.restoration=node.group.useRestoration?Mathf.Clamp01(node.group.restorationCurve?.At(depth)??0):0;
+                node.speedLimit=Mathf.Clamp(node.group.speedLimit!=null&&node.group.speedLimit.value>0?node.group.speedLimit.At(depth):2,.1f,4);
+                node.maxDistance=node.group.useMaxDistance?Mathf.Max(.001f,node.group.maxDistance?.At(depth)??.2f):.3f;
+                node.allowances=new float[node.bodies.Length];
+                // Rest intersection allowance is captured once, never widened by a pose.
+                for(int j=0;j<node.bodies.Length;j++)
+                {
+                    var body=node.bodies[j];
+                    if(retained.TryGetValue(node.bone,out var old))
+                    {
+                        int prior=Array.FindIndex(old.bodies,b=>b.transform==body.transform&&b.end==body.end);
+                        if(prior>=0){node.allowances[j]=old.allowances[prior];continue;}
+                    }
+                    BodyShape(body,out var a,out var b,out float ra,out float rb);var p=Closest(node.bone.position,a,b,out float t);
+                    node.allowances[j]=Mathf.Max(0,Mathf.Lerp(ra,rb,t)+node.radius-Vector3.Distance(node.bone.position,p));
+                }
+            }
+            frameBodies=nodes.SelectMany(n=>n.bodies).Distinct().ToArray();
+            // Outfit changes rebuild the small rig map, not the multi-MB recording.
+            if(loadedBake!=bakedConfiguration)
+            {loadedBake=bakedConfiguration;cachedBake=bakedConfiguration?JsonUtility.FromJson<ChillBoneBake>(bakedConfiguration.text):null;}
+            bake=cachedBake;
+            if(bake!=null&&(bake.profileHash!=Hash128.Compute(configuration.text).ToString()||!bake.paths.SequenceEqual(BonePaths())))bake=null;
+            presentation=GetComponent<ChillGraphicsPlayer>()?.story?.presentation;
+            activeBake=null;bakeWeight=0;initialized=true;
         }
-        void Update() { BeforeAnimator(); }
+        void Update(){BeforeAnimator();}
         public void BeforeAnimator()
         {
-            if(!initialized) return;
-            // Restore only our own last output, never a newly authored pose.
-            foreach(var node in nodes)
-                if(node.bone && node.applied)
-                {
-                    if (Quaternion.Angle(node.bone.localRotation,node.outputLocalRotation) < .01f)
-                        node.bone.localRotation=node.frameLocalRotation;
-                    node.applied=false;
-                }
+            foreach(var node in nodes)if(node.bone&&node.applied)
+            {if(Quaternion.Angle(node.bone.localRotation,node.outputLocalRotation)<.01f)node.bone.localRotation=node.frameLocalRotation;node.applied=false;}
         }
-        void LateUpdate() { Step(Time.deltaTime); }
+        void LateUpdate(){Step(Time.deltaTime);}
         public void Step(float deltaTime)
         {
-            if (!initialized) Initialize();
-            if(!initialized || !character) return;
-            bool reset=needsReset || !simulation || Vector3.Distance(previousAnchor,character.transform.position)>0.5f || deltaTime > .1f;
-            needsReset=false;
-            previousAnchor=character.transform.position;
-            foreach(var node in nodes)
+            if(!initialized)Initialize();LastStepCount=0;if(!initialized||!character)return;
+            foreach(var body in frameBodies)
             {
-                node.goal=node.bone.position;node.frameRotation=node.bone.rotation;node.frameLocalRotation=node.bone.localRotation;
-                if(reset || node.pinned || Vector3.Distance(node.position,node.goal)>0.6f)
-                    node.position=node.previous=node.goal;
+                body.active=body.transform&&body.transform.gameObject.activeInHierarchy;
+                if(body.active)BodyShape(body,out body.a,out body.b,out body.ra,out body.rb);
             }
-            if(reset) return;
-            float dt=Mathf.Min(deltaTime,1f/20f);
-            if(dt<=0) return;
-            int steps=Mathf.Max(1,Mathf.CeilToInt(dt*60)); float step=dt/steps;
-            for(int tick=0;tick<steps;tick++)
+            if(float.IsNaN(deltaTime)||float.IsInfinity(deltaTime)||deltaTime<0)deltaTime=0;
+            bool reset=needsReset||!simulation;needsReset=false;
+            foreach(var node in nodes)if(node.bone){node.goal=node.bone.position;node.frameRotation=node.bone.rotation;node.frameLocalRotation=node.bone.localRotation;}
+            foreach(var node in nodes)if(node.bone)
             {
+                var anchor=nodes[node.root];var rotation=anchor.bone.rotation;
+                bool teleport=Vector3.Distance(node.anchorPosition,anchor.goal)>node.group.teleportDistance||Quaternion.Angle(node.anchorRotation,rotation)>node.group.teleportRotation;
+                float world=teleport||resuming||suspended?1:1-Mathf.Clamp01(node.group.worldInertia),local=teleport||resuming||suspended?1:1-Mathf.Clamp01(node.group.localInertia);
+                var turn=Quaternion.Slerp(Quaternion.identity,rotation*Quaternion.Inverse(node.anchorRotation),local);var shift=(anchor.goal-node.anchorPosition)*world;
+                Vector3 Move(Vector3 p)=>node.anchorPosition+turn*(p-node.anchorPosition)+shift;
+                node.position=Move(node.position);node.previous=Move(node.previous);node.renderFrom=Move(node.renderFrom);
+                node.lastTickGoal=Move(node.lastTickGoal);node.tickGoal=Move(node.tickGoal);node.previousGoal=Move(node.previousGoal);
+                node.anchorPosition=anchor.goal;node.anchorRotation=rotation;
+                if(reset||!Finite(node.position)||!Finite(node.previous))node.position=node.previous=node.previousGoal=node.tickGoal=node.lastTickGoal=node.renderFrom=node.goal;
+                if(node.pinned)node.position=node.previous=node.goal;
+            }
+            resuming=false;
+            if(reset){accumulator=0;return;}
+            if(suspended){foreach(var n in nodes)n.previousGoal=n.goal;ApplyOutput();return;}
+            float elapsed=Mathf.Min(deltaTime,MaxCatchUp*FixedStep);DroppedSeconds+=Mathf.Max(0,deltaTime-elapsed);
+            double prior=accumulator;accumulator+=elapsed;
+            while(accumulator+1e-8>=TickDuration&&LastStepCount<MaxCatchUp)
+            {
+                float fraction=elapsed>0?Mathf.Clamp01((float)((LastStepCount+1)*TickDuration-prior)/elapsed):1;
                 foreach(var node in nodes)
                 {
-                    if(node.pinned || !node.bone.gameObject.activeInHierarchy) continue;
-                    float damping=Mathf.Pow(1-Mathf.Clamp(node.group.damping,0.03f,0.85f),step*60);
-                    var next=node.position+(node.position-node.previous)*damping;
-                    next += Vector3.down*(node.group.gravity*step*step);
-                    next += (node.goal-node.position)*Mathf.Min(0.25f,step*18);
-                    node.previous=node.position;node.position=next;
+                    node.renderFrom=node.position;node.lastTickGoal=node.tickGoal;node.tickGoal=Vector3.Lerp(node.previousGoal,node.goal,fraction);
+                    if(node.pinned){node.position=node.previous=node.tickGoal;continue;}
+                    if(!node.bone||!node.bone.gameObject.activeInHierarchy)continue;
+                    float attenuation=1-node.restoration*(1-Mathf.Clamp01(node.group.velocityAttenuation));
+                    var velocity=Vector3.ClampMagnitude((node.position-node.previous)*(1-node.damping)*attenuation,node.speedLimit*FixedStep);
+                    var next=node.position+velocity+Gravity(node.group)*FixedStep*FixedStep;
+                    next+=(node.tickGoal-node.position)*(1-Mathf.Exp(-(2+node.restoration*30)*FixedStep));node.previous=node.position;node.position=next;
                 }
-                for(int iteration=0;iteration<(lowQuality?2:4);iteration++)
-                    foreach(var node in nodes)
-                    {
-                        if(node.pinned || node.parent<0 || !node.bone.gameObject.activeInHierarchy) continue;
-                        var parent=nodes[node.parent];
-                        float length=Vector3.Distance(node.goal,parent.goal);
-                        var direction=node.position-parent.position;
-                        if(direction.sqrMagnitude<1e-10f) direction=node.goal-parent.goal;
-                        node.position=parent.position+direction.normalized*length;
-                        foreach(var body in node.bodies) ResolveBody(node,body);
-                    }
-            }
-            foreach(var node in nodes)
-            {
-                if(!node.bone.gameObject.activeInHierarchy) continue;
-                if(node.children.Count==1)
+                for(int iteration=0;iteration<(lowQuality?2:4);iteration++)foreach(var node in nodes)if(node.bone&&!node.pinned&&node.parent>=0&&node.bone.gameObject.activeInHierarchy)
                 {
-                    var child=nodes[node.children[0]];
-                    var authored=child.goal-node.goal;var solved=child.position-node.position;
-                    if (authored.sqrMagnitude > 1e-9f && solved.sqrMagnitude > 1e-9f)
-                    {
-                        var world = Quaternion.FromToRotation(authored,solved)*node.frameRotation;
-                        var local = node.bone.parent ? Quaternion.Inverse(node.bone.parent.rotation)*world : world;
-                        node.outputLocalRotation=Quaternion.RotateTowards(node.frameLocalRotation,local,node.angleLimit);
-                        node.bone.localRotation=node.outputLocalRotation; node.applied=true;
-                    }
+                    var parent=nodes[node.parent];var authored=node.tickGoal-parent.tickGoal;var direction=node.position-parent.position;
+                    if(direction.sqrMagnitude<1e-10f)direction=authored;
+                    direction=Vector3.RotateTowards(authored,direction,node.angleLimit*Mathf.Deg2Rad,0).normalized;
+                    node.position=parent.position+direction*authored.magnitude;
+                    node.position=node.tickGoal+Vector3.ClampMagnitude(node.position-node.tickGoal,node.maxDistance);
+                    for(int j=0;j<node.bodies.Length;j++)ResolveBody(node,parent,node.bodies[j],node.allowances[j]);
                 }
-                // No position writes, including tips and pinned roots.
+                accumulator=Math.Max(0,accumulator-TickDuration);LastStepCount++;SimulationTicks++;
             }
+            foreach(var node in nodes)node.previousGoal=node.goal;UpdateBake(elapsed);ApplyOutput();
         }
-        static void ResolveBody(Node node,Body body)
+        void UpdateBake(float elapsed)
         {
-            if(!body.transform || !body.transform.gameObject.activeInHierarchy) return;
-            var center=body.transform.TransformPoint(body.center);
-            var scale=body.transform.lossyScale;
-            float largest=Mathf.Max(Mathf.Abs(scale.x),Mathf.Abs(scale.y),Mathf.Abs(scale.z));
-            float radius=Mathf.Max(0,body.radius*largest)+node.group.radius;
-            var closest=center;
-            if(!body.sphere)
-            {
-                var axis=body.axis==0?Vector3.right:body.axis==2?Vector3.forward:Vector3.up;
-                float half=Mathf.Max(0,body.height*0.5f-body.radius);
-                var a=body.transform.TransformPoint(body.center-axis*half);
-                var b=body.transform.TransformPoint(body.center+axis*half);
-                var ab=b-a;
-                closest=a+ab*Mathf.Clamp01(Vector3.Dot(node.position-a,ab)/Mathf.Max(ab.sqrMagnitude,1e-10f));
-            }
-            var delta=node.position-closest;
-            // Respect intersections that are already part of the authored rig.
-            // Collision must not push bangs out of the head on the first frame.
-            radius = Mathf.Min(radius,Vector3.Distance(node.goal,closest));
-            if(delta.sqrMagnitude<radius*radius)
-            {
-                var normal=delta.sqrMagnitude>1e-10f?delta.normalized:(node.goal-center).normalized;
-                if(normal.sqrMagnitude<0.1f)normal=Vector3.forward;
-                node.position=closest+normal*radius;
-            }
+            if(bake==null){activeBake=null;bakeWeight=0;return;}
+            ChillBoneBake.Clip requested=null;
+            var state=character.GetCurrentAnimatorStateInfo(0);
+            if(useBakedFallback&&bake!=null&&simulation&&DynamicRootCount==0&&!character.IsInTransition(0)&&(!presentation||!presentation.manualLook))
+                requested=Array.Find(bake.clips,c=>Animator.StringToHash(c.state)==state.fullPathHash&&state.normalizedTime>=0&&state.normalizedTime<=1);
+            if(requested!=activeBake&&activeBake!=null&&bakeWeight>0)requested=null;
+            if(requested!=null&&requested!=activeBake){activeBake=requested;bakeWeight=0;}
+            bakeWeight=Mathf.MoveTowards(bakeWeight,requested!=null?1:0,elapsed/.12f);
+            if(requested!=null)bakeTime=state.normalizedTime;
+            if(bakeWeight<=0)activeBake=null;
         }
-        void OnDisable()
+        static Vector3 Gravity(Group group){var direction=Vec(group.gravityDirection);return (direction.sqrMagnitude>.01f?direction.normalized:Vector3.down)*group.gravity;}
+        void ApplyOutput()
         {
-            BeforeAnimator(); needsReset=true;
+            float alpha=Mathf.Clamp01((float)(accumulator/TickDuration));
+            Vector3 Render(Node n)=>n.pinned?n.goal:n.goal+Vector3.Lerp(n.renderFrom-n.lastTickGoal,n.position-n.tickGoal,alpha);
+            for(int index=0;index<nodes.Count;index++)
+            {
+                var node=nodes[index];
+                if(!node.bone||!node.bone.gameObject.activeInHierarchy||node.children.Count!=1)continue;
+                var child=nodes[node.children[0]];var authored=child.goal-node.goal;var solved=Render(child)-Render(node);
+                if(authored.sqrMagnitude<=1e-9f||solved.sqrMagnitude<=1e-9f)continue;
+                var world=Quaternion.FromToRotation(authored,solved)*node.frameRotation;
+                var local=node.bone.parent?Quaternion.Inverse(node.bone.parent.rotation)*world:world;
+                if(activeBake!=null&&bakeWeight>0)local=Quaternion.Slerp(local,node.frameLocalRotation*activeBake.Sample(index,bakeTime),bakeWeight);
+                node.outputLocalRotation=Quaternion.RotateTowards(node.frameLocalRotation,local,child.angleLimit);
+                node.bone.localRotation=node.outputLocalRotation;node.applied=true;
+            }
         }
+        public static Vector3 Closest(Vector3 point,Vector3 a,Vector3 b,out float t){var ab=b-a;t=Mathf.Clamp01(Vector3.Dot(point-a,ab)/Mathf.Max(ab.sqrMagnitude,1e-10f));return a+ab*t;}
+        static void BodyShape(Body body,out Vector3 a,out Vector3 b,out float ra,out float rb)
+        {
+            a=b=body.transform.TransformPoint(body.center);var scale=body.transform.lossyScale;float largest=Mathf.Max(Mathf.Abs(scale.x),Mathf.Abs(scale.y),Mathf.Abs(scale.z));
+            ra=Mathf.Max(0,body.radius*largest);rb=body.sphere?ra:Mathf.Max(0,body.radiusEnd*largest);
+            if(body.end){a=body.transform.position;b=body.end.position;return;}if(body.sphere)return;
+            var axis=body.axis==0?Vector3.right:body.axis==2?Vector3.forward:Vector3.up;float half=Mathf.Max(0,body.height*.5f-Mathf.Max(body.radius,body.radiusEnd));
+            a=body.transform.TransformPoint(body.center-axis*half);b=body.transform.TransformPoint(body.center+axis*half);
+        }
+        static void ResolveBody(Node node,Node parent,Body body,float allowance)
+        {
+            if(!body.active)return;
+            // Point and interior edge contacts catch crossings of thin limbs.
+            for(int sample=0;sample<3;sample++)
+            {
+                float weight=sample==0?.5f:sample==1?.75f:1;var point=Vector3.Lerp(parent.position,node.position,weight);
+                var closest=Closest(point,body.a,body.b,out float t);float radius=Mathf.Max(0,Mathf.Lerp(body.ra,body.rb,t)+node.radius-allowance);
+                var delta=point-closest;if(delta.sqrMagnitude>=radius*radius)continue;
+                var normal=delta.sqrMagnitude>1e-10f?delta.normalized:(node.tickGoal-closest).normalized;if(normal.sqrMagnitude<.1f)normal=Vector3.forward;
+                node.position+=normal*(radius-delta.magnitude)/weight;
+                var velocity=node.position-node.previous;float inward=Vector3.Dot(velocity,normal);if(inward<0)velocity-=normal*inward;
+                node.previous=node.position-velocity*.9f;
+            }
+        }
+        public string[] BonePaths()=>nodes.Where(n=>n.bone).Select(n=>RelativePath(n.bone)).ToArray();
+        string RelativePath(Transform bone)=>bone==character.transform?"":bone.parent==character.transform?bone.name:RelativePath(bone.parent)+"/"+bone.name;
+        public Quaternion[] RotationOffsets()=>nodes.Where(n=>n.bone).Select(n=>n.applied?Quaternion.Inverse(n.frameLocalRotation)*n.bone.localRotation:Quaternion.identity).ToArray();
+        public bool StateFinite()=>nodes.All(n=>!n.bone||(Finite(n.position)&&Finite(n.previous)));
+        void OnDisable(){BeforeAnimator();resuming=true;accumulator=0;}
     }
 }

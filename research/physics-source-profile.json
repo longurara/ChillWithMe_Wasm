@@ -1,0 +1,477 @@
+{
+  "source": "RoomScene MagicaCloth2 serialized parameters",
+  "groups": 4,
+  "roots": 9,
+  "colliders": 8,
+  "profiles": [
+    {
+      "name": "Magica Cloth",
+      "gravity": 10.0,
+      "damping": 0.6,
+      "radius": 0.02,
+      "gravityDirection": [
+        0,
+        -1,
+        0
+      ],
+      "dampingCurve": {
+        "value": 0.6,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          }
+        ]
+      },
+      "radiusCurve": {
+        "value": 0.02,
+        "useCurve": true,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          },
+          {
+            "time": 1,
+            "value": 0.5879173,
+            "inSlope": 0,
+            "outSlope": 0
+          }
+        ]
+      },
+      "angleCurve": {
+        "value": 15,
+        "useCurve": true,
+        "keys": [
+          {
+            "time": 0,
+            "value": 0,
+            "inSlope": 1,
+            "outSlope": 1
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 1,
+            "outSlope": 1
+          }
+        ]
+      },
+      "useAngleLimit": true,
+      "restorationCurve": {
+        "value": 0.4,
+        "useCurve": true,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": -0.8988037,
+            "outSlope": -0.8988037
+          },
+          {
+            "time": 1,
+            "value": 0.10119629,
+            "inSlope": -0.8988037,
+            "outSlope": -0.8988037
+          }
+        ]
+      },
+      "useRestoration": true,
+      "velocityAttenuation": 0.6,
+      "worldInertia": 0.5,
+      "localInertia": 1,
+      "speedLimit": {
+        "value": 4,
+        "useCurve": false,
+        "keys": []
+      },
+      "teleportDistance": 0.5,
+      "teleportRotation": 90,
+      "maxDistance": {
+        "value": 0.3,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          }
+        ]
+      },
+      "useMaxDistance": false
+    },
+    {
+      "name": "Magica Cloth",
+      "gravity": 7.0,
+      "damping": 0.1,
+      "radius": 0.025,
+      "gravityDirection": [
+        0,
+        -1,
+        0
+      ],
+      "dampingCurve": {
+        "value": 0.1,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          }
+        ]
+      },
+      "radiusCurve": {
+        "value": 0.025,
+        "useCurve": true,
+        "keys": [
+          {
+            "time": 0,
+            "value": 0.3017578,
+            "inSlope": 2,
+            "outSlope": 2
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          }
+        ]
+      },
+      "angleCurve": {
+        "value": 120,
+        "useCurve": true,
+        "keys": [
+          {
+            "time": 0,
+            "value": 0,
+            "inSlope": 1,
+            "outSlope": 1
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 1,
+            "outSlope": 1
+          }
+        ]
+      },
+      "useAngleLimit": true,
+      "restorationCurve": {
+        "value": 0,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": -1.412292,
+            "outSlope": -1.412292
+          },
+          {
+            "time": 0.70806885,
+            "value": 0,
+            "inSlope": -1.412292,
+            "outSlope": 0
+          },
+          {
+            "time": 1,
+            "value": 0,
+            "inSlope": 0,
+            "outSlope": -0.18676066
+          }
+        ]
+      },
+      "useRestoration": true,
+      "velocityAttenuation": 0.8,
+      "worldInertia": 1,
+      "localInertia": 1,
+      "speedLimit": {
+        "value": 4,
+        "useCurve": false,
+        "keys": []
+      },
+      "teleportDistance": 0.5,
+      "teleportRotation": 90,
+      "maxDistance": {
+        "value": 0.3,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          }
+        ]
+      },
+      "useMaxDistance": false
+    },
+    {
+      "name": "Magica Cloth Hair",
+      "gravity": 3.0,
+      "damping": 0.1,
+      "radius": 0.004,
+      "gravityDirection": [
+        0,
+        -1,
+        0
+      ],
+      "dampingCurve": {
+        "value": 0.1,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          }
+        ]
+      },
+      "radiusCurve": {
+        "value": 0.004,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          }
+        ]
+      },
+      "angleCurve": {
+        "value": 15,
+        "useCurve": true,
+        "keys": [
+          {
+            "time": 0,
+            "value": 0,
+            "inSlope": 0,
+            "outSlope": 1
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 1,
+            "outSlope": 0
+          }
+        ]
+      },
+      "useAngleLimit": true,
+      "restorationCurve": {
+        "value": 0.15,
+        "useCurve": true,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": -0.7
+          },
+          {
+            "time": 1,
+            "value": 0.3,
+            "inSlope": -0.7,
+            "outSlope": 0
+          }
+        ]
+      },
+      "useRestoration": true,
+      "velocityAttenuation": 0.7,
+      "worldInertia": 1,
+      "localInertia": 1,
+      "speedLimit": {
+        "value": 2,
+        "useCurve": false,
+        "keys": []
+      },
+      "teleportDistance": 0.5,
+      "teleportRotation": 90,
+      "maxDistance": {
+        "value": 0.2,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          }
+        ]
+      },
+      "useMaxDistance": true
+    },
+    {
+      "name": "Cloth",
+      "gravity": 5.0,
+      "damping": 0.1,
+      "radius": 0.02,
+      "gravityDirection": [
+        0,
+        -1,
+        0
+      ],
+      "dampingCurve": {
+        "value": 0.1,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          }
+        ]
+      },
+      "radiusCurve": {
+        "value": 0.02,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          }
+        ]
+      },
+      "angleCurve": {
+        "value": 75,
+        "useCurve": true,
+        "keys": [
+          {
+            "time": 0,
+            "value": 0.20166016,
+            "inSlope": 1.9016347,
+            "outSlope": 1.9016347
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 0.35740322,
+            "outSlope": 0.35740322
+          }
+        ]
+      },
+      "useAngleLimit": true,
+      "restorationCurve": {
+        "value": 0.02,
+        "useCurve": true,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": -2.2791677,
+            "outSlope": -2.2791677
+          },
+          {
+            "time": 1,
+            "value": 0.10624391,
+            "inSlope": -0.400354,
+            "outSlope": -0.400354
+          }
+        ]
+      },
+      "useRestoration": true,
+      "velocityAttenuation": 0.8,
+      "worldInertia": 1,
+      "localInertia": 1,
+      "speedLimit": {
+        "value": 3,
+        "useCurve": false,
+        "keys": []
+      },
+      "teleportDistance": 0.5,
+      "teleportRotation": 90,
+      "maxDistance": {
+        "value": 0.3,
+        "useCurve": false,
+        "keys": [
+          {
+            "time": 0,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          },
+          {
+            "time": 1,
+            "value": 1,
+            "inSlope": 0,
+            "outSlope": 0
+          }
+        ]
+      },
+      "useMaxDistance": false
+    }
+  ],
+  "webDifferences": [
+    "Rotation-only CPU solver; no MeshCloth or self-collision",
+    "Angle caps: hair 30, coat 40, hat 25, custom sleeves 12 degrees",
+    "60 Hz solver; source depth curves evaluated with Hermite interpolation",
+    "Original tapered capsules plus five neck/arm capsules",
+    "Custom sleeves have authored source tweens and a web-only secondary chain"
+  ]
+}

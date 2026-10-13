@@ -255,6 +255,7 @@ namespace Hlc.ChillPrototype
         public void SaveFromBrowser(){if(data!=null)SaveNow();}
         void OnApplicationFocus(bool focused)
         {
+            if(player&&player.bones)player.bones.SetSuspended(!focused);
             bool previously=wasFocused;wasFocused=focused;
             if(previously!=focused)
             {

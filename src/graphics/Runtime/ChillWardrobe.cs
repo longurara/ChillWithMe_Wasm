@@ -20,6 +20,7 @@ namespace Hlc.ChillPrototype
             if(presentation)presentation.sleeves=baseSleeves;
             if(selection<0||selection>4||!costumeParent||!boneParent)return;
             if(selection>0&&(prefabs==null||prefabs.Length<2||!prefabs[(selection-1)/2]||skins==null||skins.Length<selection||!skins[selection-1]))return;
+            var physics=GetComponent<ChillBonePhysics>();if(physics)physics.RebindGarment(null);
             foreach(var go in attached)if(go){go.SetActive(false);if(Application.isPlaying)Destroy(go);else DestroyImmediate(go);}attached.Clear();
             if(current){current.SetActive(false);if(Application.isPlaying)Destroy(current);else DestroyImmediate(current);}foreach(var go in defaults??Array.Empty<GameObject>())if(go)go.SetActive(selection==0);index=selection;if(selection==0)return;
             var bones=boneParent.GetComponentsInChildren<Transform>(true).GroupBy(t=>t.name).ToDictionary(g=>g.Key,g=>g.First());
@@ -34,6 +35,7 @@ namespace Hlc.ChillPrototype
                     if(presentation){var sleeve=attached.Where(g=>g&&g.name=="Character_LeftSode").Select(g=>g.transform).FirstOrDefault();presentation.sleeves=(baseSleeves??Array.Empty<ChillStoryPresentation.Sleeve>()).Concat(new[]{new ChillStoryPresentation.Sleeve{renderer=renderer,bone=sleeve}}).ToArray();}
                 }
             }
+            if(physics)physics.RebindGarment(attached.Where(g=>g&&(g.name=="Character_LeftSode"||g.name=="Character_RightSode")).Select(g=>g.transform));
         }
     }
 }
