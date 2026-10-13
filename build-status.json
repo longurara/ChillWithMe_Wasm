@@ -1,14 +1,14 @@
 {
   "stage": "standalone-completion-browser-preview-ready",
-  "completedAt": "2026-10-13T11:08:34.882968+07:00",
+  "completedAt": "2026-10-13T15:31:47.896395+07:00",
   "unity": "2022.3.62f2",
   "url": "http://127.0.0.1:8093/",
   "assets": 4517,
   "bundles": 233,
   "bundleBytes": 474455344,
-  "playerBytes": 138794068,
+  "playerBytes": 138802391,
   "assetBuildLog": "logs/unity-native-timer-release.log",
-  "playerBuildLog": "logs/unity-story-layer-fix.log",
+  "playerBuildLog": "logs/unity-story-hud-auto-effects.log",
   "knownShaderCompilerErrors": 0,
   "automatedGameplayTests": true,
   "storyGroups": 610,
@@ -76,8 +76,8 @@
   "deskLampCheck": "research/desk-lamp-render-check.json",
   "glesAdditionalLightStagesChecked": 110,
   "additionalLightShaderCheck": "research/toon-additional-light-budget.json",
-  "productVersion": "1.19.2",
-  "featureReleaseBuildBytes": 165291112,
+  "productVersion": "1.19.3",
+  "featureReleaseBuildBytes": 165432368,
   "selectedFeatureGroups": [
     1,
     3,
@@ -136,5 +136,10 @@
   "storyCommandCheck": "research/story-command-check.json",
   "dailyLifeCheck": "research/daily-life-check.json",
   "dialogueLayoutCheck": "research/dialogue-layout-check.json",
-  "browserStoryLayerCheck": "research/browser-story-layer-check.json"
+  "browserStoryLayerCheck": "research/browser-story-layer-check.json",
+  "storyPresentationCheck": "research/story-presentation-check.json",
+  "browserStoryPresentationCheck": "research/browser-story-presentation-check.json",
+  "sourceStoryHudObjects": 11,
+  "autoPauseStartsAfterVoiceAndText": true,
+  "finiteStoryEffectsStop": true
 }

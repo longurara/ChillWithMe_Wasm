@@ -1,0 +1,88 @@
+{
+  "passed": true,
+  "productVersion": "1.19.3",
+  "browser": "isolated Chrome",
+  "viewport": [
+    1280,
+    720
+  ],
+  "mainStory": {
+    "group": "main_03",
+    "cursor": 8,
+    "multilineDialogueVisible": true,
+    "sourceHudHidden": true,
+    "historyUsable": true,
+    "hudRestoredAfterSkip": true,
+    "pausedTimerSecondsAfterSkip": 1182
+  },
+  "auto": {
+    "group": "main_03",
+    "startCursor": 5,
+    "observedTransitionsMs": [
+      {
+        "cursor": 5,
+        "ms": 2
+      },
+      {
+        "cursor": 6,
+        "ms": 4144
+      },
+      {
+        "cursor": 7,
+        "ms": 9112
+      },
+      {
+        "cursor": 8,
+        "ms": 13266
+      },
+      {
+        "cursor": 9,
+        "ms": 17300
+      }
+    ],
+    "voiceCompletionMeasuredInBrowser": false,
+    "exactPostVoiceDelayVerifiedByUnityGateCheck": true
+  },
+  "ep0": {
+    "group": "tutorial_01",
+    "resumeCursor": 14,
+    "observedCursorAt8500Ms": 24,
+    "observedCursorAt10000Ms": 24,
+    "stationaryRoomRegionsIdenticalAfterEffects": true,
+    "comparisonRegions": [
+      [
+        595,
+        0,
+        630,
+        15
+      ],
+      [
+        120,
+        90,
+        140,
+        150
+      ],
+      [
+        870,
+        0,
+        883,
+        80
+      ]
+    ],
+    "finiteEffectTimingVerifiedByUnityCheck": true
+  },
+  "screenshots": [
+    "output/playwright/story-hud-hidden-main03.png",
+    "output/playwright/story-hud-history-usable.png",
+    "output/playwright/story-hud-restored-after-skip.png",
+    "output/playwright/story-auto-paced.png",
+    "output/playwright/ep0-camera-settled-a.png",
+    "output/playwright/ep0-camera-settled-b.png"
+  ],
+  "limitations": [
+    "Selected checkpoints only; not every episode.",
+    "Browser Auto test records row changes, not audio completion timestamps.",
+    "Tutorial HUD phases and full Febucci text tags are not fully ported.",
+    "No mobile/Safari verification."
+  ]
+}

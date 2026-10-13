@@ -3,7 +3,7 @@
   "method": "Đối chiếu masters/controllers/UI nguồn, kiểm tra state/callback/raycast trong Unity; thao tác UI và save/reload, IndexedDB/audio/import trong Chrome riêng. Xem browser-gameplay-check.json và browser-storage-check.json; không xác nhận mobile/Safari hay toàn bộ engine Windows.",
   "originalAssemblySha256": "2daf4eb479a910d9bcb7a4a33c2ab7cdf8f6831d9841fbfe61ccfd9494fc9e7f",
   "sourceCsFiles": 1429,
-  "portRuntimeCsFiles": 44,
+  "portRuntimeCsFiles": 46,
   "commandEnumValues": 50,
   "commandsWithoutSwitchCase": [],
   "features": [
@@ -593,7 +593,7 @@
       "id": 21,
       "feature": "UI truyện/nhật ký thoại",
       "status": "Đã sửa bố cục/lớp thoại theo nguồn",
-      "remaining": "Tách MainStoryTextParent và NormalTextParent theo Scenario; lời chào/phản ứng ở trên thanh nhạc. Đóng cửa sổ trả nhóm UI về thứ tự scene gốc, giữ BottomBackImage phía sau chữ/nút thoại. Talk Log, Skip/lịch sử và bảo toàn resume được nối; chưa toàn bộ stats log nguồn.",
+      "remaining": "Tách MainStoryTextParent và NormalTextParent theo Scenario; lời chào/phản ứng ở trên thanh nhạc. Đóng cửa sổ trả nhóm UI về thứ tự scene gốc. Truyện dài ẩn đúng 11 nhóm HUD từ UIShowManagerForPC, giữ nền/nút thoại và History, kết thúc trả lại trạng thái HUD trước đó. Tutorial còn giữ controls cho adapter web, chưa port toàn bộ pha ẩn/hiện tutorial. Talk Log, Skip/lịch sử và bảo toàn resume được nối; chưa toàn bộ stats log nguồn.",
       "original": [
         {
           "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/ScenarioReader.cs",
@@ -623,14 +623,16 @@
         "research/story-command-check.json",
         "research/daily-life-check.json",
         "research/browser-story-daily-check.json",
-        "research/browser-story-layer-check.json"
+        "research/browser-story-layer-check.json",
+        "research/story-presentation-check.json",
+        "research/browser-story-presentation-check.json"
       ]
     },
     {
       "id": 22,
       "feature": "Ngữ nghĩa lệnh kịch bản",
       "status": "Đã sửa các lệnh chờ/thoại/nhạc",
-      "remaining": "Command 25 chỉ dùng trong Talk Log; 50 chờ click controller và hiện guide nguồn. Command 22 nhận PlayPomodoroVoice từ animation, khớp loại cue và bỏ cue cũ khi hủy. BGM dùng ratio/offset/fade, resume theo scene history; command 26 chọn playlist. Live story/Talk Log được lưu riêng. Chưa xác nhận mọi tập và mọi tổ hợp hiệu ứng; scenario BGM vẫn dùng chung kênh với playlist trong adapter web.",
+      "remaining": "Auto chờ chữ và voice kết thúc rồi mới tính Arg2; tốc độ chữ đọc master từng ngôn ngữ. Glitch/ScreenMove 200/205 dừng sau Arg2, -1 giữ liên tục, resume không khôi phục hiệu ứng đã hết hạn. Command 25 chỉ dùng trong Talk Log; 50 chờ click controller và hiện guide nguồn. Command 22 nhận PlayPomodoroVoice từ animation, khớp loại cue và bỏ cue cũ khi hủy. BGM dùng ratio/offset/fade, resume theo scene history; command 26 chọn playlist. Live story/Talk Log được lưu riêng. Chưa xác nhận mọi tập và mọi tổ hợp hiệu ứng, chưa port đầy đủ pause/tag của Febucci; scenario BGM vẫn dùng chung kênh với playlist trong adapter web.",
       "original": [
         {
           "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/ScenarioReader.cs",
@@ -669,7 +671,9 @@
         "research/dialogue-layout-check.json",
         "research/story-command-check.json",
         "research/daily-life-check.json",
-        "research/browser-story-daily-check.json"
+        "research/browser-story-daily-check.json",
+        "research/story-presentation-check.json",
+        "research/browser-story-presentation-check.json"
       ]
     },
     {
