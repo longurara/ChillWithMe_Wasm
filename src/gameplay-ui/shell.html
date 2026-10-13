@@ -1,0 +1,71 @@
+<div id="chill-ui" hidden>
+  <svg class="symbol-library" aria-hidden="true"><defs>
+    <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></symbol>
+    <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6M12 2v3M18 6l2-2"/></symbol>
+    <symbol id="i-notes" viewBox="0 0 24 24"><path d="M4 3h16v18H4zM8 7h8M8 11h8M8 15h5"/></symbol>
+    <symbol id="i-story" viewBox="0 0 24 24"><path d="M12 5v16M12 5C9 3 5 3 2 4v15c3-1 7-1 10 2 3-3 7-3 10-2V4c-3-1-7-1-10 1z"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24"><path d="M4 3h13l3 3v15H4zM8 3v6h8V3M8 21v-8h8v8"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></symbol>
+  </defs></svg>
+  <header class="hud-header">
+    <div class="brand"><span class="eyebrow">LO-FI STORY</span><span class="brand-name">Chill with You<span class="brand-dot">.</span></span></div>
+    <div class="header-actions"><button id="timer-chip" class="glass chip" data-panel="timer" aria-label="Mở đồng hồ tập trung"><span class="status-dot"></span><span id="timer-chip-label">25:00 · Tập trung</span></button><span id="level-chip" class="glass chip level">Cấp 1</span><button id="fullscreen" class="glass icon-button" aria-label="Toàn màn hình"><svg class="icon"><use href="#i-expand"/></svg></button><button id="hide-ui" class="glass chip" aria-label="Ẩn giao diện">Ẩn UI</button></div>
+  </header>
+  <div id="mode-switch" class="glass segmented mode-switch" role="group" aria-label="Hoạt động của Satone"><button data-mode="0">Đọc sách</button><button data-mode="1">Viết</button><button data-mode="2">Gõ phím</button></div>
+  <button id="show-ui" class="glass reveal" hidden>Hiện giao diện</button>
+  <aside id="panel" class="glass panel" hidden aria-labelledby="panel-title">
+    <div class="panel-heading"><div><span id="panel-eyebrow" class="eyebrow">GÓC CỦA BẠN</span><h1 id="panel-title">Nhạc</h1></div><button id="close-panel" class="icon-button" aria-label="Đóng bảng"><svg class="icon"><use href="#i-close"/></svg></button></div>
+    <section data-view="music" hidden>
+      <p class="muted">Một chút nhạc, một khoảng bình yên.</p>
+      <label class="sr-only" for="music-search">Tìm bài hát</label><input id="music-search" type="search" placeholder="Tìm trong thư viện nhạc…" autocomplete="off">
+      <div class="list-meta"><span id="music-count"></span><span id="music-loading" role="status"></span></div>
+      <div id="track-list" class="scroll-list tracks"></div>
+      <p id="story-music-hint" class="muted" hidden>Nhạc đang theo kịch bản. Bạn có thể đổi bài sau khi dừng truyện.</p>
+      <label class="field-label" for="volume">Âm lượng nhạc <span id="volume-label">35%</span></label><input id="volume" type="range" min="0" max="1" step="0.01" value="0.35">
+    </section>
+    <section data-view="timer" hidden>
+      <p id="timer-phase" class="muted center">Đến giờ tập trung.</p>
+      <div id="timer-clock" class="timer-clock">25:00</div><div id="timer-rounds" class="rounds" aria-label="Tiến độ phiên tập trung"></div>
+      <div class="two-columns"><label class="field-label">Làm việc · phút<input id="work-minutes" type="number" min="1" max="180" value="25"></label><label class="field-label">Nghỉ · phút<input id="break-minutes" type="number" min="1" max="120" value="5"></label></div>
+      <button id="timer-toggle" class="primary wide">Bắt đầu tập trung</button><button id="timer-reset" class="quiet wide">Kết thúc phiên</button>
+      <div class="progress-card"><span id="work-total">Đã tập trung 00:00:00</span><span id="exp-label">Cấp 1</span><progress id="exp-progress" max="100" value="0" aria-label="Kinh nghiệm"></progress></div>
+    </section>
+    <section data-view="notes" hidden>
+      <p class="muted">Ghi lại điều bạn muốn làm hôm nay.</p>
+      <label class="field-label" for="note">Ghi chú <span id="note-state">Tự động lưu</span></label><textarea id="note" rows="5" maxlength="64000" placeholder="Hôm nay mình muốn…"></textarea>
+      <h2>Việc cần làm <span id="todo-count" class="muted"></span></h2><form id="todo-form" class="inline-form"><input id="todo-input" maxlength="200" placeholder="Thêm một việc nhỏ…" aria-label="Việc mới"><button class="primary" type="submit">Thêm</button></form><div id="todo-list" class="scroll-list todos"></div>
+    </section>
+    <section data-view="story" hidden>
+      <p class="muted">Những câu chuyện cùng Satone.</p>
+      <button id="story-resume" class="primary wide" hidden>Tiếp tục đoạn đang đọc</button>
+      <div class="two-columns"><label class="field-label">Nhóm truyện<select id="chapter-kind"><option value="0">Cốt truyện chính</option><option value="1">Ngoại truyện</option><option value="2">Hội thoại</option><option value="3">Tất cả</option></select></label><label class="field-label">Lời thoại<select id="language"><option value="En">English</option><option value="Ja">日本語</option></select></label></div>
+      <label class="sr-only" for="chapter-search">Tìm câu chuyện</label><input id="chapter-search" type="search" placeholder="Tìm câu chuyện…" autocomplete="off">
+      <div id="chapter-list" class="scroll-list chapters"></div><div class="pagination"><button id="chapter-prev" class="quiet" aria-label="Trang trước">←</button><span id="chapter-page"></span><button id="chapter-next" class="quiet" aria-label="Trang sau">→</button></div>
+      <label class="check-label"><input id="unlock" type="checkbox"> Mở toàn bộ truyện để thử</label>
+      <details><summary>Nhật ký hội thoại</summary><div id="dialogue-history" class="scroll-list history"></div></details>
+    </section>
+    <section data-view="settings" hidden>
+      <h2>Bầu không khí</h2><div id="time-switch" class="segmented" role="group" aria-label="Thời gian trong phòng"><button data-time="0">Ngày</button><button data-time="1">Chiều</button><button data-time="2">Đêm</button><button data-time="3">Mây</button></div>
+      <label class="field-label" for="environment">Ngoài cửa sổ</label><select id="environment"></select>
+      <h2>Hình ảnh</h2><label class="check-label"><input id="quality" type="checkbox"> Chế độ nhẹ · 30 FPS</label>
+      <p class="muted">Bấm “Ẩn UI” để chỉ ngắm khung cảnh. Phím Esc mở lại giao diện hoặc đóng bảng.</p>
+    </section>
+    <section data-view="save" hidden>
+      <div class="save-card"><svg class="icon"><use href="#i-save"/></svg><h2>Khoảnh khắc của bạn</h2><p id="save-summary" class="muted"></p></div>
+      <button id="save-now" class="primary wide">Lưu tiến trình</button><div class="two-columns"><button id="save-export" class="quiet">Xuất save</button><button id="save-import" class="quiet">Nhập save</button></div>
+      <p class="muted">Tiến trình tự lưu trên trình duyệt này. Xuất một bản save nếu bạn muốn chuyển sang thiết bị khác.</p>
+    </section>
+    <p id="panel-status" class="panel-status" role="status"></p>
+  </aside>
+  <section id="dialogue" class="glass dialogue" hidden aria-label="Hội thoại">
+    <div class="dialogue-top"><span id="speaker" class="eyebrow">SATONE</span><span id="dialogue-title" class="muted"></span><button id="story-stop" class="quiet small">Dừng · giữ vị trí</button></div>
+    <p id="dialogue-text" class="dialogue-text"></p><span id="voice-loading" class="muted" hidden>Đang tải lời thoại…</span><div id="choices" class="choices"></div>
+    <div class="dialogue-bottom"><label class="check-label"><input id="auto-read" type="checkbox"> Tự đọc tiếp</label><button id="dialogue-next" class="primary">Tiếp →</button></div>
+  </section>
+  <div id="now-playing" class="glass now-playing"><button id="music-toggle" class="icon-button" aria-label="Phát nhạc"><svg class="icon"><use id="music-play-icon" href="#i-play"/></svg></button><button class="song-info" data-panel="music"><span class="eyebrow">ĐANG NGHE</span><span id="music-title">aqua room</span></button><span id="music-position" class="muted">00:00</span></div>
+  <nav id="dock" class="glass dock" aria-label="Chức năng"><button data-panel="music"><svg class="icon"><use href="#i-music"/></svg><span>Nhạc</span></button><button data-panel="timer"><svg class="icon"><use href="#i-timer"/></svg><span>Tập trung</span></button><button data-panel="notes"><svg class="icon"><use href="#i-notes"/></svg><span>Ghi chú</span></button><button data-panel="story"><svg class="icon"><use href="#i-story"/></svg><span>Truyện</span></button><button data-panel="settings"><svg class="icon"><use href="#i-settings"/></svg><span>Không gian</span></button><button data-panel="save"><svg class="icon"><use href="#i-save"/></svg><span>Save</span></button></nav>
+</div>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1f1c22">
+  <title>Chill with You · Lo-Fi Story</title>
+  <link rel="icon" href="TemplateData/favicon.ico">
+  <link rel="stylesheet" href="ui/native.css">
+</head>
+<body>
+  <div id="unity-container"><canvas id="unity-canvas" width="1280" height="720" tabindex="0" aria-label="Phòng của Satone"></canvas></div>
+  <div id="unity-loading-bar" role="status"><span class="eyebrow">LO-FI STORY</span><h1>Chill with You<span>.</span></h1><p>Chờ một chút, Satone đang chuẩn bị phòng.</p><progress id="unity-progress" max="1" value="0" aria-label="Tiến độ tải game"></progress><span id="load-percent">0%</span></div>
+  <div id="unity-warning" role="alert" hidden></div>
+  <script src="Build/WebPlayer.loader.js"></script>
+  <script>
+    document.addEventListener('gesturestart',event=>event.preventDefault(),{passive:false});
+    document.addEventListener('gesturechange',event=>event.preventDefault(),{passive:false});
+    const warning=document.getElementById('unity-warning');
+    function showWarning(message,type) {
+      warning.hidden=false;warning.textContent=message;
+      if(type!=='error')setTimeout(()=>{warning.hidden=true;},5000);
+    }
+    createUnityInstance(document.getElementById('unity-canvas'),{
+      dataUrl:'Build/WebPlayer.data',frameworkUrl:'Build/WebPlayer.framework.js',codeUrl:'Build/WebPlayer.wasm',streamingAssetsUrl:'StreamingAssets',
+      companyName:'HLC',productName:'Chill Graphics Prototype',productVersion:'1.19.0',devicePixelRatio:Math.min(window.devicePixelRatio||1,2),showBanner:showWarning
+    },progress=>{document.getElementById('unity-progress').value=progress;document.getElementById('load-percent').textContent=Math.floor(progress*100)+'%';}).then(instance=>{
+      window.chillUnityInstance=instance;
+      document.getElementById('unity-loading-bar').hidden=true;
+    }).catch(error=>{showWarning('Không mở được game. '+error,'error');document.getElementById('unity-loading-bar').hidden=true;});
+  </script>
+</body>
+</html>
