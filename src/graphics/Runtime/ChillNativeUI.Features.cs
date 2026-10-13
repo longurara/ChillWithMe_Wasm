@@ -95,15 +95,17 @@ namespace Hlc.ChillPrototype
             if(tagRoot){foreach(var child in tagRoot.GetComponentsInChildren<Transform>(true).Where(t=>t.name=="Content"))Show(child.gameObject,false);Bind(tagRoot.gameObject,()=>{var names=story.PlaylistNames;story.SetPlaylist(names[(Array.IndexOf(names,story.MusicState.playlist)+1)%names.Length]);musicSignature=null;});playlistSelector=tagRoot.GetComponent<Button>();}
             var general=Find(SettingsContent);if(general)
             {
-                var rect=(RectTransform)general;rect.sizeDelta=new Vector2(rect.sizeDelta.x,1510);
+                var rect=(RectTransform)general;rect.sizeDelta=new Vector2(rect.sizeDelta.x,1645);
                 float y=-565;
                 void Add(string key,string title,Action callback){var button=FeatureButton(general,key,title,y);FeatureHook(button,callback);y-=65;}
+                Add("pcSave","Import PC save",()=>ChillBrowserSave.ImportPC(story.gameObject.name));
                 Add("autonomy","Satone actions",()=>{story.Settings.autonomy=!story.Settings.autonomy;story.ResetAutonomy();story.CommitSettings();});
                 Add("rest","Satone: work / break",()=>story.SetResting(!story.Settings.resting));
                 Add("cameraView","Room camera",()=>story.ChooseRoomView((story.Settings.cameraView+1)%3));
                 Add("selfTalk","Self talk",()=>{story.Settings.selfTalk=!story.Settings.selfTalk;story.CommitSettings();});
                 Add("greeting","Greeting on launch",()=>{story.Settings.autoGreeting=!story.Settings.autoGreeting;story.CommitSettings();});
                 Add("autoTime","Automatic day / evening / night",()=>{story.Settings.autoTime=!story.Settings.autoTime;story.CommitSettings();});
+                Add("firstDay","First day of week",()=>{story.Settings.firstDayInWeek=(story.Settings.firstDayInWeek+1)%7;story.CommitSettings();workspaceSignature=null;});
                 Add("clock24","12 / 24 hour clock",()=>{story.Settings.clock24=!story.Settings.clock24;story.CommitSettings();});
                 Add("ambient","Ambient mixer",OpenAmbient);
                 Add("tutorial","Replay tutorial",()=>{Close();story.Tutorial();});
@@ -213,6 +215,7 @@ namespace Hlc.ChillPrototype
             if(playlistSelector){var label=playlistSelector.GetComponentInChildren<TMP_Text>(true);if(label)label.text=story.MusicState.playlist;}
             var shuffleIcon=Get<Image>("MusicUI","_shuffleChangeButtonImage");if(shuffleIcon)shuffleIcon.color=story.MusicState.shuffle?Color.white:new Color(1,1,1,.4f);
             var repeatIcon=Get<Image>("MusicUI","_loopChangeButtonImage");if(repeatIcon)repeatIcon.color=story.MusicState.repeat?Color.white:new Color(1,1,1,.4f);
+            FeatureCaption("firstDay","Week starts: "+((DayOfWeek)s.firstDayInWeek).ToString());
             FeatureCaption("birthday",s.birthdayMonth==0?"Set birthday":"Birthday: "+s.birthdayMonth.ToString("00")+" / "+s.birthdayDay.ToString("00"));
             if(timeBoundariesInput&&!timeBoundariesInput.isFocused)timeBoundariesInput.SetTextWithoutNotify(string.Join(" / ",new[]{s.dayStart,s.sunsetStart,s.nightStart}.Select(h=>TimeSpan.FromMinutes(Math.Round(h*60)).ToString(@"hh\:mm"))));
             var seek=Get<Slider>("MusicUI","musicProgressSlider");if(seek)seek.interactable=player.music.clip&&!state.playing&&!story.MusicLoading;
@@ -239,15 +242,18 @@ namespace Hlc.ChillPrototype
             string signature=story.MusicRevision+"|"+story.MusicState.playlist;if(signature==musicSignature)return;bool resetPosition=musicSignature==null;musicSignature=signature;
             var scroll=Get<ScrollRect>("MusicPlayListView","_scrollRect");float position=resetPosition?1:scroll?scroll.verticalNormalizedPosition:1;
             Clear(musicRows);var parent=RefOf("MusicPlayListView","_playListButtonsParent");if(!parent||!musicCell)return;Set(RefOf("MusicPlayListView","_dummyButton"),false);Layout(parent,((RectTransform)musicCell.transform).rect.height);
-            foreach(var item in story.Queue)
+            foreach(var item in story.PlaylistTracks)
             {
                 string guid=item.guid;var go=Cell(musicCell,parent);SetText(go,"MusicTitleText",item.title);SetText(go,"MusicArtistNameText",item.artist);
                 foreach(var t in go.GetComponentsInChildren<Transform>(true))if(t.name=="GreyOutImage"||t.name=="Doraggable")t.gameObject.SetActive(false);
                 var play=go.GetComponentsInChildren<Transform>(true).FirstOrDefault(t=>t.name=="PlayListMusicPlayButton");Bind(play?play.gameObject:go,()=>story.SelectTrack(guid));
                 var favorite=go.GetComponentsInChildren<Transform>(true).FirstOrDefault(t=>t.name=="FavoriteIcon");
                 if(favorite){favorite.gameObject.SetActive(true);Bind(favorite.gameObject,()=>story.ToggleFavorite(guid));var hit=favorite.Find("FavoriteIconBase")?.GetComponent<Graphic>();if(hit){favorite.GetComponent<Button>().targetGraphic=hit;hit.raycastTarget=true;}var active=favorite.Find("FavoriteIconActive");if(active)active.gameObject.SetActive(story.MusicState.favorites.Contains(guid));}
+                var candidate=go.GetComponentsInChildren<Transform>(true).FirstOrDefault(t=>t.name=="PlayCheck");
+                if(candidate){candidate.gameObject.SetActive(true);Bind(candidate.gameObject,()=>story.ToggleTrackExcluded(guid));}
+                var grey=go.GetComponentsInChildren<Transform>(true).FirstOrDefault(t=>t.name=="GreyOutImage");if(grey)grey.gameObject.SetActive(story.MusicState.excluded.Contains(guid));
                 var remove=go.GetComponentsInChildren<Transform>(true).FirstOrDefault(t=>t.name=="RemoveButton");if(remove){remove.gameObject.SetActive(item.personal||story.MusicState.playlists.Any(p=>p.name==story.MusicState.playlist));Bind(remove.gameObject,()=>story.RemoveTrack(guid));}
-                foreach(var t in go.GetComponentsInChildren<Transform>(true))if(t.name=="Playing"||t.name=="PlayCheck")t.gameObject.SetActive(story.MusicState.selected==guid);
+                foreach(var t in go.GetComponentsInChildren<Transform>(true))if(t.name=="Playing")t.gameObject.SetActive(story.MusicState.selected==guid);
                 if(story.MusicState.playlists.Any(p=>p.name==story.MusicState.playlist))
                 {var up=FeatureButton(go.transform,"moveUp"+guid,"↑",-8,38,180);var down=FeatureButton(go.transform,"moveDown"+guid,"↓",-8,38,222);FeatureHook(up,()=>story.MoveTrack(guid,-1));FeatureHook(down,()=>story.MoveTrack(guid,1));var handle=go.GetComponentsInChildren<Transform>(true).FirstOrDefault(t=>t.name=="Doraggable");if(handle){handle.gameObject.SetActive(true);var drag=handle.gameObject.GetComponent<ChillNativeRowDrag>()??handle.gameObject.AddComponent<ChillNativeRowDrag>();drag.moved=step=>story.MoveTrack(guid,step);}}
                 musicRows.Add(go);

@@ -9,6 +9,12 @@ ui = output / 'ui'
 ui.mkdir(parents=True, exist_ok=True)
 shutil.copy2(source / 'native.css', ui / 'native.css')
 shutil.copy2(source / 'startup.js', ui / 'startup.js')
+shutil.copy2(source / 'pc-save.mjs', ui / 'pc-save.mjs')
+shutil.copy2(source / 'save-store.mjs', ui / 'save-store.mjs')
+streaming=output/'StreamingAssets'
+streaming.mkdir(parents=True,exist_ok=True)
+for name in ('chill-features.json','story-scene.json','pc-save-metadata.json'):
+    shutil.copy2(root/'UnityProject/Assets/Prototype'/name,streaming/name)
 import sys
 sys.path.insert(0,str(root/'src/graphics'))
 from prepare_loading_screen import prepare

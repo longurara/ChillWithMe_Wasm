@@ -9,11 +9,18 @@ namespace Hlc.ChillPrototype
         public bool WantsToTalk=>invitedChapter!=null;
         ChillChapter NextInvitedChapter()
         {
-            if(save.timerRunning || save.countupRunning || !string.IsNullOrEmpty(save.chapter))return null;
+            if(!string.IsNullOrEmpty(save.chapter))return null;
             var available=data.groups.Where(g=>chapters.ContainsKey(g.ID) && !save.completed.Contains(g.ID) && Unlocked(g));
-            if(Workspace.collaboration>0)return available.Where(g=>g.Scenario==49+Workspace.collaboration).OrderBy(g=>g.EpisodeNumber).FirstOrDefault();
-            return available.Where(g=>g.Scenario==1 && g.EpisodeNumber>=save.mainEpisode && g.EpisodeNumber<=save.mainEpisode+1).OrderBy(g=>g.EpisodeNumber).FirstOrDefault()
-                ?? available.Where(g=>g.Scenario==2 || g.Scenario==3).OrderBy(g=>g.UnlockLevel).ThenBy(g=>g.EpisodeNumber).FirstOrDefault();
+            if(!save.timerRunning&&!save.countupRunning)
+            {
+                var main=Workspace.collaboration>0?available.Where(g=>g.Scenario==49+Workspace.collaboration).OrderBy(g=>g.EpisodeNumber).FirstOrDefault():available.Where(g=>g.Scenario==1&&g.EpisodeNumber>=save.mainEpisode&&g.EpisodeNumber<=save.mainEpisode+1).OrderBy(g=>g.EpisodeNumber).FirstOrDefault();
+                if(main!=null)return main;
+                if(Workspace.collaboration==0&&!(save.mainEpisode>=30&&save.mainEpisode<32)){var extra=available.FirstOrDefault(g=>g.Scenario==24);if(extra!=null)return extra;}
+            }
+            if(save.needsTutorial||ConnectionLost)return null;
+            var date=ChillRuntimeContext.LocalNow;
+            int scenario=SeasonalEvent==102?102:BirthdayMatches(date,Settings.birthdayMonth,Settings.birthdayDay)?103:0;
+            return scenario==0?null:available.FirstOrDefault(g=>g.Scenario==scenario&&g.EpisodeNumber==1);
         }
         bool InviteNextChapter()
         {
@@ -25,7 +32,8 @@ namespace Hlc.ChillPrototype
             if(invitedChapter==null)return false;
             var selected=NextInvitedChapter();invitedChapter=null;
             if(selected==null){SetNativeMotion(CurrentBaseMotion);return true;}
-            Begin(selected,false,false,false);return true;
+            if(selected.Scenario==102||selected.Scenario==103){suspendedChapter=save.chapter;suspendedCursor=save.cursor;suspendedScene=new System.Collections.Generic.List<int>(save.sceneHistory);suspendedStoryLive=save.storyLive;Begin(selected,false,true,false);}
+            else Begin(selected,false,false,false);return true;
         }
         IEnumerator FinishSnackActivity()
         {

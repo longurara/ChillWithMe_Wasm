@@ -45,11 +45,14 @@ public static class ChillStoryFlowCheck
             }
         }
         // Source VoiceText does not change body, face or look, even when its row has a body value.
-        var voiceRow=data.novels.First(r=>r.Command==20&&r.BodyMotion>=0);Set(story,"chapter",data.groups.First(g=>g.ID==voiceRow.ScenarioGroupID));Set(story,"current",voiceRow);Get<List<ChillSentence>>(story,"choices").Clear();Set(story,"chosen",3);
+        var voiceRow=JsonUtility.FromJson<ChillSentence>(JsonUtility.ToJson(data.novels.First(r=>r.Command==20&&data.localizations.Any(t=>t.ID==r.LocalizationID&&!string.IsNullOrEmpty(t.En)))));
+        voiceRow.BodyMotion=752; // Inject a conflicting body value to verify that VoiceText ignores it.
+        Set(story,"chapter",data.groups.First(g=>g.ID==voiceRow.ScenarioGroupID));Set(story,"current",voiceRow);Get<List<ChillSentence>>(story,"choices").Clear();Set(story,"chosen",3);
         int motion=player.character.GetInteger("MotionType"),face=player.character.GetInteger("Facial");float look=player.character.GetFloat("LookScale");
         var speak=(IEnumerator)Call(story,"Speak",voiceRow,false,true);Require(speak.MoveNext(),"voice-only speech did not start");
         Require(player.character.GetInteger("MotionType")==motion&&player.character.GetInteger("Facial")==face&&Mathf.Abs(player.character.GetFloat("LookScale")-look)<.001f,"VoiceText overwrites an authored pose");
         Require(speak.MoveNext()&&speak.MoveNext(),"old choice skips an unrelated voice/typewriter wait");(speak as IDisposable)?.Dispose();
+        foreach(string id in new[]{"selftalk_normal_001","motion_guts_001","motion_stretch_001","motion_gymnastics_001"})Require((string)Call(story,"Text",id)=="","Missing source caption leaks a debug placeholder into dialogue");
         var loop=data.novels.First(r=>r.Command==81);Set(story,"current",loop);Set(story,"loopChoiceVersion",7);
         var delayed=(IEnumerator)Call(story,"ShowLoopChoices",loop,Get<int>(story,"generation"),7);
         Require(delayed.MoveNext()&&delayed.Current is WaitForSecondsRealtime wait&&Mathf.Abs(wait.waitTime-.3f)<.001f,"loop ignores the source Arg4 selection delay");Call(story,"ResetCommandWaits");Require(!delayed.MoveNext(),"cancelled loop publishes stale choices");

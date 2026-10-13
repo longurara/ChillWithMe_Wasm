@@ -34,6 +34,9 @@ public static class ChillStoryCommandCheck
         Call(story,"PreparePomodoroVoice",new ChillSentence{Command=22,Arg1="1",BodyMotion=-1,FacialMotion=-1});Require(Get<bool>(story,"pomodoroVoiceReady"),"Voice without body motion waits for a nonexistent cue");
         Call(story,"PreparePomodoroVoice",new ChillSentence{Command=22,Arg1="0",BodyMotion=row.BodyMotion,FacialMotion=-1});Require(Get<bool>(story,"pomodoroVoiceReady"),"Immediate voice type incorrectly waits for an event");
         actions.previewEvents=oldPreview;
+        int deskBefore=player.SelectedState,motionBefore=player.character.GetInteger("MotionType");
+        foreach(var desk in new[]{("Book",0),("Report",1),("Pc",2)}){var change=(IEnumerator)Call(story,"ChangeStoryLayout",desk.Item1,false);while(change.MoveNext()){}Require(player.SelectedState==desk.Item2&&player.character.GetInteger("MotionType")==motionBefore,"ChangeLayout loses its desk fallback or overwrites the character pose");}
+        player.SetStoryDesk(deskBefore);
 
         var music=data.novels.First(r=>r.Command==25);Set(story,"talkLog",false);Require(!(bool)Call(story,"AppliesStoryMusic",music),"Talk-log-only BGM applies to a live reaction/resume");Set(story,"talkLog",true);Require((bool)Call(story,"AppliesStoryMusic",music),"Talk-log playback lost its BGM");
         var playlist=data.novels.First(r=>r.Command==26);Require(!(bool)Call(story,"AppliesStoryMusic",playlist)&&story.Tracks.Any(t=>t.title==playlist.Arg1),"MusicService command must resolve through the playlist");

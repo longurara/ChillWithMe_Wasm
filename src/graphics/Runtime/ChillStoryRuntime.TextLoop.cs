@@ -20,7 +20,7 @@ namespace Hlc.ChillPrototype
             var bag=new List<ChillSentence>();ChillSentence previous=null;
             ChillSentence Pick()
             {
-                if(bag.Count==0)bag.AddRange(loops.OrderBy(_=>UnityEngine.Random.value));
+                if(bag.Count==0)bag.AddRange(loops.OrderBy(_=>ChillRuntimeContext.Value));
                 if(bag.Count>1&&bag[0]==previous){var first=bag[0];bag.RemoveAt(0);bag.Add(first);}
                 var row=bag[0];bag.RemoveAt(0);previous=row;return row;
             }
@@ -32,7 +32,7 @@ namespace Hlc.ChillPrototype
             while(Playing&&chosen<0)
             {
                 float min=Mathf.Max(0,Number(setup.Arg1)),max=Mathf.Max(min,setup.Arg2);
-                double end=Now+UnityEngine.Random.Range(min,max);
+                double end=Now+ChillRuntimeContext.Range(min,max);
                 while(Playing&&chosen<0&&Now<end)yield return null;
                 if(!Playing||chosen>=0)break;
                 yield return Speak(Pick(),false);

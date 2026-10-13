@@ -28,7 +28,7 @@ namespace Hlc.ChillPrototype
     }
     [Serializable] public class ChillText { public string ID, En, Ja, ZhHans, ZhHant, Pt, Ko, Ru, Voice; }
     [Serializable] public class ChillMusic { public string title, clip, credit; }
-    [Serializable] public class ChillParameters { public ChillLevelParameters LevelUpInfoData;public ChillTalkSpeed TalkSpeedData;public ChillTypingPolicy typing; }
+    [Serializable] public class ChillParameters { public ChillLevelParameters LevelUpInfoData;public ChillTalkSpeed TalkSpeedData;public ChillTypingPolicy typing;public ChillSmallTalkParameters SmallTalkData; }
     [Serializable] public class ChillTalkSpeed
     {
         public float TalkTextWaitSecondsJp=.13f,TalkTextWaitSecondsEn=.02f,TalkTextWaitSecondsCS=.13f,TalkTextWaitSecondsCT=.13f,TalkTextWaitSecondsPt=.02f,TalkTextWaitSecondsKo=.05f,TalkTextWaitSecondsRu=.02f;
@@ -43,14 +43,18 @@ namespace Hlc.ChillPrototype
         public float pomodoroExpBaseMinutes, pomodoroExpBaseMax, pomodoroExpBaseMaxHour, nextLevelNecessaryExpBase;
         public float[] nextLevelNecessaryExpArray;
     }
+    [Serializable] public class ChillSmallTalkParameters {public float intervalMinutes=10;}
     [Serializable] public class ChillTodo { public string title,id,due="",completedDate=""; public bool done; }
     [Serializable] public class ChillSave
     {
         public string format = "chill-with-you-web";
-        public int version = 1, level = 1, cursor, deskMode, timeMode, windowMode;
+        public int version = 2, level = 1, cursor, deskMode, timeMode, windowMode;
         public string language = "En", chapter = "", note = "";
         public bool autoRead, previewUnlock;
         public bool storyLive;
+        public bool needsTutorial=true;
+        public bool timerComplete,connectionLostNextEpisode;
+        public double lastStoryUnlockWorkSeconds;
         public List<string> completed = new List<string>();
         public List<float> usedChoices = new List<float>();
         public List<int> sceneHistory = new List<int>();

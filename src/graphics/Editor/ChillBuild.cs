@@ -156,7 +156,7 @@ public static class ChillBuild
         player.bones = player.gameObject.AddComponent<ChillBonePhysics>();
         player.bones.character = actor;
         player.bones.configuration = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-physics.json");
-        player.bones.bakedConfiguration = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-bakes.json");
+        player.bones.bakedConfiguration = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-bakes.bytes")??AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-bakes.json");
         player.bones.enabled = true;
         player.library = player.gameObject.AddComponent<ChillLibraryBrowser>();
         player.library.character = actor; player.library.music = player.music; player.library.view = view;
@@ -184,8 +184,10 @@ public static class ChillBuild
         PlayerSettings.SetScriptingBackend(BuildTargetGroup.WebGL, ScriptingImplementation.IL2CPP);
         PlayerSettings.SetManagedStrippingLevel(BuildTargetGroup.WebGL, ManagedStrippingLevel.Low);
         PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
+        PlayerSettings.WebGL.powerPreference = WebGLPowerPreference.HighPerformance;
+        PlayerSettings.WebGL.debugSymbolMode = WebGLDebugSymbolMode.External;
         PlayerSettings.WebGL.template = "APPLICATION:Default";
-        PlayerSettings.bundleVersion = "1.23.0";
+        PlayerSettings.bundleVersion = "1.24.0";
         PlayerSettings.WebGL.dataCaching = false;
         PlayerSettings.WebGL.memorySize = 512;
         PlayerSettings.WebGL.initialMemorySize = 256;
@@ -222,6 +224,7 @@ public static class ChillBuild
         environment.environments = environment.window ? environment.window.Cast<Transform>().Select(t => t.gameObject).ToArray() : Array.Empty<GameObject>();
         var renderers = All<Renderer>().GroupBy(r => Hierarchy(r.transform)).ToDictionary(g => g.Key, g => g.First());
         var names = new[] { "day", "sunset", "night", "cloudy" };
+        var cozy=JsonUtility.FromJson<ChillCozyLighting.Configuration>(File.ReadAllText("Assets/Prototype/cozy-lighting.json"));
         var ambient = new[] { new Color(.38f,.41f,.46f), new Color(.4f,.27f,.25f), new Color(.16f,.18f,.3f), new Color(.32f,.35f,.39f) };
         var sky = new[] { new Color(.43f,.62f,.8f), new Color(.9f,.43f,.35f), new Color(.08f,.1f,.23f), new Color(.44f,.48f,.55f) };
         environment.presets = names.Select((name,index) => {
@@ -231,7 +234,8 @@ public static class ChillBuild
                 renderers=rows.Select(b => renderers[b.path]).ToArray(), indices=rows.Select(b => b.index).ToArray(),
                 offsets=rows.Select(b => new Vector4(b.offset[0],b.offset[1],b.offset[2],b.offset[3])).ToArray(), ambient=ambient[index],
                 sky=sky[index], sunColor=index==1 ? new Color(1,.65f,.4f) : index==2 ? new Color(.5f,.6f,1) : new Color(1,.95f,.88f),
-                sunIntensity=index==2 ? .15f : index==3 ? .4f : .75f };
+                sunIntensity=index==2 ? .15f : index==3 ? .4f : .75f,
+                cozy=cozy.presets[index],originalSun=All<Light>().FirstOrDefault(l=>Hierarchy(l.transform).Contains("/DateTime/"+cozy.presets[index].name+"/Cozy Weather Sphere/Sky/Sun Offset/")&&l.name=="Sun Light") };
         }).ToArray();
         Debug.Log("HLC_CHILL_ENVIRONMENTS " + environment.environments.Length + " lighting=" + environment.presets.Length);
     }
@@ -316,11 +320,8 @@ public static class ChillBuild
         var ambient = new SphericalHarmonicsL2();
         ambient.AddAmbientLight(new Color(0.38f, 0.41f, 0.46f));
         RenderSettings.ambientProbe = ambient;
-        foreach (var light in All<Light>()) if (light.type == LightType.Directional) light.enabled = false;
-        var sun = new GameObject("Prototype daylight").AddComponent<Light>();
-        sun.type = LightType.Directional; sun.intensity = 0.75f; sun.color = new Color(1f, 0.95f, 0.88f);
-        sun.shadows = LightShadows.Hard; sun.transform.rotation = Quaternion.Euler(35, 140, 0);
-        RenderSettings.sun = sun;
+        // Keep authored directional lights and their source hierarchy. COZY's
+        // sampled atmosphere sets the active sunlight and ambient gradient.
     }
 
     static void RestoreStaticBatches()
@@ -413,7 +414,9 @@ public static class ChillBuild
     public static void BuildWebGL()
     {
         if (!File.Exists(ScenePath)) Prepare();
-        PlayerSettings.bundleVersion = "1.23.0";
+        PlayerSettings.WebGL.powerPreference = WebGLPowerPreference.HighPerformance;
+        PlayerSettings.WebGL.debugSymbolMode = WebGLDebugSymbolMode.External;
+        PlayerSettings.bundleVersion = "1.24.0";
         PlayerSettings.WebGL.template = "APPLICATION:Default";
         PlayerSettings.WebGL.initialMemorySize = 256;
         PlayerSettings.WebGL.maximumMemorySize = 2048;

@@ -163,6 +163,14 @@ namespace Hlc.ChillPrototype
         void DeskMotion(int motion)
         { if (deskObjectAnimator) { deskObjectAnimator.enabled = true; deskObjectAnimator.speed = 1; deskObjectAnimator.SetInteger("MotionType", motion); } }
 
+        public void SetStoryLayout(int mode)
+        {
+            if(!deskObjectAnimator)return;
+            deskObjectAnimator.enabled=true;deskObjectAnimator.speed=1;
+            deskObjectAnimator.SetInteger("MotionType",mode==0?3:mode==1?5:1);
+            deskObjectAnimator.Play(mode==0?"FromPcToBook":mode==1?"FromPcToReport":"FromBookToPc",0,1);
+            deskObjectAnimator.Update(0);deskObjectAnimator.speed=0;
+        }
         public void Select(int mode)
         {
             RestoreReturnTargets();returning.Clear();

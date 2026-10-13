@@ -24,7 +24,7 @@ public static class ChillFeaturesCheck
     }
     public static void Run()
     {
-        ChillStartupCheck.Run();
+        ChillStartupCheck.Run();ChillPCSaveMetadata.Build();
         EditorSceneManager.OpenScene("Assets/Prototype/Room.unity");var player=UnityEngine.Object.FindObjectOfType<ChillGraphicsPlayer>();
         ChillAppearanceBuild.Configure(player);var ui=ChillNativeUIBuild.Configure(player);ChillFeaturesBuild.Configure(player);var story=player.story;story.VerificationOnly=true;
         var data=JsonUtility.FromJson<ChillStoryData>(File.ReadAllText("Assets/StreamingAssets/chill-story.json"));var features=JsonUtility.FromJson<ChillFeatureData>(File.ReadAllText("Assets/Prototype/chill-features.json"));
@@ -39,8 +39,10 @@ public static class ChillFeaturesCheck
         story.decorations.Restore();Require(beforeRestore.All(pair=>pair.Key.activeSelf==pair.Value),"Decoration restore mutated native UI visibility");
         var taskButton=ui.Find("Paremt/PCPlatform/Canvas/UI/ChangeOrderObjects/UI_FacilityTodo/AddTodoUI/AddTodoButton").GetComponent<Button>();
         int taskCount=story.CurrentList.items.Count;taskButton.onClick.Invoke();Require(story.CurrentList.items.Count==taskCount+1,"Native New Task callback is missing");story.DeleteTodo(story.CurrentList.items.Count-1);
-        story.ApplyFeatureSettings();ui.RefreshNow();var save=Get<ChillSave>(story,"save");
+        story.ApplyFeatureSettings();if(QualitySettings.vSyncCount!=0)throw new InvalidOperationException("VSync overrides the user's frame limit");ui.RefreshNow();var save=Get<ChillSave>(story,"save");
         ChillCompletionCheck.Run(story,ui,player,save);save.previewUnlock=true;
+        ChillParityCoreCheck.Run(story,player);
+        ChillCozyLightingCheck.Run(player);
         Require(features.music.Length==43 && features.ambient.Length==30,"Native music/ambient master count mismatch");
         Require(features.music.Concat(features.ambient.Select(t=>new ChillTrack{guid=t.guid})).All(t=>catalog.assets.Any(a=>a.guid==t.guid&&a.type=="AudioClip")),"A music/ambient GUID is not in the built catalog");
         Require(features.systemSounds.Length==12&&features.timerSounds.Length==7&&features.systemSounds.Concat(features.timerSounds).All(t=>catalog.assets.Any(a=>a.guid==t.guid&&a.type=="AudioClip"&&catalog.bundles.Any(b=>b.name==a.bundle))),"Native sound cue bank is incomplete");

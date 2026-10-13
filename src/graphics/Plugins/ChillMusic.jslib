@@ -84,7 +84,7 @@ mergeInto(LibraryManager.library, {
           var id='local-'+Array.from(new Uint8Array(hash)).map(function(n){return n.toString(16).padStart(2,'0');}).join('');
           var tags=ChillMusicStore.tags(bytes,file.name.replace(/\.[^.]+$/,'').slice(0,240));
           await ChillMusicStore.write({id:id,title:tags.title,artist:tags.artist,file:new Blob([bytes],{type:file.type})});
-          ChillMusicStore.send(target,'PersonalTrackImported',{guid:id,title:tags.title,artist:tags.artist});
+          ChillMusicStore.send(target,'PersonalTrackImported',{guid:id,title:tags.title,artist:tags.artist,fileName:file.name});
         }catch(error){ChillMusicStore.send(target,'PersonalTrackImported',{error:error.message});}
       }
     };

@@ -1,4 +1,11 @@
 <linker>
+  <assembly fullname="UnityEngine.CoreModule">
+    <type fullname="UnityEngine.Texture" preserve="all" />
+    <type fullname="UnityEngine.Texture2D" preserve="all" />
+  </assembly>
   <assembly fullname="Unity.TextMeshPro" preserve="all" />
   <assembly fullname="UnityEngine.UI" preserve="all" />
+  <assembly fullname="UnityEngine.TextCoreFontEngineModule" preserve="all" />
+  <assembly fullname="UnityEngine.TextCoreTextEngineModule" preserve="all" />
+  <assembly fullname="UnityEngine.TextRenderingModule" preserve="all" />
 </linker>

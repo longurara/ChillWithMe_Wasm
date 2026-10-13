@@ -62,7 +62,7 @@ namespace Hlc.ChillPrototype
         }
         Vector2 listScroll, dialogueScroll, noteScroll;
         GUIStyle storyLabel, storyButton;
-        static double Now => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000.0;
+        static double Now => ChillRuntimeContext.Now;
         static float Number(string value) => float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var number) ? number : 0;
 
         IEnumerator Start()
@@ -87,7 +87,13 @@ namespace Hlc.ChillPrototype
             if (!string.IsNullOrEmpty(json))
             {
                 try { var loaded = JsonUtility.FromJson<ChillSave>(json); Validate(loaded); save = loaded; }
-                catch (Exception error) { saveAllowed = false; status = "Save chưa đọc được; không ghi đè: " + error.Message; Notify(status,true); }
+                catch (Exception error)
+                {
+                    saveAllowed = false; status = "Save chưa đọc được; không ghi đè: " + error.Message;
+                    try{var backup=JsonUtility.FromJson<ChillSave>(ChillBrowserSave.Backup());Validate(backup);save=backup;recoveredBackup=true;status="Recovered a verified backup. Export it or explicitly save to replace the damaged save.";}
+                    catch(Exception){ }
+                    Notify(status,true);
+                }
             }
             autoRead = save.autoRead; ApplyPreferences();
             if (saveAllowed) status = data.groups.Length + " đoạn truyện/hội thoại đã sẵn sàng";
@@ -98,7 +104,7 @@ namespace Hlc.ChillPrototype
         string Text(string id)
         {
             if (string.IsNullOrEmpty(id) || id == "0") return "";
-            if (!texts.TryGetValue(id, out var text)) return "[Thiếu lời thoại trong dữ liệu nguồn: " + id + "]";
+            if (!texts.TryGetValue(id, out var text)) return "";
             string value=save.language=="Ja"?text.Ja:save.language=="ZhHans"?text.ZhHans:save.language=="ZhHant"?text.ZhHant:save.language=="Pt"?text.Pt:save.language=="Ko"?text.Ko:save.language=="Ru"?text.Ru:text.En;
             return string.IsNullOrEmpty(value) ? text.En ?? text.Ja ?? "" : value;
         }
@@ -117,14 +123,14 @@ namespace Hlc.ChillPrototype
             if(candidate!=null && candidate.loopCount==0)candidate.loopCount=4;
             if (candidate != null && candidate.sceneHistory == null) candidate.sceneHistory = new List<int>();
             if (candidate != null && candidate.sceneHistory.Count > 8192) throw new ArgumentException("Lịch sử cảnh quá dài.");
-            if (candidate == null || candidate.format != "chill-with-you-web" || candidate.version != 1) throw new ArgumentException("Sai định dạng/phiên bản.");
+            if (candidate == null || candidate.format != "chill-with-you-web" || (candidate.version < 1 || candidate.version > 2)) throw new ArgumentException("Sai định dạng/phiên bản.");
             if (candidate.completed == null || candidate.usedChoices == null || candidate.todos == null) throw new ArgumentException("Thiếu dữ liệu tiến trình.");
             if (candidate.level < 1 || candidate.level > 10000 || candidate.exp < 0 || double.IsNaN(candidate.exp) || double.IsInfinity(candidate.exp)) throw new ArgumentException("Cấp độ không hợp lệ.");
             if (candidate.deskMode < 0 || candidate.deskMode > 2 || candidate.timeMode < 0 || candidate.timeMode > 3 || candidate.windowMode < 0 || candidate.windowMode > player.environment.environments.Length) throw new ArgumentException("Thiết lập phòng không hợp lệ.");
             ValidateFeatures(candidate);
             if (!new[]{"En","Ja","ZhHans","ZhHant","Pt","Ko","Ru"}.Contains(candidate.language)) throw new ArgumentException("Ngôn ngữ không hợp lệ.");
             if (candidate.completed.Count > 1000 || candidate.completed.Any(id => !data.groups.Any(g => g.ID == id)) || candidate.todos.Any(t => t == null || (t.title ?? "").Length > 200)) throw new ArgumentException("Danh sách tiến trình không hợp lệ.");
-            if (candidate.workedSeconds < 0 || double.IsNaN(candidate.workedSeconds) || double.IsInfinity(candidate.workedSeconds) || candidate.mainEpisode < 0 || candidate.mainEpisode > 1000 || double.IsNaN(candidate.mainEpisode)) throw new ArgumentException("Thời gian/tiến trình không hợp lệ.");
+            if (candidate.workedSeconds < 0 || double.IsNaN(candidate.workedSeconds) || double.IsInfinity(candidate.workedSeconds) || candidate.mainEpisode < 0 || candidate.mainEpisode > 1000 || double.IsNaN(candidate.mainEpisode)||double.IsInfinity(candidate.mainEpisode)||candidate.lastStoryUnlockWorkSeconds<0||double.IsNaN(candidate.lastStoryUnlockWorkSeconds)||double.IsInfinity(candidate.lastStoryUnlockWorkSeconds)) throw new ArgumentException("Thời gian/tiến trình không hợp lệ.");
             if (candidate.workMinutes < 1 || candidate.workMinutes > 999 || candidate.breakMinutes < 1 || candidate.breakMinutes > 999 || candidate.loopCount<1 || candidate.loopCount>99 || candidate.timerMode<0 || candidate.timerMode>1 || candidate.todos.Count > 100 || (candidate.note ?? "").Length > 64000) throw new ArgumentException("Dữ liệu công việc quá lớn.");
             if(candidate.countupSeconds<0 || double.IsNaN(candidate.countupSeconds) || double.IsInfinity(candidate.countupSeconds) || candidate.countupStarted<0 || double.IsNaN(candidate.countupStarted) || double.IsInfinity(candidate.countupStarted) || double.IsNaN(candidate.lastCountupTick) || double.IsInfinity(candidate.lastCountupTick))throw new ArgumentException("Đồng hồ đếm lên không hợp lệ.");
             if(candidate.timerPresets!=null && (candidate.timerPresets.Count>5 || candidate.timerPresets.Any(p=>p==null || (p.name ?? "").Length>80 || p.loopCount<1 || p.loopCount>99 || p.workMinutes<1 || p.workMinutes>999 || p.breakMinutes<1 || p.breakMinutes>999)))throw new ArgumentException("Preset không hợp lệ.");
@@ -137,16 +143,22 @@ namespace Hlc.ChillPrototype
         {
             try
             {
+                if(json==null||json.Length>32*1024*1024)throw new ArgumentException("Save file is too large.");
                 var imported = JsonUtility.FromJson<ChillSave>(json); Validate(imported);
-                StopStory(); save = imported; autoRead = save.autoRead; saveAllowed = true; ApplyPreferences();ApplyFeatureSettings();ResetAutonomy();history=new List<string>(save.conversationHistory);foreach(var track in Features.ambient)SetAmbience(track.id,AmbientLevel(track.id),false);if(!string.IsNullOrEmpty(MusicState.selected))SelectTrack(MusicState.selected,false,MusicState.position);
-                if (SaveNow()) {status = "Đã nhập save. Bấm Tiếp tục truyện để đọc từ vị trí đã lưu.";Notify(status);}
+                // Store first: quota/conflict failures must leave the current session intact.
+                if(!VerificationOnly&&!ChillBrowserSave.Write(imported)){ImportSaveError("Save import could not be stored. Export your current progress and reload before trying again.");return;}
+                farewellPending=false;StopStory();CancelRoom(); save = imported; autoRead = save.autoRead; saveAllowed = true; ApplyPreferences();ApplyFeatureSettings();ResetAutonomy();RestoreRoom();history=new List<string>(save.conversationHistory);foreach(var track in Features.ambient)SetAmbience(track.id,AmbientLevel(track.id),false);if(!string.IsNullOrEmpty(MusicState.selected))SelectTrack(MusicState.selected,false,MusicState.position);
+                status = "Đã nhập save. Bấm Tiếp tục truyện để đọc từ vị trí đã lưu.";Notify(status);
             }
             catch (Exception error) { status = "Không nhập save: " + error.Message; Notify(status,true); }
         }
         public void ImportSaveError(string error) { status = error; Notify(status,true); }
 
-        bool SaveNow()
+        bool saveFailureNotified;
+        bool SaveNow(bool reportFailure=true)
         {
+            lastSave=Now;
+            if(!VerificationOnly&&!ChillBrowserSave.CanWrite){if(reportFailure)Notify("This tab cannot save: another tab may be saving, or browser storage is blocked. You can export your progress.",true);return false;}
             if (!saveAllowed) {Notify("Save hiện tại chưa đọc được. Hãy xuất dữ liệu hoặc nhập save hợp lệ trước khi lưu.",true);return false;}
             if(data==null)return false;
             save.autoRead = autoRead;
@@ -155,15 +167,18 @@ namespace Hlc.ChillPrototype
             var persisted=save;
             if(automaticDialogue){persisted=JsonUtility.FromJson<ChillSave>(JsonUtility.ToJson(save));persisted.chapter=suspendedChapter;persisted.cursor=suspendedCursor;persisted.sceneHistory=suspendedScene ?? new List<int>();persisted.storyLive=suspendedStoryLive;}
             bool written = VerificationOnly || ChillBrowserSave.Write(persisted);
-            if (!written) {status = "Trình duyệt không lưu được. Hãy xuất file save để giữ tiến trình.";Notify(status,true);}
+            if (!written) {status = "Trình duyệt không lưu được. Hãy xuất file save để giữ tiến trình.";if(reportFailure||!saveFailureNotified)Notify(status,true);saveFailureNotified=true;}
+            else saveFailureNotified=false;
             lastSave = Now;
             return written;
         }
 
         public void StopStory()
         {
+            startupSmallTalk=null;
             bool finishedFarewell=farewellPending&&Playing;farewellPending=false;
             bool wasPlaying = Playing;
+            if(wasPlaying)GetComponent<ChillLoadDirection>()?.Cancel();
             bool finishSnack=automaticDialogue && chapter!=null && (chapter.Scenario==2600 || chapter.Scenario==2601);
             if(wasPlaying && previousMusic && player.music.clip==previousMusic)previousMusicTime=player.music.time;
             bool resumeActivity=automaticDialogue&&autonomyInstalled;int activityBreak=breakMode,activityTalks=selfTalkCount;
@@ -215,7 +230,7 @@ namespace Hlc.ChillPrototype
             // Blend into that same destination without resetting the Animator,
             // including script-only poses with no ordinary exit to work.
             if(presentation&&wasPlaying&&!finishSnack)presentation.BlendToRequested(.25f);
-            if(finishedFarewell&&SaveNow())Notify("Saved. You can close this tab.");
+            if(finishedFarewell&&SaveNow()){Notify("Saved. You can close this tab.");if(Application.isPlaying&&!VerificationOnly)StartCoroutine(FarewellScreen());}
         }
 
         void Begin(ChillChapter selected, bool resume,bool ambientDialogue=false,bool fromTalkLog=true)
@@ -225,7 +240,7 @@ namespace Hlc.ChillPrototype
             if (!Playing) SaveNow();
             if(!ambientDialogue)StopStory();else {generation++;StopMotionSounds();choices.Clear();loops.Clear();}
             if(selected.Scenario>=50&&selected.Scenario<=56)Workspace.collaboration=selected.Scenario-49;
-            CancelRoom();automaticDialogue=ambientDialogue;invitedChapter=null;player.library.visible = false; player.library.RestoreCharacter();
+            ClearRoomDefect();CancelRoom();automaticDialogue=ambientDialogue;invitedChapter=null;player.library.visible = false; player.library.RestoreCharacter();
             previousMusic = player.music.clip; previousMusicPlaying = player.music.isPlaying;previousMusicLoop=player.music.loop;previousMusicTime=previousMusic?player.music.time:0;talkLog=resume?!save.storyLive:fromTalkLog&&!ambientDialogue;save.storyLive=!talkLog;
             if(!ambientDialogue){player.music.Pause();foreach(var source in ambienceSources.Values)if(source&&source.isPlaying){pausedStoryAmbience.Add(source);source.Pause();}}
             if (!chapters.TryGetValue(selected.ID, out sentences)) { status = "Đoạn này không có kịch bản."; return; }
@@ -284,7 +299,7 @@ namespace Hlc.ChillPrototype
                         }
                     }
                     else if (row.Command == 11) SelectWindow(row.Arg1,row.Arg2 == 1);
-                    else if (row.Command == 30) yield return decorations.Apply(row.Arg1);
+                    else if (row.Command == 30) yield return ChangeStoryLayout(row.Arg1,false);
                     else if (AppliesStoryMusic(row) || row.Command == 8) {lastMusic=row;lastMusicVolume=null;}
                     else if (row.Command == 26) lastPlaylist=row;
                     else if (row.Command == 40) lastMusicVolume=row;
@@ -433,12 +448,12 @@ namespace Hlc.ChillPrototype
                         else if (current.Arg2 > 0) yield return new WaitForSecondsRealtime(Mathf.Min(current.Arg2,120));
                         break;
                     case 30:
-                        yield return decorations.Apply(current.Arg1); break;
+                        yield return ChangeStoryLayout(current.Arg1,!talkLog); break;
                     case 40: StartCoroutine(ChangeStoryMusicVolume(current));break;
                     case 60: message = ""; typing = false; break;
                     case 70:
                         var range = current.Arg1.Split('~');
-                        bool inside = range.Length == 2 && DateTime.TryParseExact(range[0], "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var from) && DateTime.TryParseExact(range[1], "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var to) && DateTime.Now >= from && DateTime.Now <= to;
+                        bool inside = range.Length == 2 && DateTime.TryParseExact(range[0], "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var from) && DateTime.TryParseExact(range[1], "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var to) && ChillRuntimeContext.LocalNow >= from && ChillRuntimeContext.LocalNow <= to;
                         cursor = Jump(inside ? current.Arg3 : current.Arg4); advance = false; break;
                     case 80: loops.Add(current); break;
                     case 81:
@@ -446,7 +461,7 @@ namespace Hlc.ChillPrototype
                         advance = false; break;
                     case 90: effects.Apply(current); yield return new WaitForSecondsRealtime(Mathf.Clamp(Number(current.Arg1),0,30)); break;
                     case 91: yield return PlayCredits();break;
-                    case 92: GetComponent<ChillNativeUI>()?.StopNativeCredits();effects.ResetEffects();break;
+                    case 92: yield return FinishCreditsDirection();break;
                     case 100: effects.Apply(current); break;
                     case 200: case 205: case 210: case 215: case 216: case 219: case 220: case 230: case 231: case 240: case 250: case 500: case 501: case 1000:
                         if (current.Command == 240) voiceDefect = Mathf.Clamp01(Number(current.Arg1));
@@ -492,20 +507,27 @@ namespace Hlc.ChillPrototype
         void Finish()
         {
             var completed = chapter;if(completed==null)return;
+            var afterGreeting=startupSmallTalk;
             if (!save.completed.Contains(completed.ID)) save.completed.Add(completed.ID);
             CompletedAchievement(completed);
             if (completed.Scenario == 1 && Math.Abs(completed.EpisodeNumber - save.mainEpisode - 1) < .001) save.mainEpisode = completed.EpisodeNumber;
             save.sceneHistory.Clear();
+            if(completed.Scenario==18)save.needsTutorial=false;
+            CompleteCalendarScenario(completed);
             save.chapter = ""; save.cursor = 0; StopStory(); status = "Đã đọc xong: " + completed.ID; SaveNow();
+            if(afterGreeting!=null)BeginSmallTalk(afterGreeting);
         }
 
         bool Unlocked(ChillChapter item)
         {
             if (save.previewUnlock || save.completed.Contains(item.ID) || item.Scenario == 18) return true;
+            if(item.ContentType=="PurchaseEnvironment"&&!Workspace.purchases.Contains("environment:"+item.Arg1))return false;
             if(item.Scenario>=50&&item.Scenario<=56)return CollaborationUnlocked(item);
+            if(item.Scenario==1&&item.EpisodeNumber==32&&(!save.connectionLostNextEpisode||save.level<33))return false;
             if (item.UnlockLevel > save.level) return false;
             if (item.Scenario == 1 && item.EpisodeNumber > save.mainEpisode + 1) return false;
             if (float.TryParse(item.UnlockStoryEpisode, NumberStyles.Float, CultureInfo.InvariantCulture, out float prerequisite) && prerequisite > save.mainEpisode) return false;
+            if(!string.IsNullOrEmpty(item.UnlockStoryEpisode)&&item.UnlockStoryEpisode!="None"&&!float.TryParse(item.UnlockStoryEpisode,NumberStyles.Float,CultureInfo.InvariantCulture,out _)&&!save.completed.Contains(item.UnlockStoryEpisode))return false;
             return true;
         }
 
@@ -516,7 +538,7 @@ namespace Hlc.ChillPrototype
             player.character.SetBool("Enable_Talk", Playing && !Replaying && voice.isPlaying && moveMouth);
             if (voice && voice.isPlaying && voiceDefect > 0) voice.pitch = 1 + Mathf.Sin(Time.unscaledTime * 24) * voiceDefect * .12f;
             UpdateTimer();UpdateFeatures();
-            if (Now - lastSave >= 5) SaveNow();
+            if (saveAllowed && (VerificationOnly||ChillBrowserSave.CanWrite) && Now - lastSave >= 5) SaveNow(false);
         }
 
         public void MotionSound(string name)
@@ -525,7 +547,7 @@ namespace Hlc.ChillPrototype
             if (name == "PlayKeyboard" || name == "StopKeyboard") { MotionLoop(true,name == "PlayKeyboard"); return; }
             if (name == "PlayWritePen" || name == "StopWritePen") { MotionLoop(false,name == "PlayWritePen"); return; }
             if (name.StartsWith("Stop")) return;
-            if (name == "RubbingClothes") name="RubbingClothes"+UnityEngine.Random.Range(1,5);
+            if (name == "RubbingClothes") name="RubbingClothes"+ChillRuntimeContext.Range(1,5);
             if (pendingSounds.Contains(name)) return;
             if (motionSounds.TryGetValue(name, out var clip)) { if (clip) sound.PlayOneShot(clip, .3f); return; }
             var alias = data.music.FirstOrDefault(m => m.title == name); if (alias == null || string.IsNullOrEmpty(alias.clip) || motionSounds.Count >= 64) return;

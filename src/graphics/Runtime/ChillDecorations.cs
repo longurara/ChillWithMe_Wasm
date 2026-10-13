@@ -8,7 +8,7 @@ namespace Hlc.ChillPrototype
 {
     public sealed class ChillDecorations : MonoBehaviour
     {
-        [Serializable] public class Configuration { public Skin[] skins; public Binding[] bindings; public string[] defaultSkins,inactiveOnStart,hairNormal,hairAlternates,hairPins; public string hat, hair, screenSharing; }
+        [Serializable] public class Configuration { public Skin[] skins; public Binding[] bindings; public string[] defaultSkins,inactiveOnStart,hairNormal,hairAlternates,hairPins; public string hat, hair, screenSharing,santaHat,christmasObjects,christmasHair,satoneSunglasses,kouchanSunglasses; }
         [Serializable] public class Skin { public string name; public int id, model, category; }
         [Serializable] public class State { public int id; public string mesh, lens, material, texture, emission; public string[] objects; }
         [Serializable] public class Model { public int id; public string[] objects; public string renderer; }
@@ -18,6 +18,19 @@ namespace Hlc.ChillPrototype
         Configuration data;
         public Configuration Data=>data??(data=JsonUtility.FromJson<Configuration>(configuration.text));
         public Skin[] Skins=>Data.skins;
+        MaterialPropertyBlock seasonalBlock;
+        bool christmasWasVisible;
+        Renderer[] seasonalRenderers;
+        void SeasonalActive(string path,bool active){var item=Find(path);if(item&&item.gameObject.activeSelf!=active)item.gameObject.SetActive(active);}
+        public void SeasonalObjects(bool christmas,bool april,float shine)
+        {
+            if(transforms==null)return;
+            if(seasonalBlock==null)seasonalBlock=new MaterialPropertyBlock();
+            SeasonalActive(Data.santaHat,christmas);SeasonalActive(Data.christmasObjects,christmas);SeasonalActive(Data.satoneSunglasses,april);SeasonalActive(Data.kouchanSunglasses,april);
+            var hair=Find(Data.christmasHair)?.GetComponent<SkinnedMeshRenderer>();if((christmas||christmasWasVisible)&&hair&&hair.sharedMesh){int index=hair.sharedMesh.GetBlendShapeIndex("blendShape5.Hair_hat");if(index>=0)hair.SetBlendShapeWeight(index,christmas?100:0);}christmasWasVisible=christmas;
+            var glasses=Find(Data.satoneSunglasses);if(seasonalRenderers==null&&glasses)seasonalRenderers=glasses.GetComponentsInChildren<Renderer>(true);
+            if(seasonalRenderers!=null)foreach(var renderer in seasonalRenderers){renderer.GetPropertyBlock(seasonalBlock);var material=renderer.sharedMaterial;if(material&&material.HasProperty("_EmissionColor")){var color=material.GetColor("_EmissionColor");color.a=april?shine:0;seasonalBlock.SetColor("_EmissionColor",color);renderer.SetPropertyBlock(seasonalBlock);}}
+        }
         public void SetHair(int style)
         {
             var d=Data;if(transforms==null)return;

@@ -8,7 +8,7 @@ namespace Hlc.ChillPrototype
 {
     public sealed partial class ChillStoryRuntime
     {
-        public bool Resting=>Settings.resting || PomodoroActive && save.breakTime;
+        public bool Resting=>Settings.resting || save.timerComplete || PomodoroActive && save.breakTime;
         public string AutonomyState {get;private set;}="Work";
         double nextAction,nextVariant,nextSelfTalk,nextLeave,nextLeaveLottery,nextWild,clickCooldown;
         int breakMode=-1,selfTalkCount,previousMode=-1;
@@ -17,7 +17,7 @@ namespace Hlc.ChillPrototype
         string breakBaseMotion="";
         Coroutine autonomousSequence;
         ChillCharacterPicking characterPicking;
-        public bool CanReactToPointer=>Now>=clickCooldown&&autonomousSequence==null;
+        public bool CanReactToPointer=>!ConnectionLost&&Now>=clickCooldown&&autonomousSequence==null&&!ActivityTransitionPending;
         readonly List<int> breakBag=new List<int>(),workBag=new List<int>();
         readonly Dictionary<int,List<string>> reactionBags=new Dictionary<int,List<string>>();
         static readonly string[] breakGroups={"HeroineStateBreakMovie","HeroineStateBreakReadBook","HeroineStateBreakListenMusic","HeroineStateBreakTeaTime","HeroineStateBreakSleep","HeroineStateBreakForward"};
@@ -26,16 +26,18 @@ namespace Hlc.ChillPrototype
         static readonly string[] workBases={"WorkBase002","WorkBase003","WorkBase001"};
         static readonly string[] durationKeys={"Movie","Book","Music","Tea","Sleep","Forward"};
         float Policy(string key,float fallback)=>Features?.policies.FirstOrDefault(p=>p.name==key)?.value??fallback;
-        double Delay(string min,string max,float fallbackMin,float fallbackMax)=>UnityEngine.Random.Range(Policy(min,fallbackMin),Policy(max,fallbackMax));
-        bool Chance(float percent)=>UnityEngine.Random.value*100<percent;
+        double Delay(string min,string max,float fallbackMin,float fallbackMax)=>ChillRuntimeContext.Range(Policy(min,fallbackMin),Policy(max,fallbackMax));
+        bool Chance(float percent)=>ChillRuntimeContext.Value*100<percent;
         void InitializeAutonomy()
         {
-            activityObjects.drinks=UnityEngine.Random.Range(0,6);if(activityObjects.drinks==5)activityObjects.Pour(Now,Chance(Policy("LeaveChairData.ColdDrinkPourProbability",50)));activityObjects.Musicbox(Now,UnityEngine.Random.value);
+            InitializeStatusReaction();
+            activityObjects.drinks=ChillRuntimeContext.Range(0,6);if(activityObjects.drinks==5)activityObjects.Pour(Now,Chance(Policy("LeaveChairData.ColdDrinkPourProbability",50)));activityObjects.Musicbox(Now,ChillRuntimeContext.Value);
             nextLeave=Now+60*Delay("LeaveChairData.FirstWorkMinutesMin","LeaveChairData.FirstWorkMinutesMax",20,60);
             nextLeaveLottery=nextLeave;nextWild=Now;ScheduleSelfTalk();ResetAutonomy();
         }
         public void ResetAutonomy()
         {
+            CancelActivityTransition();
             if(musicboxActive)CloseMusicbox();
             if(autonomousSequence!=null){StopCoroutine(autonomousSequence);autonomousSequence=null;}
             autonomyInstalled=false;previousMode=-1;breakMode=-1;nextAction=nextVariant=0;weightGroup="";invitedChapter=null;
@@ -66,12 +68,16 @@ namespace Hlc.ChillPrototype
         {
             bool pointer=Input.GetMouseButtonDown(0) || Input.touchCount>0&&Input.GetTouch(0).phase==TouchPhase.Began;
             if(pointer)TrySatoneClick();
-            if(Playing)return;
+            if(Playing||ConnectionLost||newYearCountdownReady)return;
             if(!Settings.autonomy)
             {if(autonomyInstalled){ResetAutonomy();player.PlayState(save.deskMode);}return;}
-            if(!autonomyInstalled || previousMode!=player.SelectedState || previousRest!=Resting)
-            {ResetAutonomy();InstallAutonomy();selfTalkCount=0;ScheduleSelfTalk();}
+            if(!autonomyInstalled){InstallAutonomy();selfTalkCount=0;ScheduleSelfTalk();}
+            if(activityTransition!=null)return;
+            if(requestedWorkMode>=0||previousMode!=player.SelectedState||previousRest!=Resting)
+            {activityTransition=StartCoroutine(TransitionActivity());return;}
             if(autonomousSequence!=null)return;
+            if(WantsToTalk){if(NextInvitedChapter()!=null)return;invitedChapter=null;SetNativeMotion(CurrentBaseMotion);}
+            if(breakMode!=4&&presentation.MotionCompleted&&InviteNextChapter())return;
             if(musicboxActive&&!Resting)CloseMusicbox();
             if(Now>=nextLeaveLottery)
             {
@@ -81,8 +87,6 @@ namespace Hlc.ChillPrototype
             }
             if(Resting)
             {
-                if(WantsToTalk){if(NextInvitedChapter()!=null)return;invitedChapter=null;SetNativeMotion(CurrentBaseMotion);}
-                if(breakMode!=4 && presentation.MotionCompleted && InviteNextChapter())return;
                 if(Now>=nextAction&&presentation.MotionCompleted){SelectBreak();return;}
                 if(breakMode==4){UpdateSleep();return;}
                 if(Settings.selfTalk && Workspace.profileStatus!="2" && breakMode!=4 && Now>=nextSelfTalk)
@@ -94,7 +98,7 @@ namespace Hlc.ChillPrototype
                 if(Chance(Policy("_changeWorkLayoutRatio",50)))
                 {
                     workBag.RemoveAll(i=>i==player.SelectedState);
-                    if(workBag.Count==0)workBag.AddRange(Enumerable.Range(0,3).Where(i=>i!=player.SelectedState).OrderBy(_=>UnityEngine.Random.value));
+                    if(workBag.Count==0)workBag.AddRange(Enumerable.Range(0,3).Where(i=>i!=player.SelectedState).OrderBy(_=>ChillRuntimeContext.Value));
                     int selected=workBag[0];workBag.RemoveAt(0);autonomousSequence=StartCoroutine(ChangeWork(selected));return;
                 }
             }
@@ -113,12 +117,12 @@ namespace Hlc.ChillPrototype
             string group=Resting?breakGroups[Mathf.Max(0,breakMode)]:workGroups[player.SelectedState];
             return Mathf.Max(1,(float)Delay(group+".BaseDelaySecondsMin",group+".BaseDelaySecondsMax",30,60));
         }
-        int TimeOfDayIndex(){int h=DateTime.Now.Hour;return h>5&&h<11?0:h>=11&&h<=16?1:h>=17&&h<=19?2:3;}
+        int TimeOfDayIndex(){int h=ChillRuntimeContext.LocalNow.Hour;return h>5&&h<11?0:h>=11&&h<=16?1:h>=17&&h<=19?2:3;}
         bool StartReaction(int scenario)
         {
-            if(StartupBlocking || Playing || autonomousSequence!=null)return false;
+            if(StartupBlocking || ConnectionLost || Playing || autonomousSequence!=null||ActivityTransitionPending)return false;
             if(!reactionBags.TryGetValue(scenario,out var bag))reactionBags[scenario]=bag=new List<string>();
-            if(bag.Count==0)bag.AddRange(data.groups.Where(g=>g.Scenario==scenario&&Unlocked(g)&&chapters.ContainsKey(g.ID)).OrderBy(_=>UnityEngine.Random.value).Select(g=>g.ID));
+            if(bag.Count==0)bag.AddRange(data.groups.Where(g=>g.Scenario==scenario&&Unlocked(g)&&chapters.ContainsKey(g.ID)).OrderBy(_=>ChillRuntimeContext.Value).Select(g=>g.ID));
             if(bag.Count==0)return false;string id=bag[0];bag.RemoveAt(0);
             var item=data.groups.First(g=>g.ID==id);
             suspendedChapter=save.chapter;suspendedCursor=save.cursor;suspendedScene=new List<int>(save.sceneHistory);suspendedStoryLive=save.storyLive;
@@ -126,6 +130,7 @@ namespace Hlc.ChillPrototype
         }
         void TrySatoneClick()
         {
+            if(ConnectionLost||ActivityTransitionPending)return;
             if(Playing && tutorialCommand!=14 && tutorialCommand!=50)return;
             if(Now<clickCooldown)return;
             if(tutorialCommand!=14 && tutorialCommand!=50 && EventSystem.current && (EventSystem.current.IsPointerOverGameObject() || Input.touchCount>0&&EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)))return;
@@ -137,15 +142,16 @@ namespace Hlc.ChillPrototype
             clickCooldown=Now+Policy("PlayerStatusReactionData.CooldownSeconds",5);
             if(autonomousSequence!=null)return;
             if(AcceptStoryInvitation())return;
+            if(!save.timerRunning&&!save.countupRunning){if(TrySmallTalk())return;StartReaction(8);return;}
             if(Resting && breakMode==4 && AutonomyState=="BreakBase005_Sleep"){autonomousSequence=StartCoroutine(WakeAndReact());return;}
             StartReaction(RestingScenario());
         }
         int RestingScenario()=>Chance(50)?(Resting?10:9):(Resting?550:500)+TimeOfDayIndex();
-        public void SetResting(bool value){Settings.resting=value;ResetAutonomy();SaveNow();}
+        public void SetResting(bool value){Settings.resting=value;SaveNow();}
         void SelectBreak()
         {
             breakBag.RemoveAll(i=>!BreakEligible(i));
-            if(breakBag.Count==0)breakBag.AddRange((breakMode<0?new[]{0,1,3}:Enumerable.Range(0,6)).Where(i=>BreakEligible(i)&&(i!=4||Chance(Policy("_breakSleepOccurrenceProbability",10)))).OrderBy(_=>UnityEngine.Random.value));
+            if(breakBag.Count==0)breakBag.AddRange((breakMode<0?new[]{0,1,3}:Enumerable.Range(0,6)).Where(i=>BreakEligible(i)&&(i!=4||Chance(Policy("_breakSleepOccurrenceProbability",10)))).OrderBy(_=>ChillRuntimeContext.Value));
             breakMode=breakBag[0];breakBag.RemoveAt(0);player.StopAnimationAudio();weightGroup="";
             breakBaseMotion=breakMode==2?(Chance(50)?"BreakBase003_ListenMusicLow":"BreakBase003_ListenMusicHigh"):breakBases[breakMode];SetNativeMotion(breakBaseMotion);
             nextAction=Now+60*Delay("_changeBreak"+durationKeys[breakMode]+"TimeMinutesMin","_changeBreak"+durationKeys[breakMode]+"TimeMinutesMax",1,3);
@@ -153,7 +159,7 @@ namespace Hlc.ChillPrototype
             sleepiness=0;
         }
         bool BreakEligible(int mode)=>mode>=0 && mode<6 && mode!=breakMode && (mode!=5 || player.SelectedState==2);
-        string CurrentBaseMotion=>Resting?(breakMode==4 && AutonomyState=="BreakBase005_Sleep"?"BreakBase005_Sleep":string.IsNullOrEmpty(breakBaseMotion)?breakBases[Mathf.Max(0,breakMode)]:breakBaseMotion):workBases[player.SelectedState];
+        string CurrentBaseMotion=>(autonomyInstalled?previousRest:Resting)?(breakMode==4 && AutonomyState=="BreakBase005_Sleep"?"BreakBase005_Sleep":string.IsNullOrEmpty(breakBaseMotion)?breakBases[Mathf.Max(0,breakMode)]:breakBaseMotion):workBases[player.SelectedState];
         void UpdateSleep()
         {
             if(Now<nextVariant || !presentation.MotionCompleted)return;
@@ -183,19 +189,19 @@ namespace Hlc.ChillPrototype
             // NextActionSelector's ordinary lottery uses states 4..6. Window and
             // musicbox actions have separate object readiness rules in the source.
             var group=Features.actions.Where(a=>a.name=="HeroineStateWildStretchFullBody" || a.name=="HeroineStateWildStretchShoulder" || a.name=="HeroineStateWildTea").SelectMany(a=>a.motions).Distinct().Where(m=>presentation.statePaths.Any(s=>data.motions.Any(d=>d.name==m&&d.value==s.motion))).ToArray();if(group.Length==0){autonomousSequence=null;yield break;}
-            yield return Variant(group[UnityEngine.Random.Range(0,group.Length)]);
+            yield return Variant(group[ChillRuntimeContext.Range(0,group.Length)]);
         }
         IEnumerator ChangeWork(int selected)
         {
             int before=player.SelectedState;string[] names={"Book","Report","Pc"};
             SetNativeMotion("Wild002_From"+names[before]+"To"+names[selected]);yield return WaitNative();
-            if(!Playing){player.PlayState(selected);save.deskMode=selected;previousMode=selected;SetNativeMotion(workBases[selected]);}
+            if(!Playing){ApplyWorkMode(selected);SetNativeMotion(workBases[selected]);}
             nextAction=Now+Policy("_changeWorkLayoutDelaySeconds",300);autonomousSequence=null;
         }
         IEnumerator LeaveChair()
         {
             bool kitchen=Chance(Policy("LeaveChairData."+(TimeOfDayIndex()==1?"NoonKitchenDestinationProbabilityPercent":"KitchenDestinationProbabilityPercent"),60));
-            bool cup=kitchen&&activityObjects.NeedCold(Now,UnityEngine.Random.value*100,Policy("LeaveChairData.ColdDrinkPourProbability",50))&&Chance(Policy("LeaveChairData.PrepareColdDrinkLeaveProbability",50));
+            bool cup=kitchen&&activityObjects.NeedCold(Now,ChillRuntimeContext.Value*100,Policy("LeaveChairData.ColdDrinkPourProbability",50))&&Chance(Policy("LeaveChairData.PrepareColdDrinkLeaveProbability",50));
             SetNativeMotion(kitchen?(cup?"Wild003_LeaveChair_Cup":"Wild003_LeaveChair_Normal"):"Wild003_LeaveChair_Sofa");
             yield return WaitNative(30);
             float stay=(float)Delay("LeaveChairData."+(kitchen?"Kitchen":"Sofa")+"StaySecondsMin","LeaveChairData."+(kitchen?"Kitchen":"Sofa")+"StaySecondsMax",kitchen?15:90,kitchen?25:180);
@@ -205,7 +211,7 @@ namespace Hlc.ChillPrototype
             bool snack=kitchen&&!cup&&Chance(Policy("LeaveChairData."+(TimeOfDayIndex()==1?"NoonSnackTakeProbability":"SnackTakeProbability"),60));
             if(snack)
             {
-                float[] weights={Policy("LeaveChairData.CookieTakeWeight",1),Policy("LeaveChairData.CupcakeTakeWeight",1),Policy("LeaveChairData.BreadTakeWeight",1)};float draw=UnityEngine.Random.value*weights.Sum();int snackKind=draw<weights[0]?0:draw<weights[0]+weights[1]?1:2;if(snackKind<2)yield return SnackSkin(snackKind==0?"cookie":"cupcake");if(Playing){autonomousSequence=null;yield break;}bool rareBread=snackKind==2&&Chance(Policy("LeaveChairData.BreadRareProbability",30));string snackMotion=snackKind==0?"Wild003_LeaveChair_Cookie_Comeback":snackKind==1?"Wild003_LeaveChair_Cupcake_Comeback":(rareBread?"Wild003_LeaveChair_BreadB_Comeback":"Wild003_LeaveChair_BreadA_Comeback");SetNativeMotion(snackMotion);yield return WaitNative(25);
+                float[] weights={Policy("LeaveChairData.CookieTakeWeight",1),Policy("LeaveChairData.CupcakeTakeWeight",1),Policy("LeaveChairData.BreadTakeWeight",1)};float draw=ChillRuntimeContext.Value*weights.Sum();int snackKind=draw<weights[0]?0:draw<weights[0]+weights[1]?1:2;if(snackKind<2)yield return SnackSkin(snackKind==0?"cookie":"cupcake");if(Playing){autonomousSequence=null;yield break;}bool rareBread=snackKind==2&&Chance(Policy("LeaveChairData.BreadRareProbability",30));string snackMotion=snackKind==0?"Wild003_LeaveChair_Cookie_Comeback":snackKind==1?"Wild003_LeaveChair_Cupcake_Comeback":(rareBread?"Wild003_LeaveChair_BreadB_Comeback":"Wild003_LeaveChair_BreadA_Comeback");SetNativeMotion(snackMotion);yield return WaitNative(25);
                 autonomousSequence=null;nextLeave=Now+60*Delay("LeaveChairData.WorkMinutesMin","LeaveChairData.WorkMinutesMax",80,120);nextLeaveLottery=nextLeave;
                 if(!StartReaction(snackKind==2?2601:2600))SetNativeMotion("Base001");yield break;
             }

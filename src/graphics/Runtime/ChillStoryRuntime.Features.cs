@@ -18,7 +18,7 @@ namespace Hlc.ChillPrototype
         public ChillTrack CurrentTrack => Tracks.FirstOrDefault(t=>t.guid==MusicState.selected);
         public ChillTrack[] Tracks => Features==null?Array.Empty<ChillTrack>():Features.music.Concat(MusicState.imports).ToArray();
         public bool TrackAvailable(ChillTrack track)=>save.previewUnlock||string.IsNullOrEmpty(track.requiredChapter)||save.completed.Contains(track.requiredChapter);
-        public ChillTrack[] Queue => Tracks.Where(TrackAvailable).Where(t=>MusicState.playlist=="ALL" || MusicState.playlist=="Favorites" && MusicState.favorites.Contains(t.guid) || MusicState.playlist=="Imported" && t.personal || MusicState.playlists.Any(p=>p.name==MusicState.playlist && p.tracks.Contains(t.guid))).OrderBy(t=>PlaylistOrder(t.guid)).ToArray();
+        public ChillTrack[] PlaylistTracks => Tracks.Where(TrackAvailable).Where(t=>MusicState.playlist=="ALL" || MusicState.playlist=="Favorites" && MusicState.favorites.Contains(t.guid) || MusicState.playlist=="Imported" && t.personal || MusicState.playlists.Any(p=>p.name==MusicState.playlist && p.tracks.Contains(t.guid))).OrderBy(t=>PlaylistOrder(t.guid)).ToArray();
         public int MusicRevision {get;private set;}
         public bool MusicLoading {get;private set;}
         public string MusicError {get;private set;}="";
@@ -44,7 +44,7 @@ namespace Hlc.ChillPrototype
             if(save.settings==null)save.settings=new ChillWebSettings();
             if(save.settings.ambience==null)save.settings.ambience=new List<ChillAmbientLevel>();
             if(save.musicState==null)save.musicState=new ChillMusicState();
-            if(save.musicState.favorites==null)save.musicState.favorites=new List<string>();
+            if(save.musicState.favorites==null)save.musicState.favorites=new List<string>();if(save.musicState.excluded==null)save.musicState.excluded=new List<string>();
             if(save.musicState.playlists==null)save.musicState.playlists=new List<ChillPlaylist>();
             if(save.musicState.imports==null)save.musicState.imports=new List<ChillTrack>();
             if(save.conversationHistory==null)save.conversationHistory=new List<string>();
@@ -55,9 +55,10 @@ namespace Hlc.ChillPrototype
             if(value.settings==null)value.settings=new ChillWebSettings();
             if(value.musicState==null)value.musicState=new ChillMusicState();
             var s=value.settings;var m=value.musicState;
-            if(s.cameraView<0||s.cameraView>2)throw new ArgumentException("Invalid room viewpoint.");
+            if(s.totalLoginCount<0||s.totalLoginCount>1000000||s.greetingBags!=null&&(s.greetingBags.Count>20||s.greetingBags.Any(b=>b==null||b.episodes==null||b.episodes.Count>50||b.episodes.Any(n=>n<1||n>50))))throw new ArgumentException("Invalid greeting history.");
+            if(s.cameraView<0||s.cameraView>2||s.firstDayInWeek<0||s.firstDayInWeek>6)throw new ArgumentException("Invalid room viewpoint.");
             if(s.ambience==null)s.ambience=new List<ChillAmbientLevel>();
-            if(m.imports==null)m.imports=new List<ChillTrack>();if(m.favorites==null)m.favorites=new List<string>();if(m.playlists==null)m.playlists=new List<ChillPlaylist>();
+            if(m.excluded==null)m.excluded=new List<string>();if(m.excluded.Count>500||m.excluded.Any(t=>t==null||t.Length>100))throw new ArgumentException("Invalid excluded music.");if(m.imports==null)m.imports=new List<ChillTrack>();if(m.favorites==null)m.favorites=new List<string>();if(m.playlists==null)m.playlists=new List<ChillPlaylist>();
             if(value.conversationHistory==null)value.conversationHistory=new List<string>();
             float[] volumes={s.master,s.music,s.voice,s.sfx,s.ambient,s.timer};
             if(volumes.Any(v=>float.IsNaN(v)||float.IsInfinity(v)||v<0||v>1) || float.IsNaN(s.renderScale)||s.renderScale<.5f||s.renderScale>1.5f || s.quality<0||s.quality>2 || s.activeFps<15||s.activeFps>120||s.inactiveFps<5||s.inactiveFps>60)throw new ArgumentException("Invalid audio/graphics settings.");
@@ -72,6 +73,7 @@ namespace Hlc.ChillPrototype
             Features=JsonUtility.FromJson<ChillFeatureData>(featureConfiguration.text);
             history=new List<string>(save.conversationHistory);
             sessionStarted=Now;var previousVisit=Settings.lastVisit;
+            RecordLogin(previousVisit);
             ApplyFeatureSettings();InitializeAutonomy();
             foreach(var level in Settings.ambience.ToArray())if(level.volume>0)SetAmbience(level.id,level.volume,false);
             ChillPersonalMusic.Attach(gameObject.name);
@@ -81,14 +83,26 @@ namespace Hlc.ChillPrototype
             while(roomRoutine!=null)yield return null;
             var startup=GetComponent<ChillStartupGate>();
             if(startup){yield return startup.Reveal();if(startup.Failed)yield break;}
+            if(save.needsTutorial&&string.IsNullOrEmpty(save.chapter))
+            {
+                var tutorial=data.groups.FirstOrDefault(g=>g.Scenario==18);
+                if(tutorial!=null){Begin(tutorial,false,false,false);yield break;}
+            }
             // An interrupted story stays resumable; greetings never overwrite it.
             if(Settings.autoGreeting && string.IsNullOrEmpty(save.chapter))
             {
                 yield return new WaitForSecondsRealtime(1);
                 if(!Playing && !TryCalendarEvent())
                 {
-                    int scenario=previousVisit==0?11:Now-previousVisit>365*86400?17:Now-previousVisit>30*86400?16:Now-previousVisit>15*86400?15:Now-previousVisit>2*86400?14:13;
-                    StartAutomaticScenario(scenario);
+                    var date=ChillRuntimeContext.LocalNow.Date;
+                    var previous=previousVisit>0?DateTimeOffset.FromUnixTimeMilliseconds((long)(previousVisit*1000)).LocalDateTime.Date:date;
+                    var smallTalk=previous!=date && SeasonalEvent==0 && !BirthdayMatches(date,Settings.birthdayMonth,Settings.birthdayDay)?LotterySmallTalk(true):null;
+                    if(smallTalk?.ContentType=="SmallTalk_CatHeadphone")
+                    {
+                        Workspace.room.RemoveAll(r=>r.category==2);Workspace.room.Add(new ChillRoomChoice{category=2,skin="Headphone_2"});
+                        RestoreRoom();while(roomRoutine!=null)yield return null;
+                    }
+                    if(StartGreeting(previousVisit))startupSmallTalk=smallTalk;
                 }
             }
         }
@@ -104,7 +118,9 @@ namespace Hlc.ChillPrototype
         {
             var s=Settings;AudioListener.volume=s.master;if(!Playing)player.SetVolume(s.music);
             player.SetLowQuality(s.quality==0);
+            QualitySettings.vSyncCount=0;
             Application.targetFrameRate=wasFocused?s.activeFps:s.inactiveFps;
+            ChillBrowserFrameRate.Apply(Application.targetFrameRate);
             if(GraphicsSettings.currentRenderPipeline is UniversalRenderPipelineAsset pipeline)
             {pipeline.renderScale=s.renderScale;pipeline.msaaSampleCount=s.quality==2?4:2;pipeline.shadowDistance=s.quality==0?8:15;}
             var cameraData=player.view.GetUniversalAdditionalCameraData();cameraData.renderPostProcessing=s.postProcessing;
@@ -122,7 +138,7 @@ namespace Hlc.ChillPrototype
             keyboard.volume=writing.volume=.15f*s.sfx;ambient.volume=cachedStoryAmbient*s.ambient;
             if(uiSound)uiSound.volume=s.sfx*uiCueGain;if(timerSound)timerSound.volume=s.timer*timerCueGain;
             if(!Playing && s.autoTime && Now>=nextClock)
-            {nextClock=Now+30;float h=(float)DateTime.Now.TimeOfDay.TotalHours;int mode=h>=s.dayStart&&h<s.sunsetStart?0:h>=s.sunsetStart&&h<s.nightStart?1:2;if(player.environment.selectedTime!=mode)player.environment.SelectTime(mode);}
+            {nextClock=Now+30;float h=(float)ChillRuntimeContext.LocalNow.TimeOfDay.TotalHours;int mode=h>=s.dayStart&&h<s.sunsetStart?0:h>=s.sunsetStart&&h<s.nightStart?1:2;if(player.environment.selectedTime!=mode)player.environment.SelectTime(mode);}
             if(musicboxActive)player.music.volume=Settings.music*.15f;
             if(managedMusic && !Playing && player.music.clip==managedMusic && !MusicLoading)
             {
@@ -131,13 +147,15 @@ namespace Hlc.ChillPrototype
                 // A paused track cannot accidentally trigger next. A completed clip can.
                 if(wantsMusic && musicStarted && !player.music.isPlaying && !MusicState.repeat){musicStarted=false;NextTrack(1);}
             }
-            if(!Playing&&Now>=nextReminder){nextReminder=Now+30;DailyAppearance();if(Settings.autoGreeting)TryCalendarEvent();if(Workspace.reminders){var today=DateKey(DateTime.Now);var key="due:"+today;var count=Workspace.lists.SelectMany(l=>l.items).Count(t=>!t.done&&t.due==today);if(count>0&&!Workspace.calendarEvents.Contains(key)){Workspace.calendarEvents.Add(key);Notify(count+" tasks are due today.");ChillBrowser.Notify("Chill with You",count+" tasks are due today.");SaveNow();}}}
-            UpdateAutonomy();
+            if(!Playing&&Now>=nextReminder){nextReminder=Now+30;DailyAppearance();if(Settings.autoGreeting)TryCalendarEvent();if(Workspace.reminders){var today=DateKey(ChillRuntimeContext.LocalNow);var key="due:"+today;var count=Workspace.lists.SelectMany(l=>l.items).Count(t=>!t.done&&t.due==today);if(count>0&&!Workspace.calendarEvents.Contains(key)){Workspace.calendarEvents.Add(key);Notify(count+" tasks are due today.");ChillBrowser.Notify("Chill with You",count+" tasks are due today.");SaveNow();}}}
+            UpdateMusicboxCalendar();UpdateSeasonalPresentation();UpdateNewYearCountdown();UpdateRoomDefect();UpdateAutonomy();UpdateStatusReaction();
         }
         int PlaylistOrder(string guid)
         {var p=MusicState.playlists.FirstOrDefault(p=>p.name==MusicState.playlist);return p==null?0:p.tracks.IndexOf(guid);}
         public void SetPlaylist(string name)
         {MusicState.playlist=name;shuffleBag.Clear();MusicRevision++;SaveNow();}
+        public ChillTrack[] Queue=>PlaylistTracks.Where(t=>!MusicState.excluded.Contains(t.guid)).ToArray();
+        public void ToggleTrackExcluded(string guid){if(!MusicState.excluded.Remove(guid))MusicState.excluded.Add(guid);shuffleBag.Clear();MusicRevision++;SaveNow();}
         public string[] PlaylistNames=>new[]{"ALL","Favorites","Imported"}.Concat(MusicState.playlists.Select(p=>p.name)).ToArray();
         public void CreatePlaylist(string name)
         {
@@ -182,7 +200,7 @@ namespace Hlc.ChillPrototype
             if(direction>0 && MusicState.shuffle)
             {
                 shuffleBag.RemoveAll(g=>!queue.Any(t=>t.guid==g));
-                if(shuffleBag.Count==0)shuffleBag.AddRange(queue.Where(t=>queue.Length==1||t.guid!=MusicState.selected).OrderBy(_=>UnityEngine.Random.value).Select(t=>t.guid));
+                if(shuffleBag.Count==0)shuffleBag.AddRange(queue.Where(t=>queue.Length==1||t.guid!=MusicState.selected).OrderBy(_=>ChillRuntimeContext.Value).Select(t=>t.guid));
                 id=shuffleBag[0];shuffleBag.RemoveAt(0);
             }
             else {int index=Array.FindIndex(queue,t=>t.guid==MusicState.selected);id=queue[(index+direction+queue.Length)%queue.Length].guid;}
@@ -216,16 +234,31 @@ namespace Hlc.ChillPrototype
         {MusicLoading=false;managedMusic=clip;player.music.clip=clip;player.music.loop=MusicState.repeat;player.music.time=Mathf.Clamp(seek,0,Mathf.Max(0,clip.length-.05f));player.SetVolume(Settings.music);if(wantsMusic){player.music.Play();musicStarted=true;if(Application.isPlaying&&!VerificationOnly)StartCoroutine(FadeInMusic(musicToken));}MusicRevision++;SaveNow();}
         IEnumerator FadeInMusic(int token){for(float elapsed=0;elapsed<.22f;elapsed+=Time.unscaledDeltaTime){if(token!=musicToken||Playing)yield break;player.music.volume=Settings.music*Mathf.Clamp01(elapsed/.22f);yield return null;}if(token==musicToken&&!Playing)player.music.volume=Settings.music;}
         void MusicFailed(string text){MusicLoading=false;wantsMusic=musicStarted=false;MusicError=text;Notify(text,true);MusicRevision++;}
-        [Serializable] class ImportedTrackResult {public string guid,title,artist,error,url;public int token;}
+        [Serializable] class ImportedTrackResult {public string guid,title,artist,fileName,error,url;public int token;}
         public void PersonalTrackRemoved(string json)
         {
             var result=JsonUtility.FromJson<ImportedTrackResult>(json);if(!string.IsNullOrEmpty(result.error)){Notify(result.error,true);return;}
             if(!MusicState.imports.Any(t=>t.guid==result.guid))return;
             if(MusicState.selected==result.guid){musicToken++;player.music.Stop();player.music.clip=null;managedMusic=null;wantsMusic=false;MusicLoading=false;MusicState.selected="";if(personalClip){Destroy(personalClip);personalClip=null;}}
-            MusicState.imports.RemoveAll(t=>t.guid==result.guid);MusicState.favorites.Remove(result.guid);foreach(var p in MusicState.playlists)p.tracks.Remove(result.guid);MusicRevision++;SaveNow();
+            MusicState.imports.RemoveAll(t=>t.guid==result.guid);MusicState.favorites.Remove(result.guid);MusicState.excluded.Remove(result.guid);foreach(var p in MusicState.playlists)p.tracks.Remove(result.guid);shuffleBag.Clear();MusicRevision++;SaveNow();
         }
         public void PersonalTrackImported(string json)
-        {var result=JsonUtility.FromJson<ImportedTrackResult>(json);if(!string.IsNullOrEmpty(result.error)){Notify(result.error,true);return;}var track=MusicState.imports.FirstOrDefault(t=>t.guid==result.guid);if(track==null){if(MusicState.imports.Count>=200){Notify("Maximum 200 imported tracks.",true);return;}track=new ChillTrack{guid=result.guid,personal=true};MusicState.imports.Add(track);}track.title=Trim(result.title,240);track.artist=Trim(string.IsNullOrEmpty(result.artist)?"Personal music":result.artist,240);AwardAchievement("IMPORT_MUSIC_COUNT");MusicRevision++;SaveNow();}
+        {
+            var result=JsonUtility.FromJson<ImportedTrackResult>(json);if(!string.IsNullOrEmpty(result.error)){Notify(result.error,true);return;}
+            var pending=MusicState.imports.Where(t=>t.guid.StartsWith("local-pc-")&&!string.IsNullOrEmpty(t.fileName)&&t.fileName==result.fileName).ToArray();
+            if(pending.Length==1)
+            {
+                string old=pending[0].guid;
+                foreach(var p in MusicState.playlists)for(int i=0;i<p.tracks.Count;i++)if(p.tracks[i]==old)p.tracks[i]=result.guid;
+                for(int i=0;i<MusicState.favorites.Count;i++)if(MusicState.favorites[i]==old)MusicState.favorites[i]=result.guid;
+                for(int i=0;i<MusicState.excluded.Count;i++)if(MusicState.excluded[i]==old)MusicState.excluded[i]=result.guid;
+                if(MusicState.selected==old)MusicState.selected=result.guid;
+                MusicState.imports.Remove(pending[0]);
+            }
+            var track=MusicState.imports.FirstOrDefault(t=>t.guid==result.guid);
+            if(track==null){if(MusicState.imports.Count>=200){Notify("Maximum 200 imported tracks.",true);return;}track=new ChillTrack{guid=result.guid,personal=true};MusicState.imports.Add(track);}
+            track.fileName=Trim(result.fileName,240);track.title=Trim(result.title,240);track.artist=Trim(string.IsNullOrEmpty(result.artist)?"Personal music":result.artist,240);AwardAchievement("IMPORT_MUSIC_COUNT");MusicRevision++;SaveNow();
+        }
         public void PersonalTrackReady(string json)
         {var result=JsonUtility.FromJson<ImportedTrackResult>(json);if(result.token!=musicToken){ChillPersonalMusic.Revoke(result.url);return;}if(!string.IsNullOrEmpty(result.error)){MusicFailed(result.error);return;}StartCoroutine(LoadPersonalClip(result));}
         IEnumerator LoadPersonalClip(ImportedTrackResult result)
@@ -266,16 +299,16 @@ namespace Hlc.ChillPrototype
                 if(!focused){voicePausedForFocus=voice&&voice.isPlaying;storyMusicPausedForFocus=storyMusic&&storyMusic.isPlaying;if(voicePausedForFocus)voice.Pause();if(storyMusicPausedForFocus)storyMusic.Pause();}
                 else{if(Playing&&voicePausedForFocus&&voice)voice.UnPause();if(Playing&&storyMusicPausedForFocus&&storyMusic)storyMusic.UnPause();voicePausedForFocus=storyMusicPausedForFocus=false;}
             }
-            if(!FeatureReady)return;Application.targetFrameRate=focused?Settings.activeFps:Settings.inactiveFps;SaveNow();
+            if(!FeatureReady)return;Application.targetFrameRate=focused?Settings.activeFps:Settings.inactiveFps;ChillBrowserFrameRate.Apply(Application.targetFrameRate);SaveNow();
             if(previously!=focused && Settings.selfTalk && !Playing && sessionStarted>0 && Now-sessionStarted>10)StartAutomaticScenario(focused?(Resting?2751:2752):(Resting?2701:2702));
         }
         public void BrowserVisibility(string value)=>OnApplicationFocus(value=="visible");
         public bool StartAutomaticScenario(int scenario)
         {
-            if(!FeatureReady || StartupBlocking || Playing || autonomousSequence!=null)return false;
+            if(!FeatureReady || StartupBlocking || ConnectionLost || Playing || autonomousSequence!=null||ActivityTransitionPending)return false;
             var list=data.groups.Where(g=>g.Scenario==scenario&&Unlocked(g)&&chapters.ContainsKey(g.ID)).ToArray();if(list.Length==0)return false;
             var unseen=list.Where(g=>!save.completed.Contains(g.ID)).ToArray();if(unseen.Length>0)list=unseen;
-            var selected=list[UnityEngine.Random.Range(0,list.Length)];
+            var selected=list[ChillRuntimeContext.Range(0,list.Length)];
             suspendedChapter=save.chapter;suspendedCursor=save.cursor;suspendedScene=new List<int>(save.sceneHistory);suspendedStoryLive=save.storyLive;
             Begin(selected,false,true);return true;
         }
@@ -283,15 +316,32 @@ namespace Hlc.ChillPrototype
         {if(!automaticDialogue)return;automaticDialogue=false;save.chapter=suspendedChapter;save.cursor=suspendedCursor;save.sceneHistory=suspendedScene??new List<int>();save.storyLive=suspendedStoryLive;suspendedChapter="";talkLog=!save.storyLive;ResetAutonomy();}
         bool TryCalendarEvent()
         {
-            var date=DateTime.Now;
-            if(BirthdayMatches(date,Settings.birthdayMonth,Settings.birthdayDay)&&CalendarScenario(103,"birthday:"+DateKey(date)))return true;
+            var date=ChillRuntimeContext.LocalNow;
+            if(save.needsTutorial||ConnectionLost)return false;
             // Source scenarios are date-specific releases, not generic annual events.
             if(date.Year==2025&&date.Month==12&&date.Day==25)return CalendarScenario(100,"event:"+DateKey(date));
-            if(date.Year==2026&&date.Month==4&&date.Day==1)return CalendarScenario(102,"event:"+DateKey(date));
-            if(date.Month==1&&date.Day==1)return CalendarScenario(101,"newyear:"+date.Year);
             return false;
         }
-        bool CalendarScenario(int scenario,string key){if(Workspace.calendarEvents.Contains(key)||!StartAutomaticScenario(scenario))return false;Workspace.calendarEvents.Add(key);SaveNow();return true;}
+        string pendingCalendarKey;
+        int pendingCalendarScenario;
+        bool newYearCountdownReady;
+        bool CalendarScenario(int scenario,string key){if(Workspace.calendarEvents.Contains(key)||!StartAutomaticScenario(scenario))return false;pendingCalendarKey=key;pendingCalendarScenario=scenario;return true;}
+        void CompleteCalendarScenario(ChillChapter completed)
+        {
+            if(completed.Scenario==pendingCalendarScenario&&!string.IsNullOrEmpty(pendingCalendarKey)&&!Workspace.calendarEvents.Contains(pendingCalendarKey))Workspace.calendarEvents.Add(pendingCalendarKey);
+            pendingCalendarKey=null;pendingCalendarScenario=0;
+        }
+        void UpdateNewYearCountdown()
+        {
+            var date=ChillRuntimeContext.LocalNow;
+            if(save.needsTutorial||ConnectionLost||Workspace.calendarEvents.Contains("newyear:2026"))return;
+            if(!newYearCountdownReady&&date>=new DateTime(2025,12,31,23,59,40)&&date<new DateTime(2026,1,1))newYearCountdownReady=true;
+            if(!newYearCountdownReady||Playing||autonomousSequence!=null||ActivityTransitionPending)return;
+            // Wait for the desk base, then :50. A pending countdown survives midnight.
+            if(AutonomyState!="Base001"){SetNativeMotion("Base001");return;}
+            if(!presentation.MotionCompleted||date<new DateTime(2025,12,31,23,59,50))return;
+            if(CalendarScenario(101,"newyear:2026"))newYearCountdownReady=false;
+        }
         public static bool BirthdayMatches(DateTime date,int month,int day)
         {if(month==2&&day==29&&!DateTime.IsLeapYear(date.Year))return date.Month==3&&date.Day==1;return month>0&&day>0&&date.Month==month&&date.Day==day;}
         public void Farewell(){if(Playing){Notify("Finish or skip the current conversation first.");return;}if(farewellPending)return;ResetAutonomy();double hours=(Now-sessionStarted)/3600;int scenario=19;

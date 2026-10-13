@@ -30,6 +30,16 @@ skins=[{'name':name,'id':number,'model':row['ModelType'],'category':model_catego
 bindings=[];special={}
 for t,i,b in blocks:
     if t!=114:continue
+    if '  _santaHat:' in b:
+        raw=yaml.safe_load(b)['MonoBehaviour']
+        special.update(santaHat=reference(raw['_santaHat']),christmasObjects=reference(raw['_christmasObjectsParent']),christmasHair=reference(raw['_heroineHairRenderer']))
+    if '  _kouchanSunglasses:' in b:
+        raw=yaml.safe_load(b)['MonoBehaviour']
+        def sunglasses(ref,controller=False):
+            payload=yaml.safe_load(components[str(ref['fileID'])][1])['MonoBehaviour']
+            if controller:payload=yaml.safe_load(components[str(payload['_sunglasses']['fileID'])][1])['MonoBehaviour']
+            return reference(payload['_object'])
+        special.update(satoneSunglasses=sunglasses(raw['_heroineSunglassesCtrl'],True),kouchanSunglasses=sunglasses(raw['_kouchanSunglasses']))
     if '  hairPinStyles:' in b and '  hairPins:' in b:
         hair_source=yaml.safe_load(b)['MonoBehaviour']
         special.update(hairNormal=refs(hair_source['normal']),

@@ -23,9 +23,14 @@ public static class ChillNativeUIBuild
     {
         var old=player.GetComponent<ChillGameplayUI>();if(old)UnityEngine.Object.DestroyImmediate(old);
         var ui=player.GetComponent<ChillNativeUI>() ?? player.gameObject.AddComponent<ChillNativeUI>();ui.player=player;
+        if(!player.GetComponent<ChillPerformanceCapture>())player.gameObject.AddComponent<ChillPerformanceCapture>();
         ui.configuration=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/native-ui.json");
         if(!ui.configuration)throw new InvalidOperationException("Run prepare_native_ui.py first");
         var all=UnityEngine.Object.FindObjectsOfType<Transform>(true);
+        foreach(var penguin in all.Where(t=>t.name=="m_penguin"&&t.GetComponent<Collider>()))
+        {
+            var click=penguin.GetComponent<ChillPenguinClick>()??penguin.gameObject.AddComponent<ChillPenguinClick>();click.story=player.story;
+        }
         ui.canvas=all.First(t=>PathOf(t)=="Paremt/PCPlatform/Canvas").GetComponent<Canvas>();
         for(var t=ui.canvas.transform;t;t=t.parent)t.gameObject.SetActive(true);
         ui.canvas.enabled=true;ui.canvas.renderMode=RenderMode.ScreenSpaceOverlay;ui.canvas.overrideSorting=true;ui.canvas.sortingOrder=100;
@@ -50,6 +55,18 @@ public static class ChillNativeUIBuild
             ui.fallbackFont=TMP_FontAsset.CreateFontAsset(player.uiFont,48,6,UnityEngine.TextCore.LowLevel.GlyphRenderMode.SDFAA,1024,1024,AtlasPopulationMode.Dynamic,true);
             ui.fallbackFont.name="Native UI supplemental glyphs";AssetDatabase.CreateAsset(ui.fallbackFont,fontPath);
             AssetDatabase.AddObjectToAsset(ui.fallbackFont.material,ui.fallbackFont);foreach(var atlas in ui.fallbackFont.atlasTextures)if(atlas)AssetDatabase.AddObjectToAsset(atlas,ui.fallbackFont);
+        }
+        // Bake the port's UI symbols before packing. Keep runtime font-engine bindings
+        // for text entered by the player, rather than depending on first-open rasterization.
+        // Restore the editor's persistent source reference even if an older
+        // verification pass left this generated font in static mode.
+        ui.fallbackFont.atlasPopulationMode=AtlasPopulationMode.Dynamic;
+        if(ui.fallbackFont.sourceFontFile)
+        {
+            string symbols="✓☑□×↑↓←→•–—…%+−/0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            ui.fallbackFont.TryAddCharacters(symbols,out _);
+            foreach(var atlas in ui.fallbackFont.atlasTextures)if(atlas&&!AssetDatabase.IsSubAsset(atlas))AssetDatabase.AddObjectToAsset(atlas,ui.fallbackFont);
+            EditorUtility.SetDirty(ui.fallbackFont);
         }
         // Save tools use clones of the game's own settings button, font and frame.
         const string prefix="Paremt/PCPlatform/Canvas/UI/ChangeOrderObjects/UI_FacilitySetting/General/ScrollView";
@@ -162,7 +179,7 @@ public static class ChillNativeUIBuild
         ChillAppearanceBuild.Configure(player);var ui=Configure(player);ChillFeaturesBuild.Configure(player);
         if(!player.GetComponent<ChillStartupGate>())player.gameObject.AddComponent<ChillStartupGate>();
         player.bones.configuration=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-physics.json");
-        player.bones.bakedConfiguration=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-bakes.json");
+        player.bones.bakedConfiguration=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-bakes.bytes")??AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-bakes.json");
         EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();
         Debug.Log("HLC_CHILL_NATIVE_UI_READY canvas="+PathOf(ui.canvas.transform)+" nativePrefabs=4");
         if(refreshLightingBundles)ChillAssets.RebuildForLighting();

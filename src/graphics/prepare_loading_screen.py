@@ -14,6 +14,7 @@ def prepare(output=None):
     objects = {i:d for i,(t,d) in data.items() if t==1}
     rects = {i:d for i,(t,d) in data.items() if t==224}
     graphics = {str(d['m_GameObject']['fileID']):d for t,d in data.values() if t==114 and 'm_Sprite' in d}
+    groups = {str(d['m_GameObject']['fileID']):d for t,d in data.values() if t==225}
     scalers = {str(d['m_GameObject']['fileID']):d for t,d in data.values() if t==114 and 'm_ReferenceResolution' in d}
     sprites = {meta_guid(p):p for p in (source/'Sprite').glob('t_ui_loading*.asset')}
     assets = {}
@@ -25,6 +26,7 @@ def prepare(output=None):
                 'anchorMin':vector(r['m_AnchorMin']), 'anchorMax':vector(r['m_AnchorMax']),
                 'pivot':vector(r['m_Pivot']), 'position':vector(r['m_AnchoredPosition']),
                 'size':vector(r['m_SizeDelta']), 'scale':vector(r['m_LocalScale'])}
+        if str(r['m_GameObject']['fileID']) in groups:result['groupAlpha']=groups[str(r['m_GameObject']['fileID'])]['m_Alpha']
         if str(r['m_GameObject']['fileID']) in graphics:
             g=graphics[str(r['m_GameObject']['fileID'])];image={'color':vector(g['m_Color'],'rgba'),'enabled':bool(g['m_Enabled'])}
             ref=g['m_Sprite'];guid=ref.get('guid')
@@ -52,7 +54,7 @@ def prepare(output=None):
             if scaler['m_MatchWidthOrHeight']!=0:raise ValueError('Unsupported loading canvas scale')
             layouts['portrait' if name.endswith('Mobile') else 'landscape']={'width':scaler['m_ReferenceResolution']['x'],'root':root}
     clips={}
-    for key,name in [('loop','anim_ui_loading'),('finish','anim_ui_loading_finish'),('fade','anim_ui_loading_fadein')]:
+    for key,name in [('loop','anim_ui_loading'),('finish','anim_ui_loading_finish'),('fade','anim_ui_loading_fadein'),('errorFinish','anim_ui_loading_finish_error'),('errorFade','anim_ui_loading_fadein_error'),('gameEnd','anim_ui_loading_gameend'),('creditsIn','anim_ui_finish_endcredits_fadein')]:
         _,cb=split_yaml((source/'AnimationClip'/f'{name}.anim').read_text('utf-8-sig'))
         clip=yaml.safe_load(cb[0][2])['AnimationClip'];tracks=[]
         def curve(row, prop, axis=None):
@@ -64,7 +66,7 @@ def prepare(output=None):
                 keys.append({'time':float(k['time']),'value':v('value'),'inSlope':incoming if math.isfinite(incoming) else 0,
                              'outSlope':outgoing if math.isfinite(outgoing) else 0,'step':not math.isfinite(outgoing) or prop=='active'})
             tracks.append({'path':row['path'],'property':prop,'keys':keys})
-        properties={'m_AnchoredPosition.x':'x','m_AnchoredPosition.y':'y','m_Color.a':'alpha','m_IsActive':'active'}
+        properties={'m_AnchoredPosition.x':'x','m_AnchoredPosition.y':'y','m_Color.a':'alpha','m_IsActive':'active','m_Alpha':'groupAlpha'}
         for row in clip['m_FloatCurves']:
             if row['attribute'] not in properties:raise ValueError('Unknown loading property '+row['attribute'])
             curve(row,properties[row['attribute']])

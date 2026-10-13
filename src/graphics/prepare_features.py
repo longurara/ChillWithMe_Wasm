@@ -13,7 +13,7 @@ def component(name):
 
 music=[]
 for row in table('MusicMaster')['AudioCollection']:
-    music.append(dict(guid=row['AudioClip'].get('guid',''),title=re.sub(r'<[^>]+>','',str(row.get('Title',''))),artist=re.sub(r'<[^>]+>','',str(row.get('Credit',''))),tag=int(row.get('Tag',0)),requiredChapter='main_32' if row.get('UUID')=='428d0ecc-81d7-1c75-09bf-0970e0608b5f' else ''))
+    music.append(dict(guid=row['AudioClip'].get('guid',''),uuid=row.get('UUID',''),title=re.sub(r'<[^>]+>','',str(row.get('Title',''))),artist=re.sub(r'<[^>]+>','',str(row.get('Credit',''))),tag=int(row.get('Tag',0)),requiredChapter='main_32' if row.get('UUID')=='428d0ecc-81d7-1c75-09bf-0970e0608b5f' else ''))
 ambient_names=enumeration('Bulbul/AmbientSoundType.cs','AmbientSoundType')
 ambient=[]
 for row in table('AmbientMaster')['AmbientSounds']:
@@ -112,3 +112,14 @@ output=ROOT/'UnityProject/Assets/Prototype/chill-features.json'
 output.write_text(json.dumps(config,ensure_ascii=False,indent=2),encoding='utf-8')
 (ROOT/'research/features-source-data.json').write_text(json.dumps({'music':len(music),'ambient':len(ambient),'policies':len(policies),'actions':actions,'credits':len(config['creditsGroups'])},ensure_ascii=False,indent=2),encoding='utf-8')
 print('Native feature data:',len(music),'music,',len(ambient),'ambient,',len(actions),'action policies')
+
+# Source enum IDs for local PC save conversion. No player data is embedded.
+metadata={"decorations":{str(v):k for k,v in enumeration("DecorationService.cs","DecorationSkinType").items()},"windows":{str(v):k for k,v in enumeration("Bulbul/WindowViewType.cs","WindowViewType").items()},"costumes":{"1":0,"1001":1,"1002":2,"2001":3,"2002":4}}
+metadata["environmentIndices"]={}
+window_go=next(i for i,name in native.objects.items() if name=="WindowView")
+for index,tid in enumerate(native.children[native.bygo[window_go]]):
+    metadata["environmentIndices"][native.objects[native.transforms[tid][0]].removeprefix("Env_")]=index+1
+aliases={"Fireworks":"hanabio_For_Place","WindBell":"Furin","LightRain":"Rain","HeavyRain":"RainHeavy","ThunderRain":"Thunder","HotSpring":"Onsen","BlueButterfly":"AlterEgo","City":"Buildings","ValentineSweets":"valentine","FreshGreenery":"Hometown","SpaceB":"Space2"}
+for original,target in aliases.items():
+    if target in metadata["environmentIndices"]:metadata["environmentIndices"][original]=metadata["environmentIndices"][target]
+(root_path:=ROOT/"UnityProject/Assets/Prototype/pc-save-metadata.json").write_text(json.dumps(metadata,indent=2),encoding="utf-8")

@@ -6,7 +6,9 @@ namespace Hlc.ChillPrototype
 {
     public sealed partial class ChillStoryRuntime
     {
+        bool recoveredBackup;
         public int RoomLevel=>save.level;
+        public double WorkedSeconds=>save?.workedSeconds??0;
         public string UITranslate(string key) => texts != null && texts.ContainsKey(key) ? Text(key) : key;
         static string TimerLabel(double seconds)
         { long total=(long)Math.Max(0,Math.Min(seconds,7*24*3600)); return (total/3600).ToString("00")+":"+(total/60%60).ToString("00")+":"+(total%60).ToString("00"); }
@@ -71,8 +73,9 @@ namespace Hlc.ChillPrototype
                 case "timer-mode": if(!PomodoroActive && !save.countupActive){save.timerMode=command.value==1?1:0;SaveNow();}break;
                 case "countup-toggle":
                     if(save.timerMode!=1 || PomodoroActive || Playing)break;
+                    TimerUserActivity();
                     if(save.countupRunning){UpdateCountup();save.countupSeconds=CountupElapsed;save.countupRunning=false;}
-                    else{bool fresh=!save.countupActive;save.countupActive=save.countupRunning=true;save.countupStarted=save.lastCountupTick=Now;if(fresh)TimerVoice("start",true);}
+                    else{bool fresh=!save.countupActive;save.timerComplete=false;save.countupActive=save.countupRunning=true;save.countupStarted=save.lastCountupTick=Now;if(fresh)TimerVoice("start",true);}
                     TimerSound(save.countupRunning?0:6);SaveNow();break;
                 case "countup-reset": bool finishedCountup=save.countupActive;UpdateCountup();save.countupRunning=save.countupActive=false;save.countupSeconds=0;if(finishedCountup){TimerSound(3);TimerVoice("finish",true);}SaveNow();break;
                 case "preset-name":case "preset-loops":case "preset-work":case "preset-break":
@@ -86,12 +89,13 @@ namespace Hlc.ChillPrototype
                     UIAction(new ChillUiCommand{action="timer-toggle"});break;
                 case "timer-toggle":
                     if(save.timerMode!=0 || save.countupActive || Playing)break;
+                    TimerUserActivity();
                     if (save.timerRunning) { UpdateTimer(); save.pausedRemaining=Math.Max(0,save.timerEnd-Now); save.timerRunning=false; }
-                    else {bool fresh=!PomodoroActive;if(fresh){save.rounds=0;save.breakTime=false;}save.timerEnd=Now+(save.pausedRemaining > 0 ? save.pausedRemaining : (save.breakTime ? save.breakMinutes : save.workMinutes)*60); save.lastTimerTick=Now; save.timerRunning=true;if(fresh)TimerVoice("start",false); }
+                    else {bool fresh=!PomodoroActive;save.timerComplete=false;if(fresh){save.rounds=0;save.breakTime=false;}save.timerEnd=Now+(save.pausedRemaining > 0 ? save.pausedRemaining : (save.breakTime ? save.breakMinutes : save.workMinutes)*60); save.lastTimerTick=Now; save.timerRunning=true;if(fresh)TimerVoice("start",false); }
                     TimerSound(save.timerRunning?0:6);SaveNow(); break;
                 case "timer-reset": bool finishedPomodoro=PomodoroActive;UpdateTimer(); save.timerRunning=false; save.pausedRemaining=0; save.breakTime=false; save.rounds=0;if(finishedPomodoro)TimerVoice("finish",false,true); SaveNow(); break;
-                case "timer-skip": if (save.timerRunning) { save.timerEnd=Now; UpdateTimer(); SaveNow(); } break;
-                case "save": if (SaveNow()) {status="Đã lưu tiến trình.";Notify(status);} break;
+                case "timer-skip": if(save.timerRunning){skippingTimer=true;try{save.timerEnd=Now;UpdateTimer();}finally{skippingTimer=false;}SaveNow();}break;
+                case "save": if(recoveredBackup)saveAllowed=true;if (SaveNow()) {recoveredBackup=false;status="Đã lưu tiến trình.";Notify(status);} break;
                 case "save-export": SaveNow(); ChillBrowserSave.Export(save); Notify("Đã gửi file save cho trình duyệt tải xuống."); break;
                 case "save-import": ChillBrowserSave.Import(gameObject.name); break;
             }

@@ -12,6 +12,8 @@ python "$taskSources\generate_shaders.py"
 if ($LASTEXITCODE -ne 0) { throw 'Shader generation failed.' }
 python "$taskSources\prepare_toon_web.py"
 if ($LASTEXITCODE -ne 0) { throw 'lilToon WebGL preparation failed.' }
+python "$taskSources\prepare_cozy_lighting.py"
+if ($LASTEXITCODE -ne 0) { throw 'COZY lighting extraction failed.' }
 python "$taskSources\prepare_lighting.py"
 if ($LASTEXITCODE -ne 0) { throw 'Lighting extraction failed.' }
 python "$taskSources\prepare_controls.py"

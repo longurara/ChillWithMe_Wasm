@@ -78,8 +78,15 @@ namespace Hlc.ChillPrototype
             }
         }
 
+        public void SetStoryDesk(int index)
+        {
+            if(index<0||index>2)return;
+            selected=index;deskObjects?.SetStoryLayout(index);
+        }
         public void PlayState(int index)
         {
+            if(index<0||index>2)return;
+            if(story&&story.TryRequestWorkMode(index))return;
             if (story) story.StopMotionSounds();
             if (library) library.RestoreCharacter();
             selected = index;

@@ -10,7 +10,7 @@ namespace Hlc.ChillPrototype
         {
             bool rare=Chance(Policy("LeaveChairData."+(kind=="cookie"?"Cookie":"Cupcake")+"RareProbability",30));
             var choices=Features.snacks.Where(s=>s.kind==kind&&s.rarity==(rare?1:0)).ToArray();if(choices.Length==0)choices=Features.snacks.Where(s=>s.kind==kind).ToArray();if(choices.Length==0)yield break;
-            var skin=choices[UnityEngine.Random.Range(0,choices.Length)];
+            var skin=choices[ChillRuntimeContext.Range(0,choices.Length)];
             for(int i=0;i<skin.parts.Length;i++){
                 var part=skin.parts[i];var target=FindObjectsOfType<Transform>(true).FirstOrDefault(t=>TransformPath(t)==part.path);if(!target)continue;
                 UnityEngine.Object mesh=null,material=null;bool done=false;

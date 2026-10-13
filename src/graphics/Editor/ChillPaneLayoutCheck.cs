@@ -16,6 +16,15 @@ public static class ChillPaneLayoutCheck
     static void Click(ChillNativeUI ui,string script,string field)=>Ref(ui,script,field).GetComponent<Button>().onClick.Invoke();
     public static void Run(ChillStoryRuntime story,ChillNativeUI ui,ChillGraphicsPlayer player)
     {
+        var settingsRoot=Ref(ui,"SettingUI","self");
+        var version=settingsRoot.GetComponentsInChildren<TMP_Text>(true).First(t=>t.name=="AppVersionText");
+        foreach(string pane in new[]{"General","Graphics","MusicAudio"})
+        {
+            var scroll=settingsRoot.Find(pane+"/ScrollView").GetComponent<ScrollRect>();
+            var bodyCorners=new Vector3[4];var footerCorners=new Vector3[4];
+            scroll.viewport.GetWorldCorners(bodyCorners);version.rectTransform.GetWorldCorners(footerCorners);
+            Require(bodyCorners.Min(p=>settingsRoot.InverseTransformPoint(p).y)>footerCorners.Max(p=>settingsRoot.InverseTransformPoint(p).y),"Settings scroll overlaps the shared footer: "+pane);
+        }
         ui.Open("settings");
         foreach(var tab in new[]{"_generalInteractableUI","_graphicInteractableUI","_audioInteractableUI"})
         {

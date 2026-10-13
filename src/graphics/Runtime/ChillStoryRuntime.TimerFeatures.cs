@@ -21,6 +21,15 @@ namespace Hlc.ChillPrototype
         void TimerVoice(string phase,bool countup,bool midway=false)
         {
             if(!FeatureReady)return;
+            if(phase=="start")
+            {if(countup||save.rounds==0)timerTotalBase=save.workedSeconds;workSessionStart=Now;sessionWorkBase=save.workedSeconds;}
+            if(phase=="finish")
+            {
+                save.timerComplete=true;
+                if(save.level>=33&&save.mainEpisode<32&&!save.connectionLostNextEpisode)
+                {save.lastStoryUnlockWorkSeconds+=Math.Max(0,save.workedSeconds-timerTotalBase);if(save.lastStoryUnlockWorkSeconds>=50*60)save.connectionLostNextEpisode=true;}
+                if(ConnectionLost&&save.level>=33&&!midway&&!skippingTimer)save.connectionLostNextEpisode=true;
+            }
             if(Workspace.reminders&&phase!="start")ChillBrowser.Notify("Chill with You",phase=="break"?"Time for a break.":"Your work session is complete.");
             if(!TimerAudio(countup).voice)return;
             float Value(string key,float fallback)=>Policy("PomodoroVoiceData."+key,fallback);
@@ -28,7 +37,7 @@ namespace Hlc.ChillPrototype
             int scenario;
             if(phase=="start")
             {
-                if(countup||save.rounds==0)timerTotalBase=save.workedSeconds;workSessionStart=Now;sessionWorkBase=save.workedSeconds;scenario=countup?3000:4;
+                scenario=countup?3000:4;
                 if(!countup&&save.workMinutes>=Value("longWorkStartVoiceData.judgeLongMinutes",120)&&Roll("longWorkStartVoiceData.selectionProbability",60))scenario=1001;
                 else if(lastWorkEnd>0&&Now-lastWorkEnd<=Value("continuousWorkStartVoiceData.continuousMinutes",5)*60&&Roll("continuousWorkStartVoiceData.selectionProbability",90))scenario=countup?3001:1000;
             }
@@ -45,7 +54,7 @@ namespace Hlc.ChillPrototype
                 else if(minutes<=Value("shortWorkFinishVoiceData.judgeShortMinutes",40)&&Roll("shortWorkFinishVoiceData.selectionProbability",20))scenario=countup?3201:1201;
                 else if(!countup&&midway&&Roll("midwayFinishVoiceData.selectionProbability",50))scenario=1202;
             }
-            pendingTimerScenario=scenario;pendingTimerUntil=Now+20;UpdateTimerVoice();
+            pendingTimerScenario=scenario;pendingTimerUntil=Now+30;UpdateTimerVoice();
         }
         void UpdateTimerVoice()
         {if(pendingTimerScenario==0)return;if(Now>pendingTimerUntil){pendingTimerScenario=0;return;}if(!Playing&&Application.isPlaying&&!VerificationOnly&&StartReaction(pendingTimerScenario))pendingTimerScenario=0;}

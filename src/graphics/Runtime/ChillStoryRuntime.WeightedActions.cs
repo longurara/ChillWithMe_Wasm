@@ -35,7 +35,7 @@ namespace Hlc.ChillPrototype
         {
             SetWeightGroup(group);
             if(actionWeights.Count==0)return null;
-            float draw=UnityEngine.Random.value*(baseWeight+actionWeights.Sum(w=>w.amount));
+            float draw=ChillRuntimeContext.Value*(baseWeight+actionWeights.Sum(w=>w.amount));
             if(draw<baseWeight)
             {
                 float original=baseWeight;foreach(var weight in actionWeights){if(Now<weight.available)continue;float transfer=original*Mathf.Clamp01(Policy(group+"."+weight.add,0));weight.amount+=transfer;if(group!="HeroineStateWorkPC"||weight.key!="DrinkTea")baseWeight-=transfer;}baseWeight=Mathf.Max(0,baseWeight);return null;
@@ -46,7 +46,7 @@ namespace Hlc.ChillPrototype
             nextVariant=Now+Delay(group+"."+selected.delay+"DelaySecondsMin",group+"."+selected.delay+"DelaySecondsMax",30,60);
             if(selected.key=="DrinkTea"||selected.key=="Drink")
             {
-                if(activityObjects.Empty)return activityObjects.NeedHot(Now,UnityEngine.Random.value*100,Policy("LeaveChairData.ColdDrinkPourProbability",50))?"Wild001_Motion10_UseCoffeeMaker":null;
+                if(activityObjects.Empty)return activityObjects.NeedHot(Now,ChillRuntimeContext.Value*100,Policy("LeaveChairData.ColdDrinkPourProbability",50))?"Wild001_Motion10_UseCoffeeMaker":null;
                 if(group=="HeroineStateBreakTeaTime"&&activityObjects.Hot(Now)&&Chance(100*Policy(group+".DrinkHotTeaProbability",.1f)))return "BreakBase004_DrinkHot";
             }
             selected.previous=(selected.previous+1)%selected.motions.Length;return selected.motions[selected.previous];

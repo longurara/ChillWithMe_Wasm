@@ -23,7 +23,9 @@ namespace Hlc.ChillPrototype
                 var title=parent.Find("Title") as RectTransform;if(title){title.anchorMin=title.anchorMax=new Vector2(0,1);title.pivot=new Vector2(0,1);title.anchoredPosition=new Vector2(210,-130);title.sizeDelta=new Vector2(740,55);}
                 if(title&&title.GetComponent<TMP_Text>() is TMP_Text titleText)titleText.alignment=TextAlignmentOptions.MidlineLeft;
                 var scroll=parent.Find("ScrollView") as RectTransform;
-                if(scroll){scroll.anchorMin=Vector2.zero;scroll.anchorMax=Vector2.one;scroll.offsetMin=new Vector2(205,105);scroll.offsetMax=new Vector2(-35,-200);}
+                // The shared footer starts 135 units above the panel bottom.
+                // Keep scroll content above it so partially visible rows cannot cover the version or links.
+                if(scroll){scroll.anchorMin=Vector2.zero;scroll.anchorMax=Vector2.one;scroll.offsetMin=new Vector2(205,150);scroll.offsetMax=new Vector2(-35,-200);}
             }
             var audio=RefOf("SettingUI","_audioParent");var content=audio?audio.Find("ScrollView/Viewport/Content"):null;
             if(content)

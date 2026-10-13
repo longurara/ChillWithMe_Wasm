@@ -87,10 +87,10 @@ namespace Hlc.ChillPrototype
             canvas.enabled=true;
             canvas.renderMode=RenderMode.ScreenSpaceOverlay;canvas.overrideSorting=true;canvas.sortingOrder=100;
             foreach(var animator in canvas.GetComponentsInChildren<Animator>(true)) animator.enabled=false;
+            PrepareRuntimeFonts();
             foreach(var text in canvas.GetComponentsInChildren<TMP_Text>(true))
             {
                 if(text.font && text.fontSharedMaterial && text.font.atlasTexture && text.fontSharedMaterial.mainTexture != text.font.atlasTexture)text.fontSharedMaterial=text.font.material;
-                if(fallbackFont && text.font && !text.font.fallbackFontAssetTable.Contains(fallbackFont)) text.font.fallbackFontAssetTable.Add(fallbackFont);
                 if(text.text.StartsWith("ui_") || text.text == "heroine_name") localized[text]=text.text;
             }
             foreach(var group in canvas.GetComponentsInParent<CanvasGroup>()) {group.alpha=1;group.interactable=group.blocksRaycasts=true;}
@@ -209,6 +209,16 @@ namespace Hlc.ChillPrototype
         void WirePath(string path,Action callback){var t=Find(path);if(t)Bind(t.gameObject,callback);}
         void Bind(GameObject go,Action callback)
         {var button=go.GetComponent<Button>() ?? go.AddComponent<Button>();if(!button.targetGraphic)button.targetGraphic=go.GetComponent<Graphic>() ?? go.GetComponentInChildren<Graphic>(true);if(button.targetGraphic)button.targetGraphic.raycastTarget=true;button.interactable=true;button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>{callback();player.story.UISelectSound();});hooks.RemoveAll(h=>!h.button||h.button==button);hooks.Add(new Hook{button=button,action=callback});}
+        public void UICommand(string json)
+        {
+            try
+            {
+                var command=JsonUtility.FromJson<ChillUiCommand>(json);
+                if(command==null || string.IsNullOrEmpty(command.action))return;
+                player.story.UIAction(command);nextUpdate=0;
+            }
+            catch(Exception error){player.story.Notify("Invalid UI command: "+error.Message,true);}
+        }
         void Action(string action,float value=0,string text=null,string id=null){player.story.UIAction(new ChillUiCommand{action=action,value=value,text=text,id=id});nextUpdate=0;}
         void SelectLanguage(string value){Action("language",text:value);storySignature=null;SetLanguageOpen(false);Refresh(true);}
         void SetLanguageOpen(bool value)
@@ -225,7 +235,7 @@ namespace Hlc.ChillPrototype
             string script=name=="music"?"MusicPlayListView":name=="notes"?"NoteUI":name=="todos"?"TodoListUI":name=="story"?"StorySelectUI":name=="environment"?"EnvironmentUI":name=="presets"?"PomodoroPresetUI":name=="calendar"?"CalendarUI":name=="habits"?"HabitTrackerUI":name=="statistics"?"TotalWorkStatisticsUI":name=="timer-audio"?"TimerSoundSettingView":name=="profile"?"PlayerProfileView":name=="heroine-profile"?"HeroineProfileView":name=="special"?"SpecialView":name=="decorations"?"DecorationListUI":"SettingUI";
             openPane=name=="history"||name=="achievements"?historyPanel:RefOf(script,"self")?.gameObject;if(name=="timer-audio"&&timerAudioPane){Show(openPane,true);openPane=timerAudioPane;}Show(openPane,true);if(openPane){if(nativeUiRoot)nativeUiRoot.SetAsLastSibling();openPane.transform.SetAsLastSibling();}
             ShowWorkspacePane();
-            if(name=="achievements"){if(historyTitle)historyTitle.SetTextWithoutNotify("Achievements");if(historyInput)historyInput.SetTextWithoutNotify(string.Join("\n\n",player.story.Workspace.achievements.Select(a=>"✓ "+a.Replace('_',' '))));}
+            if(name=="achievements"){if(historyTitle)historyTitle.SetTextWithoutNotify("Achievements");if(historyInput)historyInput.SetTextWithoutNotify("Focus hours: "+Math.Floor(player.story.WorkedSeconds/3600)+"\nPenguin clicks: "+(player.story.Workspace.achievements.Contains("CLICK_KOU_COUNT")?5:player.story.Workspace.penguinClicks)+" / 5\n\n"+string.Join("\n\n",player.story.Workspace.achievements.Select(a=>"✓ "+a.Replace('_',' '))));}
             SetPaneUsing(name);if(name=="story")storySignature=null;if(name=="todos")todoSignature=null;if(name=="music")musicSignature=null;Refresh(true);
             if(name=="decorations"){var scroll=Get<ScrollRect>("DecorationListUI","_scrollRect");if(scroll){Canvas.ForceUpdateCanvases();scroll.verticalNormalizedPosition=1;}}
         }

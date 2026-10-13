@@ -25,7 +25,7 @@ namespace Hlc.ChillPrototype
         public string[] creditsGroups;
         public float creditsFadeIn,creditsHold,creditsFadeOut,creditsGap;
     }
-    [Serializable] public class ChillTrack {public string guid,title,artist,requiredChapter;public int tag;public bool personal;}
+    [Serializable] public class ChillTrack {public string guid,uuid,fileName,title,artist,requiredChapter;public int tag;public bool personal;}
     [Serializable] public class ChillAmbientTrack {public int id;public string name,guid;}
     [Serializable] public class ChillPolicy {public string name;public float value;}
     [Serializable] public class ChillTutorialFocus {public string path,image,mask;}
@@ -43,10 +43,12 @@ namespace Hlc.ChillPrototype
     [Serializable] public class ChillSnackPart {public string path,mesh,material;}
     [Serializable] public class ChillAmbientLevel {public int id;public float volume;}
     [Serializable] public class ChillPlaylist {public string name="Playlist";public List<string> tracks=new List<string>();}
+    [Serializable] public class ChillGreetingBag {public int scenario,lastTail=-1;public List<int> episodes=new List<int>();}
     [Serializable] public class ChillWebSettings
     {
         public bool autonomy=true,selfTalk=true,resting,autoGreeting=true,autoTime,clock24,mobileFit=true;
-        public int quality=1,activeFps=60,inactiveFps=15,birthdayMonth,birthdayDay,cameraView;
+        public int quality=1,activeFps=60,inactiveFps=15,birthdayMonth,birthdayDay,cameraView,firstDayInWeek;
+        public int totalLoginCount;public List<ChillGreetingBag> greetingBags=new List<ChillGreetingBag>();
         public float master=1,music=.35f,voice=1,sfx=1,ambient=1,timer=1,renderScale=1;
         public float dayStart=6,sunsetStart=17,nightStart=19;
         public bool postProcessing=true;
@@ -59,6 +61,7 @@ namespace Hlc.ChillPrototype
         public float position;
         public bool shuffle,repeat;
         public List<string> favorites=new List<string>();
+        public List<string> excluded=new List<string>();
         public List<ChillPlaylist> playlists=new List<ChillPlaylist>();
         public List<ChillTrack> imports=new List<ChillTrack>();
     }
