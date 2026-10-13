@@ -19,8 +19,8 @@ Bản port riêng. Cloud hoãn theo yêu cầu. Không xác nhận toàn bộ h�
 | 11 | Nhập nhạc cá nhân | Đã port import cho trình duyệt | File/folder, metadata cơ bản, giải mã audio và IndexedDB đã kiểm tra trong Chrome riêng. Chưa đọc toàn bộ định dạng tag/plugin nhạc của Windows. |
 | 12 | Phát nhạc đúng hành vi gốc | Đã port các điều khiển chính | 43 bài MusicMaster, seek/auto-next/shuffle/repeat/metadata/khôi phục paused. Chưa tái hiện đầy đủ mọi fade/transition audio nguồn. |
 | 13 | AI sinh hoạt tự nhiên của Satone | Đã mở rộng, còn khác nguồn | Work/break/wild/rời ghế, trà/ăn và mesh đồ ăn hiếm; thêm sofa có trọng số/cooldown, buồn ngủ tăng/giảm theo master, giữ tư thế nghe nhạc, giới hạn nghỉ PC theo bàn. Chặn thoại chen vào chuỗi hoạt động; thêm lời mời đọc tập mới khi nghỉ. Đã nối servings/lottery nóng-lạnh/cooldown trà, cửa sổ và hộp nhạc; chờ motion kết thúc và dùng mesh để bắt click Satone. Chưa tương đương toàn bộ AI, chuyển tiếp và mô phỏng đồ vật trong engine gốc. |
-| 14 | Bấm nhân vật để phản ứng | Đã nối phản ứng nhân vật | Bấm vùng renderer nhân vật, cooldown và các nhóm phản ứng/đánh thức. Hit test là bounds, chưa có mesh/collider picking chính xác hoàn toàn. |
-| 15 | Chế độ làm việc/vị trí phòng | Một phần | Đã nối chọn đọc/viết/gõ trong General và lưu lựa chọn. Chuyển bàn/sofa/giường và controller di chuyển chưa port. |
+| 14 | Bấm nhân vật để phản ứng | Đã nối phản ứng nhân vật | Bấm vùng renderer nhân vật, cooldown và các nhóm phản ứng/đánh thức. Đã dùng triangle hit test trên mesh đang animation; chưa đối chiếu mọi trang phục/collider nguồn. |
+| 15 | Chế độ làm việc/vị trí phòng | Một phần | Đã nối chọn đọc/viết/gõ trong General và lưu lựa chọn. Đã có animation chuyển hoạt động bàn và lượt sofa; góc camera Desk/Sofa/Bed được lưu. Pose/hoạt động giường chưa có trong dữ liệu phục hồi. |
 | 16 | Trang trí và preset phòng | Đã triển khai | 29 nhóm lựa chọn, skin/màu nguồn, điều kiện mở khóa/điểm, reset, lưu/nạp/xóa preset phòng. Popup mua đồ dùng adapter web. |
 | 17 | Cảnh cửa sổ và ambient | Một phần mở rộng | Giữ 24 cảnh cửa sổ và thêm 30 ambient độc lập, lưu mức, tự đổi ngày/chiều/đêm theo giờ cấu hình. Chưa port mọi phối hợp ambient/environment riêng của nguồn. |
 | 18 | Trang phục/kiểu tóc theo ngày | Đã triển khai | Bốn kiểu tóc, năm trang phục, material/xương theo nguồn và chọn theo trọng số tháng mỗi ngày; các quy tắc sự kiện giới hạn thời gian chưa đầy đủ. |
@@ -43,3 +43,7 @@ Bản port riêng. Cloud hoãn theo yêu cầu. Không xác nhận toàn bộ h�
 ## Kiểm tra 1.20.0
 
 Xem [phạm vi thay đổi và giới hạn](gameplay-polish-1.20.md), [catalog truyện](story-catalog-check.json) và [kiểm tra runtime](gameplay-parity-check.json). Không khẳng định đã chơi hết 36 tập hoặc đạt đầy đủ tương đương bản Windows.
+
+## Chuyển động 1.20.1
+
+Giữ controller nguồn qua lúc thoát truyện và sinh hoạt thường; bỏ các lượt Rebind/khởi động lại pose liên tiếp. Look/ghế chuyển dần, phản ứng ngắn giữ tư thế và lịch hoạt động. Xem [kiểm tra chuyển động](motion-continuity-1.20.1.md).

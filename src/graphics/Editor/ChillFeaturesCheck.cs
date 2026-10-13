@@ -75,6 +75,7 @@ public static class ChillFeaturesCheck
         ChillGameplayParityCheck.Run(story,ui,player,data);
         ChillStoryCommandCheck.Run(story,ui,player,data);
         ChillDailyLifeCheck.Run(story,player,data);
+        ChillMotionContinuityCheck.Run(story,player,data);
         string[] required={"WorkBase001","WorkBase002","WorkBase003","BreakBase001","BreakBase002","BreakBase003_ListenMusicLow","BreakBase004","BreakBase005","BreakBase006","BreakBase005_Sleep","BreakBase005_JumpUp","Wild003_LeaveChair_Cup","Wild003_LeaveChair_Normal","Wild003_LeaveChair_Sofa","Wild003_LeaveChair_Cupcake_Comeback","Wild003_LeaveChair_Cookie_Comeback","Wild003_LeaveChair_BreadA_Comeback"};
         player.character.runtimeAnimatorController=story.storyController;player.character.Rebind();
         foreach(var name in required)

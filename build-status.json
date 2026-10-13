@@ -1,14 +1,14 @@
 {
   "stage": "standalone-completion-browser-preview-ready",
-  "completedAt": "2026-10-13T17:34:36.246076+07:00",
+  "completedAt": "2026-10-13T18:12:38.553739+07:00",
   "unity": "2022.3.62f2",
   "url": "http://127.0.0.1:8093/",
   "assets": 4517,
   "bundles": 233,
   "bundleBytes": 474455344,
-  "playerBytes": 138891202,
+  "playerBytes": 138922877,
   "assetBuildLog": "logs/unity-native-timer-release.log",
-  "playerBuildLog": "logs/unity-timer-raycast-final.log",
+  "playerBuildLog": "logs/unity-motion-continuity-final.log",
   "knownShaderCompilerErrors": 0,
   "automatedGameplayTests": true,
   "storyGroups": 610,
@@ -76,8 +76,8 @@
   "deskLampCheck": "research/desk-lamp-render-check.json",
   "glesAdditionalLightStagesChecked": 110,
   "additionalLightShaderCheck": "research/toon-additional-light-budget.json",
-  "productVersion": "1.20.0",
-  "featureReleaseBuildBytes": 165264662,
+  "productVersion": "1.20.1",
+  "featureReleaseBuildBytes": 165258920,
   "selectedFeatureGroups": [
     1,
     3,
@@ -146,5 +146,9 @@
   "gameplayParityCheck": "research/gameplay-parity-check.json",
   "storyCatalogCheck": "research/story-catalog-check.json",
   "exclusiveTimerSelectionVerified": true,
-  "originalTimerSiblingBindings": true
+  "originalTimerSiblingBindings": true,
+  "motionContinuityCheck": "research/motion-continuity-check.json",
+  "browserMotionContinuityCheck": "research/browser-motion-continuity-check.json",
+  "storyReturnControllerPreserved": true,
+  "storyReturnBlendSeconds": 0.25
 }

@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "productVersion": "1.20.1",
+  "finalBuildLog": "logs/unity-motion-continuity-final.log",
+  "browser": "isolated Chrome",
+  "viewport": [
+    1280,
+    720
+  ],
+  "userBrowserProfileWritten": false,
+  "checks": {
+    "episode32LeaningPoseReturnsToBookWork": true,
+    "autonomyEnabledAndDisabled": true,
+    "roomHudRestored": true,
+    "resumableChapterPreserved": true
+  },
+  "console": {
+    "errors": 0,
+    "warnings": 9
+  },
+  "evidence": [
+    "output/playwright/continuity-before-return.png",
+    "output/playwright/continuity-return-first.png",
+    "output/playwright/continuity-return-quarter.png",
+    "output/playwright/continuity-return-settled.png",
+    "output/playwright/continuity-ai-before-return.png",
+    "output/playwright/continuity-ai-return-settled.png"
+  ],
+  "scope": "Selected Chrome story-return checkpoints. Quantitative per-step pose continuity is tested separately in Unity; browser screenshots are not frame-accurate timing measurements."
+}
