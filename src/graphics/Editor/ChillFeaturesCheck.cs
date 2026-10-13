@@ -95,6 +95,13 @@ public static class ChillFeaturesCheck
             Set(story,"chapter",group);bool main=group.Scenario>=1&&group.Scenario<=3||group.Scenario==24||group.Scenario>=50&&group.Scenario<=56;
             Require(story.UISnapshot("").mainStoryText==main,"Wrong source message type for "+group.ID);
         }
+        var uiRoot=ui.canvas.transform.Find("UI");var storyRoot=Ref("StorySystemUI","self");
+        int sourceUiOrder=uiRoot.GetSiblingIndex();
+        foreach(var panel in new[]{"story","settings","history","music"})
+        {
+            ui.Open(panel);Require(uiRoot.GetSiblingIndex()>storyRoot.GetSiblingIndex(),"Popup did not rise above dialogue: "+panel);
+            ui.Close();Require(uiRoot.GetSiblingIndex()==sourceUiOrder&&uiRoot.GetSiblingIndex()<storyRoot.GetSiblingIndex(),"Closing popup leaves its background over the dialogue: "+panel);
+        }
         Set(story,"chapter",data.groups.First(g=>g.Scenario==13||g.Scenario==1401));Set(story,"automaticDialogue",true);
         Set(story,"current",new ChillSentence{Talker=1});string text="Welcome back. Let's both do our best. A longer greeting must wrap above the music controls without covering the track title, playback buttons, or progress bar.";
         Set(story,"message",text);Set(story,"shownChars",text.Length);ui.RefreshNow();Canvas.ForceUpdateCanvases();

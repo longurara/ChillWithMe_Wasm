@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "productVersion": "1.19.2",
+  "browser": "isolated Chrome",
+  "userProfileWritten": false,
+  "fixtureSaveWrittenInIsolatedProfile": true,
+  "chapter": "special_valentine2026_scenario_001",
+  "cursor": 7,
+  "scenario": 52,
+  "expectedAndSavedText": "Oh...right. I completely forgot.",
+  "entryPath": "Talk Log / Continue reading",
+  "dialogueVisibleAboveBackground": true,
+  "settingsOpenClosePreservesDialogue": true,
+  "nativeTextGeometryAndColorsUnchanged": true,
+  "viewports": [[1280,720],[1920,1080]],
+  "screenshots": [
+    "output/playwright/valentine-story-layer-fixed.png",
+    "output/playwright/valentine-story-layer-1920.png"
+  ],
+  "unityRegression": {
+    "log": "logs/unity-story-layer-fix.log",
+    "popups": ["story","settings","history","music"],
+    "popupRaisesUiAboveDialogue": true,
+    "closeRestoresOriginalUiSibling": true,
+    "backgroundBelowStorySystemUIAfterClose": true
+  },
+  "limitations": [
+    "Unity cloud configuration still reports ERR_CONNECTION_RESET; the checked local story flow works.",
+    "Mobile and Safari were not checked."
+  ]
+}

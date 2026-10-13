@@ -28,13 +28,13 @@
     {
       "path": "/Build/WebPlayer.wasm",
       "status": 200,
-      "bytes": "33577720",
+      "bytes": "33578260",
       "type": "application/wasm"
     },
     {
       "path": "/Build/WebPlayer.data",
       "status": 200,
-      "bytes": "104761456",
+      "bytes": "104761696",
       "type": "application/octet-stream"
     },
     {

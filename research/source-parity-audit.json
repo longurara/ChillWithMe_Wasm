@@ -592,8 +592,8 @@
     {
       "id": 21,
       "feature": "UI truyện/nhật ký thoại",
-      "status": "Đã sửa bố cục thoại theo nguồn",
-      "remaining": "Tách MainStoryTextParent và NormalTextParent theo Scenario; lời chào/phản ứng ở trên thanh nhạc. Talk Log, Skip/lịch sử và bảo toàn resume được nối; chưa toàn bộ stats log nguồn.",
+      "status": "Đã sửa bố cục/lớp thoại theo nguồn",
+      "remaining": "Tách MainStoryTextParent và NormalTextParent theo Scenario; lời chào/phản ứng ở trên thanh nhạc. Đóng cửa sổ trả nhóm UI về thứ tự scene gốc, giữ BottomBackImage phía sau chữ/nút thoại. Talk Log, Skip/lịch sử và bảo toàn resume được nối; chưa toàn bộ stats log nguồn.",
       "original": [
         {
           "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/ScenarioReader.cs",
@@ -622,7 +622,8 @@
         "research/dialogue-layout-check.json",
         "research/story-command-check.json",
         "research/daily-life-check.json",
-        "research/browser-story-daily-check.json"
+        "research/browser-story-daily-check.json",
+        "research/browser-story-layer-check.json"
       ]
     },
     {

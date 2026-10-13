@@ -184,7 +184,7 @@ public static class ChillBuild
         PlayerSettings.SetManagedStrippingLevel(BuildTargetGroup.WebGL, ManagedStrippingLevel.Low);
         PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
         PlayerSettings.WebGL.template = "APPLICATION:Default";
-        PlayerSettings.bundleVersion = "1.19.1";
+        PlayerSettings.bundleVersion = "1.19.2";
         PlayerSettings.WebGL.dataCaching = false;
         PlayerSettings.WebGL.memorySize = 512;
         PlayerSettings.WebGL.initialMemorySize = 256;
@@ -412,7 +412,7 @@ public static class ChillBuild
     public static void BuildWebGL()
     {
         if (!File.Exists(ScenePath)) Prepare();
-        PlayerSettings.bundleVersion = "1.19.1";
+        PlayerSettings.bundleVersion = "1.19.2";
         PlayerSettings.WebGL.template = "APPLICATION:Default";
         PlayerSettings.WebGL.initialMemorySize = 256;
         PlayerSettings.WebGL.maximumMemorySize = 2048;

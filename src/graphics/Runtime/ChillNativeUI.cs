@@ -40,6 +40,8 @@ namespace Hlc.ChillPrototype
         readonly Dictionary<string,Label> labels=new Dictionary<string,Label>();
         readonly List<GameObject> musicRows=new List<GameObject>(),storyRows=new List<GameObject>(),todoRows=new List<GameObject>(),choiceRows=new List<GameObject>();
         GameObject openPane;
+        Transform nativeUiRoot;
+        int nativeUiSibling;
         GameObject reveal;
         string pane="",language="",musicSignature,storySignature,todoSignature,choiceSignature;
         bool initialized,hidden,shuffle,translatedReady;
@@ -61,6 +63,7 @@ namespace Hlc.ChillPrototype
             if (initialized) return; initialized=true;
             ChillGameplayUI.UseNativeUI(true);
             foreach(var t in UnityEngine.Object.FindObjectsOfType<Transform>(true)) paths[PathOf(t)]=t;
+            nativeUiRoot=canvas.transform.Find("UI");if(nativeUiRoot)nativeUiSibling=nativeUiRoot.GetSiblingIndex();
             var config=JsonUtility.FromJson<Configuration>(configuration.text);
             FixSprites(canvas.gameObject);
             CleanEvents(canvas.gameObject);
@@ -201,12 +204,12 @@ namespace Hlc.ChillPrototype
             if(pane==name){Close();return;}player.story.TutorialSignal(name);Close();pane=name;
             player.story.HistoryVisible=name=="history";
             string script=name=="music"?"MusicPlayListView":name=="notes"?"NoteUI":name=="todos"?"TodoListUI":name=="story"?"StorySelectUI":name=="environment"?"EnvironmentUI":name=="presets"?"PomodoroPresetUI":name=="calendar"?"CalendarUI":name=="habits"?"HabitTrackerUI":name=="statistics"?"TotalWorkStatisticsUI":name=="timer-audio"?"TimerSoundSettingView":name=="profile"?"PlayerProfileView":name=="heroine-profile"?"HeroineProfileView":name=="special"?"SpecialView":name=="decorations"?"DecorationListUI":"SettingUI";
-            openPane=name=="history"||name=="achievements"?historyPanel:RefOf(script,"self")?.gameObject;if(name=="timer-audio"&&timerAudioPane){Show(openPane,true);openPane=timerAudioPane;}Show(openPane,true);if(openPane){openPane.transform.SetAsLastSibling();var uiRoot=Find("Paremt/PCPlatform/Canvas/UI");if(uiRoot)uiRoot.SetAsLastSibling();}
+            openPane=name=="history"||name=="achievements"?historyPanel:RefOf(script,"self")?.gameObject;if(name=="timer-audio"&&timerAudioPane){Show(openPane,true);openPane=timerAudioPane;}Show(openPane,true);if(openPane){openPane.transform.SetAsLastSibling();if(nativeUiRoot)nativeUiRoot.SetAsLastSibling();}
             ShowWorkspacePane();
             if(name=="achievements"){if(historyTitle)historyTitle.SetTextWithoutNotify("Achievements");if(historyInput)historyInput.SetTextWithoutNotify(string.Join("\n\n",player.story.Workspace.achievements.Select(a=>"✓ "+a.Replace('_',' '))));}
             if(name=="story")storySignature=null;if(name=="todos")todoSignature=null;if(name=="music")musicSignature=null;Refresh(true);
         }
-        public void Close(){if(skinPopup)Show(skinPopup.gameObject,false);Set(RefOf("ProfileIconSettingView","self"),false);Set(RefOf("StatusChangeView","self"),false);Show(openPane,false);openPane=null;pane="";player.story.HistoryVisible=false;SetLanguageOpen(false);}
+        public void Close(){if(skinPopup)Show(skinPopup.gameObject,false);Set(RefOf("ProfileIconSettingView","self"),false);Set(RefOf("StatusChangeView","self"),false);Show(openPane,false);openPane=null;pane="";player.story.HistoryVisible=false;SetLanguageOpen(false);if(nativeUiRoot)nativeUiRoot.SetSiblingIndex(nativeUiSibling);}
         void ToggleHidden(){hidden=!hidden;Set(Find("Paremt/PCPlatform/Canvas/UI"),!hidden);if(reveal)reveal.SetActive(hidden);Close();}
         void NextMusic(int step)
         {if(player.story.Playing || player.library.Busy)return;var entries=player.library.MusicEntries;if(entries.Length==0)return;int current=Array.FindIndex(entries,t=>player.music.clip && t.name==player.music.clip.name);int index=shuffle?UnityEngine.Random.Range(0,entries.Length):(current+step+entries.Length)%entries.Length;player.library.SelectMusic(entries[index].guid);}
