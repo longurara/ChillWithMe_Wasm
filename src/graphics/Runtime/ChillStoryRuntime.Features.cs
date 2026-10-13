@@ -25,6 +25,7 @@ namespace Hlc.ChillPrototype
         public bool FeatureReady => Features!=null && data!=null;
         AudioClip managedMusic,personalClip;
         bool wantsMusic,musicStarted,wasFocused=true;
+        bool voicePausedForFocus,storyMusicPausedForFocus;
         int musicToken,seekFrame=-1;
         readonly HashSet<int> ambiencePending=new HashSet<int>();
         float cachedStoryVoice=.8f,cachedStorySound=1,cachedStoryAmbient=.3f,cachedStoryMusic=.35f;
@@ -53,6 +54,7 @@ namespace Hlc.ChillPrototype
             if(value.settings==null)value.settings=new ChillWebSettings();
             if(value.musicState==null)value.musicState=new ChillMusicState();
             var s=value.settings;var m=value.musicState;
+            if(s.cameraView<0||s.cameraView>2)throw new ArgumentException("Invalid room viewpoint.");
             if(s.ambience==null)s.ambience=new List<ChillAmbientLevel>();
             if(m.imports==null)m.imports=new List<ChillTrack>();if(m.favorites==null)m.favorites=new List<string>();if(m.playlists==null)m.playlists=new List<ChillPlaylist>();
             if(value.conversationHistory==null)value.conversationHistory=new List<string>();
@@ -106,17 +108,18 @@ namespace Hlc.ChillPrototype
             nextClock=0;
         }
         void FeatureAudioGain(AudioSource source,float value)
-        {if(source==voice)cachedStoryVoice=value;else if(source==sound)cachedStorySound=value;else if(source==ambient)cachedStoryAmbient=value;else if(source==player.music)cachedStoryMusic=value;}
+        {if(source==voice)cachedStoryVoice=value;else if(source==sound)cachedStorySound=value;else if(source==ambient)cachedStoryAmbient=value;else if(source==storyMusic)cachedStoryMusic=value;}
         void UpdateFeatures()
         {
             if(!FeatureReady)return;
             var s=Settings;
-            if(Playing)player.music.volume=Mathf.Clamp01(cachedStoryMusic*(s.music/.35f));
+            if(storyMusic)storyMusic.volume=Mathf.Clamp01(cachedStoryMusic*(s.music/.35f));
             voice.volume=cachedStoryVoice*s.voice;sound.volume=cachedStorySound*s.sfx;
             keyboard.volume=writing.volume=.15f*s.sfx;ambient.volume=cachedStoryAmbient*s.ambient;
             if(uiSound)uiSound.volume=s.sfx*uiCueGain;if(timerSound)timerSound.volume=s.timer*timerCueGain;
             if(!Playing && s.autoTime && Now>=nextClock)
             {nextClock=Now+30;float h=(float)DateTime.Now.TimeOfDay.TotalHours;int mode=h>=s.dayStart&&h<s.sunsetStart?0:h>=s.sunsetStart&&h<s.nightStart?1:2;if(player.environment.selectedTime!=mode)player.environment.SelectTime(mode);}
+            if(musicboxActive)player.music.volume=Settings.music*.15f;
             if(managedMusic && !Playing && player.music.clip==managedMusic && !MusicLoading)
             {
                 player.music.loop=MusicState.repeat;
@@ -253,9 +256,15 @@ namespace Hlc.ChillPrototype
         void OnApplicationFocus(bool focused)
         {
             bool previously=wasFocused;wasFocused=focused;
+            if(previously!=focused)
+            {
+                if(!focused){voicePausedForFocus=voice&&voice.isPlaying;storyMusicPausedForFocus=storyMusic&&storyMusic.isPlaying;if(voicePausedForFocus)voice.Pause();if(storyMusicPausedForFocus)storyMusic.Pause();}
+                else{if(Playing&&voicePausedForFocus&&voice)voice.UnPause();if(Playing&&storyMusicPausedForFocus&&storyMusic)storyMusic.UnPause();voicePausedForFocus=storyMusicPausedForFocus=false;}
+            }
             if(!FeatureReady)return;Application.targetFrameRate=focused?Settings.activeFps:Settings.inactiveFps;SaveNow();
             if(previously!=focused && Settings.selfTalk && !Playing && sessionStarted>0 && Now-sessionStarted>10)StartAutomaticScenario(focused?(Resting?2751:2752):(Resting?2701:2702));
         }
+        public void BrowserVisibility(string value)=>OnApplicationFocus(value=="visible");
         public bool StartAutomaticScenario(int scenario)
         {
             if(!FeatureReady || Playing || autonomousSequence!=null)return false;

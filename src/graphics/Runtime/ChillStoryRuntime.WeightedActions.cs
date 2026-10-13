@@ -44,6 +44,11 @@ namespace Hlc.ChillPrototype
             if(Now<selected.available)return null;
             float returned=selected.amount*Mathf.Clamp01(Policy(group+"."+selected.subtract,1));selected.amount-=returned;baseWeight+=returned;selected.available=Now+Policy(group+"."+selected.cooldown,0);
             nextVariant=Now+Delay(group+"."+selected.delay+"DelaySecondsMin",group+"."+selected.delay+"DelaySecondsMax",30,60);
+            if(selected.key=="DrinkTea"||selected.key=="Drink")
+            {
+                if(activityObjects.Empty)return activityObjects.NeedHot(Now,UnityEngine.Random.value*100,Policy("LeaveChairData.ColdDrinkPourProbability",50))?"Wild001_Motion10_UseCoffeeMaker":null;
+                if(group=="HeroineStateBreakTeaTime"&&activityObjects.Hot(Now)&&Chance(100*Policy(group+".DrinkHotTeaProbability",.1f)))return "BreakBase004_DrinkHot";
+            }
             selected.previous=(selected.previous+1)%selected.motions.Length;return selected.motions[selected.previous];
         }
     }

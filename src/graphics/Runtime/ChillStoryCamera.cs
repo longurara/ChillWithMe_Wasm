@@ -17,6 +17,17 @@ namespace Hlc.ChillPrototype
         Quaternion viewRotation,fromRotation;
         float viewFov,fromFov,blend;
         int target = -1;
+        public Animator actor;
+        bool frameMobileRoom;int mobileFrameDelay;
+        Vector3 mobileTarget;
+        public bool SelectRoomView(int index)
+        {
+            if(fixedViews==null||index<0||index>=fixedViews.Length||!fixedViews[index])return false;
+            target=-1;if(cameraAnimator)cameraAnimator.enabled=false;
+            view.transform.SetPositionAndRotation(fixedViews[index].position,fixedViews[index].rotation);view.fieldOfView=ChillPlatform.Mobile?45:35;
+            frameMobileRoom=ChillPlatform.Mobile&&index==0;mobileFrameDelay=3;
+            return true;
+        }
         public void Capture()
         {
             saved.Clear();
@@ -30,7 +41,11 @@ namespace Hlc.ChillPrototype
             // The desktop game keeps its fixed framing; these events select
             // Cinemachine viewpoints only for the original mobile presentation.
             if (!ChillPlatform.Mobile || poses == null || index < 0 || index >= poses.Length || !poses[index].transform) return;
+            // The recovered mobile placeholders have no injected tracking target.
+            // Preserve usable room framing until a tracked viewpoint is available.
+            if(!poses[index].follow&&!poses[index].lookAt)return;
             fromPosition=view.transform.position; fromRotation=view.transform.rotation; fromFov=view.fieldOfView; target=index; blend=0;
+            frameMobileRoom=false;
         }
         public void PlayStartCamera()
         {
@@ -41,6 +56,12 @@ namespace Hlc.ChillPrototype
         }
         void LateUpdate()
         {
+            if(frameMobileRoom&&actor&&(!cameraAnimator||!cameraAnimator.enabled))
+            {
+                if(mobileFrameDelay>0&&--mobileFrameDelay==0)
+                {var renderers=actor.GetComponentsInChildren<SkinnedMeshRenderer>();if(renderers.Length>0){var bounds=renderers[0].bounds;foreach(var renderer in renderers)if(renderer.enabled)bounds.Encapsulate(renderer.bounds);mobileTarget=bounds.center;}}
+                if(mobileFrameDelay==0&&Screen.width<Screen.height)view.transform.rotation=Quaternion.LookRotation(mobileTarget-view.transform.position,Vector3.up);
+            }
             if (target < 0) return;
             var pose=poses[target]; var position=pose.useFollow && pose.follow ? pose.follow.position+pose.followOffset : pose.transform.position;
             var rotation=pose.lookAt ? Quaternion.LookRotation(pose.lookAt.TransformPoint(pose.lookOffset)-position,Vector3.up) : pose.transform.rotation;

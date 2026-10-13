@@ -101,6 +101,13 @@ config=dict(version=2,collaborations=collabs,dailyCostumes=daily_costumes,statis
             creditsParent=native.reference(credits['_creditsParent']),
             creditsGroups=[native.reference(r) for r in credits['_creditsCanvasGroups']],
             creditsFadeIn=credits['FadeInSeconds'],creditsHold=credits['ShowSeconds'],creditsFadeOut=credits['FadeOutSeconds'],creditsGap=credits['DelayNextCreditSeconds'])
+config['tutorialFocus']=[]
+config['musicboxSound']=component('MemorieController').get('_soundMusicbox',{}).get('guid','')
+for kind,_,body in native.blocks:
+    script=re.search(r'm_Script: .*guid: ([a-f0-9]+)',body)
+    if kind==114 and script and native.scripts.get(script.group(1))=='TutorialFocusUI':
+        values=native.yaml.load(body,Loader=UnityLoader)['MonoBehaviour']
+        config['tutorialFocus'].append(dict(path=native.reference(values['m_GameObject']),image=native.reference(values['_focusImage']),mask=native.reference(values['_maskImage'])))
 output=ROOT/'UnityProject/Assets/Prototype/chill-features.json'
 output.write_text(json.dumps(config,ensure_ascii=False,indent=2),encoding='utf-8')
 (ROOT/'research/features-source-data.json').write_text(json.dumps({'music':len(music),'ambient':len(ambient),'policies':len(policies),'actions':actions,'credits':len(config['creditsGroups'])},ensure_ascii=False,indent=2),encoding='utf-8')

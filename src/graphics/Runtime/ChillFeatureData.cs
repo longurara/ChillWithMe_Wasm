@@ -19,6 +19,8 @@ namespace Hlc.ChillPrototype
         public ChillSnack[] snacks;
         public ChillCollaboration[] collaborations;public ChillDailyCostume[] dailyCostumes;public ChillTimerButton[] statisticsButtons;
         public ChillPostPreset[] post;
+        public ChillTutorialFocus[] tutorialFocus;
+        public string musicboxSound;
         public string creditsParent;
         public string[] creditsGroups;
         public float creditsFadeIn,creditsHold,creditsFadeOut,creditsGap;
@@ -26,6 +28,7 @@ namespace Hlc.ChillPrototype
     [Serializable] public class ChillTrack {public string guid,title,artist,requiredChapter;public int tag;public bool personal;}
     [Serializable] public class ChillAmbientTrack {public int id;public string name,guid;}
     [Serializable] public class ChillPolicy {public string name;public float value;}
+    [Serializable] public class ChillTutorialFocus {public string path,image,mask;}
     [Serializable] public class ChillPostPreset
     {public string name;public float brightness=1,contrast=1,saturation=1,bloom,threshold=1;public UnityEngine.Vector4 lift,gamma,gain;public bool liftOverride,gammaOverride,gainOverride;}
     [Serializable] public class ChillActionSet {public string name;public string[] motions;}
@@ -43,7 +46,7 @@ namespace Hlc.ChillPrototype
     [Serializable] public class ChillWebSettings
     {
         public bool autonomy=true,selfTalk=true,resting,autoGreeting=true,autoTime,clock24,mobileFit=true;
-        public int quality=1,activeFps=60,inactiveFps=15,birthdayMonth,birthdayDay;
+        public int quality=1,activeFps=60,inactiveFps=15,birthdayMonth,birthdayDay,cameraView;
         public float master=1,music=.35f,voice=1,sfx=1,ambient=1,timer=1,renderScale=1;
         public float dayStart=6,sunsetStart=17,nightStart=19;
         public bool postProcessing=true;

@@ -30,7 +30,7 @@ public static class ChillStoryPresentationCheck
         Call(ui,"ToggleHidden");Require(!ui.canvas.transform.Find("UI").gameObject.activeSelf,"Manual HUD hide failed");
         Set(story,"chapter",data.groups.First(g=>g.Scenario==52));ui.RefreshNow();Require(ui.StoryHudHidden&&Ref("_bottomBackImage").gameObject.activeInHierarchy,"Story backdrop is missing after a manually hidden HUD");
         Set(story,"chapter",null);ui.RefreshNow();Require(!ui.canvas.transform.Find("UI").gameObject.activeSelf,"Story ending undoes manual HUD hiding");Call(ui,"ToggleHidden");
-        Set(story,"chapter",data.groups.First(g=>g.Scenario==18));ui.RefreshNow();Require(!ui.StoryHudHidden,"Tutorial loses facility controls");
+        Set(story,"chapter",data.groups.First(g=>g.Scenario==18));ui.RefreshNow();Require(ui.StoryHudHidden&&!ui.canvas.transform.Find("UI").gameObject.activeSelf,"Tutorial intro leaves the room HUD visible");ui.SetTutorialHudVisible(true);Require(ui.canvas.transform.Find("UI").gameObject.activeSelf,"Tutorial cannot reveal facilities during focus");ui.SetTutorialHudVisible(false);
         Set(story,"chapter",data.groups.First(g=>g.Scenario==13));Set(story,"automaticDialogue",true);ui.RefreshNow();Require(!ui.StoryHudHidden,"Greeting hides room controls");Set(story,"chapter",null);Set(story,"automaticDialogue",false);ui.RefreshNow();
 
         var gate=new ChillAutoAdvanceGate();Require(!gate.Ready(false,0,2)&&!gate.Ready(false,10,2),"Voice playback consumes the Auto delay");Require(!gate.Ready(true,10,2)&&!gate.Ready(true,11.9,2)&&gate.Ready(true,12,2),"Auto does not wait Arg2 after voice and text finish");Require(!gate.Ready(false,20,2)&&!gate.Ready(true,21,2),"History/manual pause does not reset the Auto wait");
@@ -46,7 +46,7 @@ public static class ChillStoryPresentationCheck
             effects.RestoreFinal(row);Require((command==200?effects.glitch:effects.shake)==0,"Resume reinstates an expired tutorial effect");row.Arg2=-1;effects.RestoreFinal(row);Require((command==200?effects.glitch:effects.shake)==.5f,"Persistent source effect is lost on resume");
         }
         effects.ResetEffects();
-        File.WriteAllText(Path.GetFullPath("../research/story-presentation-check.json"),"{\"passed\":true,\"sourceHudObjects\":11,\"hudHiddenDuringLongStory\":true,\"historyAndDialogueRemainUsable\":true,\"hudRestoredAfterStory\":true,\"manualHidePreserved\":true,\"tutorialAndGreetingsKeepHud\":true,\"autoDelayAfterVoiceAndText\":true,\"languageTypewriterMaster\":true,\"finiteTutorialEffectsStop\":true,\"expiredEffectsNotRestored\":true,\"staleTimeoutIgnored\":true,\"userSaveWritten\":false,\"browserGameplayRun\":false}");
+        File.WriteAllText(Path.GetFullPath("../research/story-presentation-check.json"),"{\"passed\":true,\"sourceHudObjects\":11,\"hudHiddenDuringLongStory\":true,\"historyAndDialogueRemainUsable\":true,\"hudRestoredAfterStory\":true,\"manualHidePreserved\":true,\"tutorialHudPhases\":true,\"greetingsKeepHud\":true,\"autoDelayAfterVoiceAndText\":true,\"languageTypewriterMaster\":true,\"finiteTutorialEffectsStop\":true,\"expiredEffectsNotRestored\":true,\"staleTimeoutIgnored\":true,\"userSaveWritten\":false,\"browserGameplayRun\":false}");
         Debug.Log("HLC_STORY_PRESENTATION_CHECK_PASSED hud=11 autoWaitAfterVoice=true finiteEffectsStop=true");
     }
 }

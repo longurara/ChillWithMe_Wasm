@@ -31,6 +31,10 @@ namespace Hlc.ChillPrototype
         ChillSentence current;
         RuntimeAnimatorController deskController;
         AudioSource voice, ambient, sound, keyboard, writing;
+        AudioSource storyMusic;
+        AudioSource StoryMusic {get{if(!storyMusic){storyMusic=gameObject.AddComponent<AudioSource>();storyMusic.playOnAwake=false;storyMusic.spatialBlend=0;}return storyMusic;}}
+        readonly HashSet<AudioSource> pausedStoryAmbience=new HashSet<AudioSource>();
+        public bool IsTutorial=>chapter!=null&&chapter.Scenario==18;
         int keyboardVersion,writingVersion;
         Coroutine reader;
         List<ChillSentence> choices = new List<ChillSentence>(), loops = new List<ChillSentence>();
@@ -47,6 +51,7 @@ namespace Hlc.ChillPrototype
         readonly Dictionary<string, AudioClip> motionSounds = new Dictionary<string, AudioClip>();
         readonly HashSet<string> pendingSounds = new HashSet<string>();
         float textClock;
+        readonly ChillTypewriter typewriter=new ChillTypewriter();
         string noticeMessage="";
         bool noticeError;
         int noticeRevision;
@@ -100,6 +105,7 @@ namespace Hlc.ChillPrototype
             player.PlayState(save.deskMode);
             player.environment.SelectTime(save.timeMode);
             player.environment.SelectEnvironment(save.windowMode);
+            if(presentation&&presentation.cameras)presentation.cameras.SelectRoomView(Settings.cameraView);
         }
 
         void Validate(ChillSave candidate)
@@ -163,6 +169,8 @@ namespace Hlc.ChillPrototype
             generation++; if (reader != null) StopCoroutine(reader); reader = null;
             StopMotionSounds();
             choices.Clear(); loops.Clear(); voice.Stop(); voice.clip = null; ambient.Stop(); ambient.clip = null; sound.Stop(); sound.clip = null;
+            if(storyMusic){storyMusic.Stop();storyMusic.clip=null;}
+            foreach(var source in pausedStoryAmbience)if(source&&source.clip&&AmbientLevel(ambienceSources.FirstOrDefault(p=>p.Value==source).Key)>0)source.UnPause();pausedStoryAmbience.Clear();
             voice.pitch = 1; voiceDefect = 0;cachedStorySound=1;
             if (effects) effects.ResetEffects();
             if (decorations) decorations.Restore();
@@ -173,6 +181,7 @@ namespace Hlc.ChillPrototype
             player.character.runtimeAnimatorController = deskController;
             player.character.Rebind(); player.PlayState(save.deskMode);
             chapter = null; current = null; loadingAudio = false; typing = false;
+            GetComponent<ChillNativeUI>()?.EndTutorialPresentation();
             ApplyPreferences();
             RestoreRoom();
             if (wasPlaying)
@@ -202,12 +211,14 @@ namespace Hlc.ChillPrototype
             if(selected.Scenario>=50&&selected.Scenario<=56)Workspace.collaboration=selected.Scenario-49;
             CancelRoom();automaticDialogue=ambientDialogue;invitedChapter=null;player.library.visible = false; player.library.RestoreCharacter();
             previousMusic = player.music.clip; previousMusicPlaying = player.music.isPlaying;previousMusicLoop=player.music.loop;previousMusicTime=previousMusic?player.music.time:0;talkLog=resume?!save.storyLive:fromTalkLog&&!ambientDialogue;save.storyLive=!talkLog;
+            if(!ambientDialogue){player.music.Pause();foreach(var source in ambienceSources.Values)if(source&&source.isPlaying){pausedStoryAmbience.Add(source);source.Pause();}}
             if (!chapters.TryGetValue(selected.ID, out sentences)) { status = "Đoạn này không có kịch bản."; return; }
             chapter = selected; cursor = start; visible = true; selectedTab = 0;
             save.chapter = selected.ID; save.cursor = cursor;
             if (!resume) save.usedChoices.Clear();
             if (!resume) save.sceneHistory.Clear();
             presentation.cameras.Capture();
+            if(!ambientDialogue)presentation.cameras.SelectRoomView(0);
             string scenario=data.scenarios.FirstOrDefault(s => s.value == selected.Scenario)?.name ?? "";
             presentation.manualLook=scenario.StartsWith("HeroineClick") || scenario.StartsWith("HeroineSelfShortTalk") || scenario.StartsWith("SpeakWord_Player_");
             if (storyController && player.character.runtimeAnimatorController!=storyController) { player.character.runtimeAnimatorController = storyController; player.character.Rebind(); }
@@ -260,6 +271,7 @@ namespace Hlc.ChillPrototype
                     else if (row.Command == 26) lastPlaylist=row;
                     else if (row.Command == 40) lastMusicVolume=row;
                     else if (row.Command == 7 || row.Command == 10) lastAmbient=row;
+                    else if(row.Command==80&&!loops.Contains(row))loops.Add(row);
                     else effects.RestoreFinal(row);
                     if (++restored % 8 == 0) yield return null;
                 }
@@ -267,10 +279,10 @@ namespace Hlc.ChillPrototype
                 if (lastMusic != null && lastMusic.Command != 8)
                 {
                     float gain=lastMusicVolume!=null && lastMusicVolume.Arg1==lastMusic.Arg1 ? .35f*Mathf.Clamp01(lastMusicVolume.Arg2) : StoryMusicGain(lastMusic);
-                    yield return LoadAudio("story-music",lastMusic.Arg1,player.music,chapter.ID!="main_32",gain*(Settings.music/.35f));
+                    yield return LoadAudio("story-music",lastMusic.Arg1,StoryMusic,chapter.ID!="main_32",gain);
                     cachedStoryMusic=gain;RestoreMusicPosition(lastMusic);
                 }
-                else if (lastMusic != null) player.music.Stop();
+                else if (lastMusic != null) StoryMusic.Stop();
                 if (lastAmbient != null && lastAmbient.Command == 7) yield return LoadAudio("story-ambient",lastAmbient.Arg1,ambient,true,lastAmbient.Arg2 == 0 ? .3f : lastAmbient.Arg2);
                 if (player.bones) player.bones.ResetDynamics();
                 player.deskObjects.Action("DeactivateDropCoffee");
@@ -288,7 +300,7 @@ namespace Hlc.ChillPrototype
             var alias = data.music.FirstOrDefault(m => string.Equals(m.title, name, StringComparison.OrdinalIgnoreCase));
             if (alias != null) name = alias.clip;
             player.library.LoadExternal(slot, name, asset => {
-                if (token == generation && (musicVersion<0 || musicVersion==storyMusicVersion) && asset is AudioClip clip) { source.clip = clip; source.loop = loop; source.volume = volume;FeatureAudioGain(source,volume); source.Play(); }
+                if (token == generation && (musicVersion<0 || musicVersion==storyMusicVersion) && asset is AudioClip clip) { source.clip = clip; source.loop = loop; source.volume = volume;FeatureAudioGain(source,volume); source.Play();if(!wasFocused&&(source==voice||source==storyMusic)){source.Pause();if(source==voice)voicePausedForFocus=true;else storyMusicPausedForFocus=true;} }
                 done = true;
             });
             while (!done && token == generation) yield return null;
@@ -298,7 +310,8 @@ namespace Hlc.ChillPrototype
         {
             if(applyMotion)Motion(row); next = false;
             if (row.Command == 0 && Number(row.Arg1) > 0) yield return new WaitForSecondsRealtime(Mathf.Min(120, Number(row.Arg1)));
-            message = Text(row.LocalizationID); shownChars = 0; textClock = 0; typing = message.Length > 0;
+            typewriter.Start(Text(row.LocalizationID),(data.parameters?.TalkSpeedData ?? new ChillTalkSpeed()).Delay(save.language),data.parameters?.typing);
+            message = typewriter.Text; shownChars = 0; textClock = 0; typing = !typewriter.Complete;
             moveMouth = row.Command == 20 ? row.Arg1 == "1" : row.Command == 22 ? row.Arg3 != "-1" : row.Arg3 == "0";
             if (message.Length > 0) { history.Add(message); if (history.Count > 200) history.RemoveAt(0); }
             loadingAudio = true;
@@ -318,10 +331,10 @@ namespace Hlc.ChillPrototype
                 if (next)
                 {
                     next = false;
-                    if (typing) { typing = false; shownChars = message.Length; }
+                    if (typing) {if(typewriter.WaitingForInput)shownChars=typewriter.Advance(0,true);else typewriter.Accelerate(.01f);typing=!typewriter.Complete;}
                     else { voice.Stop(); yield break; }
                 }
-                bool ready=!HistoryVisible && !typing && !voice.isPlaying && (autoRead || automaticDialogue || !waitForClick);
+                bool ready=wasFocused && !HistoryVisible && !typing && !voice.isPlaying && (autoRead || automaticDialogue || !waitForClick);
                 if(autoWait.Ready(ready,Now,afterVoice))yield break;
                 yield return null;
             }
@@ -336,9 +349,19 @@ namespace Hlc.ChillPrototype
 
         IEnumerator Choose(int start, int command)
         {
-            choices.Clear(); chosen = -1;
-            for (int i = start; i < sentences.Length && sentences[i].Command == command; i++) choices.Add(sentences[i]);
-            while (chosen < 0) yield return null;
+            PrepareChoices(start,command);
+            while (Playing&&chosen < 0) yield return null;
+            if(!Playing)yield break;
+            CommitChoice(command);
+        }
+        void PrepareChoices(int start,int command)
+        {
+            choices.Clear();chosen=-1;
+            for(int i=start;i<sentences.Length&&sentences[i].Command==command;i++)choices.Add(sentences[i]);
+        }
+        void CommitChoice(int command)
+        {
+            if(chosen<0||chosen>=choices.Count)return;
             var selected = choices[chosen]; choices.Clear();
             if (command == 15) save.usedChoices.Add(selected.Arg2);
             cursor = Jump(selected.Arg1); save.cursor = cursor; SaveNow();
@@ -371,7 +394,7 @@ namespace Hlc.ChillPrototype
                         StartCoroutine(PlayStoryMusic(current));break;
                     case 6: yield return LoadAudio("story-sound", current.Arg1, sound, false, .7f); break;
                     case 7: yield return LoadAudio("story-ambient", current.Arg1, ambient, true, current.Arg2 == 0 ? .3f : Mathf.Clamp01(current.Arg2)); break;
-                    case 8: storyMusicVersion++;player.music.Stop(); break;
+                    case 8: StopStoryMusic(current);break;
                     case 9: sound.Stop(); break;
                     case 10: ambient.Stop(); break;
                     case 11: SelectWindow(current.Arg1, current.Arg2 == 1); break;
@@ -395,14 +418,7 @@ namespace Hlc.ChillPrototype
                         cursor = Jump(inside ? current.Arg3 : current.Arg4); advance = false; break;
                     case 80: loops.Add(current); break;
                     case 81:
-                        int selection = Jump(current.Arg3);
-                        StartCoroutine(Choose(selection, 3));
-                        while (chosen < 0)
-                        {
-                            if (loops.Count == 0) { yield return null; continue; }
-                            yield return Speak(loops[UnityEngine.Random.Range(0, loops.Count)], false);
-                            yield return new WaitForSecondsRealtime(Mathf.Max(.1f, Number(current.Arg1)));
-                        }
+                        yield return RunTextLoop(current);
                         advance = false; break;
                     case 90: effects.Apply(current); yield return new WaitForSecondsRealtime(Mathf.Clamp(Number(current.Arg1),0,30)); break;
                     case 91: yield return PlayCredits();break;
@@ -471,7 +487,7 @@ namespace Hlc.ChillPrototype
 
         void Update()
         {
-            if (typing) { textClock += Time.unscaledDeltaTime/(data?.parameters?.TalkSpeedData ?? new ChillTalkSpeed()).Delay(save.language); shownChars = Math.Min(message.Length, (int)textClock); if (shownChars == message.Length) typing = false; }
+            if (typing&&wasFocused) {shownChars=typewriter.Advance(Time.unscaledDeltaTime);typing=!typewriter.Complete;}
             if (data == null) return;
             player.character.SetBool("Enable_Talk", Playing && !Replaying && voice.isPlaying && moveMouth);
             if (voice && voice.isPlaying && voiceDefect > 0) voice.pitch = 1 + Mathf.Sin(Time.unscaledTime * 24) * voiceDefect * .12f;

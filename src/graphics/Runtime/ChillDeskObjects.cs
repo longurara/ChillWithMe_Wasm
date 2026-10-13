@@ -20,6 +20,7 @@ namespace Hlc.ChillPrototype
         readonly List<Pose> defaults = new List<Pose>();
         readonly HashSet<Transform> captured = new HashSet<Transform>();
         bool windowOpen;
+        public bool WindowOpen=>windowOpen;
         public bool restoring;
         int breadKind = 1;
         void Start() { CaptureDefaults(); }

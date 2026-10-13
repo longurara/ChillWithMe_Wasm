@@ -16,6 +16,7 @@ namespace Hlc.ChillPrototype
         float sleepiness;
         string breakBaseMotion="";
         Coroutine autonomousSequence;
+        ChillCharacterPicking characterPicking;
         readonly List<int> breakBag=new List<int>(),workBag=new List<int>();
         readonly Dictionary<int,List<string>> reactionBags=new Dictionary<int,List<string>>();
         static readonly string[] breakGroups={"HeroineStateBreakMovie","HeroineStateBreakReadBook","HeroineStateBreakListenMusic","HeroineStateBreakTeaTime","HeroineStateBreakSleep","HeroineStateBreakForward"};
@@ -28,11 +29,13 @@ namespace Hlc.ChillPrototype
         bool Chance(float percent)=>UnityEngine.Random.value*100<percent;
         void InitializeAutonomy()
         {
+            activityObjects.drinks=UnityEngine.Random.Range(0,6);if(activityObjects.drinks==5)activityObjects.Pour(Now,Chance(Policy("LeaveChairData.ColdDrinkPourProbability",50)));activityObjects.Musicbox(Now,UnityEngine.Random.value);
             nextLeave=Now+60*Delay("LeaveChairData.FirstWorkMinutesMin","LeaveChairData.FirstWorkMinutesMax",20,60);
             nextLeaveLottery=nextLeave;nextWild=Now;ScheduleSelfTalk();ResetAutonomy();
         }
         public void ResetAutonomy()
         {
+            if(musicboxActive)CloseMusicbox();
             if(autonomousSequence!=null){StopCoroutine(autonomousSequence);autonomousSequence=null;}
             autonomyInstalled=false;previousMode=-1;breakMode=-1;nextAction=nextVariant=0;weightGroup="";invitedChapter=null;
             if(player && player.deskObjects)player.deskObjects.restoring=false;
@@ -67,6 +70,7 @@ namespace Hlc.ChillPrototype
             if(!autonomyInstalled || previousMode!=player.SelectedState || previousRest!=Resting)
             {ResetAutonomy();InstallAutonomy();selfTalkCount=0;ScheduleSelfTalk();}
             if(autonomousSequence!=null)return;
+            if(musicboxActive&&!Resting)CloseMusicbox();
             if(Now>=nextLeaveLottery)
             {
                 nextLeaveLottery=Now+Policy("LeaveChairData.LotteryIntervalMinutes",5)*60;
@@ -77,7 +81,7 @@ namespace Hlc.ChillPrototype
             {
                 if(WantsToTalk){if(NextInvitedChapter()!=null)return;invitedChapter=null;SetNativeMotion(CurrentBaseMotion);}
                 if(breakMode!=4 && presentation.MotionCompleted && InviteNextChapter())return;
-                if(Now>=nextAction){SelectBreak();return;}
+                if(Now>=nextAction&&presentation.MotionCompleted){SelectBreak();return;}
                 if(breakMode==4){UpdateSleep();return;}
                 if(Settings.selfTalk && Workspace.profileStatus!="2" && breakMode!=4 && Now>=nextSelfTalk)
                 {ScheduleSelfTalk();if(selfTalkCount<Policy("_oneBreakSelfTalkMax",4) && Chance(Policy("_selfTalkProbability",75))){if(StartReaction(Chance(50)?21:2000+TimeOfDayIndex()))selfTalkCount++;}}
@@ -95,9 +99,10 @@ namespace Hlc.ChillPrototype
             if(Playing)return;
             if(Now>=nextVariant)
             {
+                if(!presentation.MotionCompleted)return;
                 nextVariant=Now+VariantDelay();
-                if(Now>=nextWild && Chance(Policy("WildMotionOccurrenceProbability",25)) && breakMode!=4)
-                {nextWild=Now+Policy("WildMotionDelayMinutes",30)*60;autonomousSequence=StartCoroutine(WildAction());return;}
+                if(Chance(Policy("WildMotionOccurrenceProbability",25)) && breakMode!=4)
+                {string ready=ReadyObjectMotion();if(!string.IsNullOrEmpty(ready)){autonomousSequence=StartCoroutine(ObjectAction(ready));return;}if(Now>=nextWild){nextWild=Now+Policy("WildMotionDelayMinutes",30)*60;autonomousSequence=StartCoroutine(WildAction());return;}}
                 var variant=WeightedVariant();if(!string.IsNullOrEmpty(variant))autonomousSequence=StartCoroutine(Variant(variant));
             }
         }
@@ -124,7 +129,8 @@ namespace Hlc.ChillPrototype
             if(tutorialCommand!=14 && tutorialCommand!=50 && EventSystem.current && (EventSystem.current.IsPointerOverGameObject() || Input.touchCount>0&&EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)))return;
             Vector3 point=Input.touchCount>0?(Vector3)Input.GetTouch(0).position:Input.mousePosition;
             var ray=player.view.ScreenPointToRay(point);
-            bool hit=player.character.GetComponentsInChildren<SkinnedMeshRenderer>().Any(r=>r.enabled&&r.bounds.IntersectRay(ray,out float distance)&&distance>0);
+            if(!characterPicking)characterPicking=gameObject.GetComponent<ChillCharacterPicking>()??gameObject.AddComponent<ChillCharacterPicking>();
+            bool hit=characterPicking.Hit(player.character,ray);
             if(!hit)return;TutorialSignal("satone");if(Playing)return;
             clickCooldown=Now+Policy("PlayerStatusReactionData.CooldownSeconds",5);
             if(autonomousSequence!=null)return;
@@ -187,12 +193,13 @@ namespace Hlc.ChillPrototype
         IEnumerator LeaveChair()
         {
             bool kitchen=Chance(Policy("LeaveChairData."+(TimeOfDayIndex()==1?"NoonKitchenDestinationProbabilityPercent":"KitchenDestinationProbabilityPercent"),60));
-            bool cup=kitchen&&Chance(Policy("LeaveChairData.PrepareColdDrinkLeaveProbability",50));
+            bool cup=kitchen&&activityObjects.NeedCold(Now,UnityEngine.Random.value*100,Policy("LeaveChairData.ColdDrinkPourProbability",50))&&Chance(Policy("LeaveChairData.PrepareColdDrinkLeaveProbability",50));
             SetNativeMotion(kitchen?(cup?"Wild003_LeaveChair_Cup":"Wild003_LeaveChair_Normal"):"Wild003_LeaveChair_Sofa");
             yield return WaitNative(30);
             float stay=(float)Delay("LeaveChairData."+(kitchen?"Kitchen":"Sofa")+"StaySecondsMin","LeaveChairData."+(kitchen?"Kitchen":"Sofa")+"StaySecondsMax",kitchen?15:90,kitchen?25:180);
             if(kitchen)yield return new WaitForSecondsRealtime(stay);else yield return SofaStay(stay);
             if(Playing){autonomousSequence=null;yield break;}
+            if(cup)activityObjects.Pour(Now,true);
             bool snack=kitchen&&!cup&&Chance(Policy("LeaveChairData."+(TimeOfDayIndex()==1?"NoonSnackTakeProbability":"SnackTakeProbability"),60));
             if(snack)
             {

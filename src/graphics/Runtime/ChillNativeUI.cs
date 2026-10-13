@@ -175,7 +175,8 @@ namespace Hlc.ChillPrototype
             foreach(var settings in config.interactions ?? Array.Empty<Interaction>())
             {var target=Find(settings.path);if(!target)continue;var interaction=target.GetComponent<ChillNativeInteraction>() ?? target.gameObject.AddComponent<ChillNativeInteraction>();
              Graphic[] Images(string[] refs)=>(refs ?? Array.Empty<string>()).Select(p=>Find(p)?.GetComponent<Graphic>()).Where(g=>g).ToArray();
-             interaction.hover=Images(settings.hover);interaction.use=Images(settings.use);interaction.baseline=Images(settings.baseline);interaction.hoverAlpha=settings.hoverAlpha;interaction.useAlpha=settings.useAlpha;interaction.baseAlpha=settings.baseAlpha;interaction.hideHoverOnUse=settings.hideHoverOnUse;interaction.SetUsing(false);}
+             interaction.hover=Images(settings.hover);interaction.use=Images(settings.use);interaction.baseline=Images(settings.baseline);interaction.hoverAlpha=settings.hoverAlpha;interaction.useAlpha=settings.useAlpha;interaction.baseAlpha=settings.baseAlpha;interaction.hideHoverOnUse=settings.hideHoverOnUse;interaction.SetUsing(false);
+             var button=target.GetComponent<Button>();if(button)button.transition=UnityEngine.UI.Selectable.Transition.None;}
             InitializeFeatureControls();InitializeWorkspaceControls();InitializeCompletionControls();Show(RefOf("FacilityProfile","_canvasGroup")?.gameObject,true);Set(RefOf("FacilityProfile","_background"),false);Set(RefOf("PlayerProfileView","self"),false);Set(RefOf("HeroineProfileView","self"),false);Close();Refresh(true);
         }
         class Hook {public Button button;public Action action;}
@@ -272,14 +273,20 @@ namespace Hlc.ChillPrototype
         }
         public int HookCount => hooks.Count;
         public void RefreshNow(){Refresh(true);}
+        int displayedTimerMode=-1;
         void RefreshTimerModes()
         {
             bool countup=state.timerMode==1,active=countup?state.countupActive:state.timerActive,available=!state.playing;
             Show(RefOf("TimerParentUI","_pomodoroTimerActivater")?.gameObject,!countup);Show(RefOf("TimerParentUI","_countupTimerActivater")?.gameObject,countup);
             Show(RefOf("TimerParentUI","_timerSettingMenuCanvasGroup")?.gameObject,!active);
             Show(RefOf("TimerParentUI","_pomodoroPresetOpenButton")?.gameObject,!countup && !active);
-            foreach(var pair in new[]{("_changePomodoroTimerButton",0),("_changeCountupTimerButton",1)})
-            {var button=Get<Button>("TimerParentUI",pair.Item1);if(button){button.interactable=available && !active && state.timerMode!=pair.Item2;button.GetComponent<ChillNativeInteraction>()?.SetUsing(state.timerMode==pair.Item2);}}
+            foreach(var pair in new[]{("_changePomodoroTimerButton","_changePomodoroTimerInteractiveUI",0),("_changeCountupTimerButton","_changeCountupTimerInteractiveUI",1)})
+            {
+                var button=Get<Button>("TimerParentUI",pair.Item1);if(button)button.interactable=available && !active && state.timerMode!=pair.Item3;
+                var interaction=Get<ChillNativeInteraction>("TimerParentUI",pair.Item2);
+                if(interaction){if(displayedTimerMode!=state.timerMode)interaction.DeactivateAll();interaction.SetUsing(state.timerMode==pair.Item3);}
+            }
+            displayedTimerMode=state.timerMode;
             foreach(string key in new[]{"_addWorkTimeButton","_subtractWorkTimeButton","_addBreakTimeButton","_subtractBreakTimeButton","_addLoopCountButton","_subtractLoopButtonButton","_togglePomodoroPresetButton"}){var button=Get<Button>("PomodoroTimerUI",key);if(button)button.interactable=!state.timerActive && available;}
             foreach(string script in new[]{"PomodoroTimerUI","CountupTimerUI"})foreach(string key in new[]{"_startPomodoroButton","_playOrPausePomodoroButton","_resetButton","_skipPomodoroButton","_startCountupButton","_playOrPauseCountupButton"}){var button=Get<Button>(script,key);if(button)button.interactable=available;}
             if(countup)
@@ -378,12 +385,15 @@ namespace Hlc.ChillPrototype
             Show(RefOf("StorySystemUI","_normalTextParent")?.gameObject,state.playing && !main);
             var bottom=RefOf("StorySystemUI","_bottomBackImage") as RectTransform;if(bottom)bottom.sizeDelta=new Vector2(bottom.sizeDelta.x,main?308:180);
             var target=RefOf("StorySystemUI",main?"_mainStoryTextMessage":"_normalTextMessage");var label=target ? target.GetComponent<TMP_Text>() ?? target.GetComponentInChildren<TMP_Text>(true) : null;
-            if(label){label.richText=false;label.text=state.text;}
+            if(label){label.richText=true;label.text=state.text;}
             string signature=JsonUtility.ToJson(new ChillStoryUiState{choices=state.choices});if(signature==choiceSignature)return;choiceSignature=signature;Clear(choiceRows);
             var parent=RefOf("SentenceSelectionButtonsUI","self");if(!parent || !selectionCell)return;
-            Layout(parent,72);
+            var selectionRect=parent as RectTransform;var prefabRect=selectionCell.transform as RectTransform;
+            if(selectionRect&&prefabRect)selectionRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,prefabRect.rect.width);
+            Layout(parent,prefabRect?prefabRect.rect.height:74);
             Show(parent.gameObject,state.playing && state.choices.Length>0);
-            for(int i=0;i<state.choices.Length;i++){int index=i;var choice=state.choices[i];var go=Cell(selectionCell,parent);var text=go.GetComponentInChildren<TMP_Text>(true);if(text){text.richText=false;text.text=choice.title;}Bind(go,()=>Action("choice",index));go.GetComponent<Button>().interactable=choice.enabled;choiceRows.Add(go);}
+            if(state.choices.Length>0)parent.SetAsLastSibling();
+            for(int i=0;i<state.choices.Length;i++){int index=i;var choice=state.choices[i];var go=Cell(selectionCell,parent);var text=go.GetComponentInChildren<TMP_Text>(true);if(text){text.richText=false;text.text=choice.title;text.color=choice.enabled?Color.white:new Color32(77,72,72,81);}Bind(go,()=>Action("choice",index));go.GetComponent<Button>().interactable=choice.enabled;choiceRows.Add(go);}
         }
         static void SetText(GameObject go,string name,string value){var t=go.GetComponentsInChildren<TMP_Text>(true).FirstOrDefault(t=>t.name==name);if(t){t.richText=false;t.text=value;}}
         void Layout(Transform parent,float height)

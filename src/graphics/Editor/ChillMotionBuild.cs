@@ -81,6 +81,7 @@ public static class ChillMotionBuild
         presentation.sleeves=(d.sleeves ?? Array.Empty<Sleeve>()).Select(s => new ChillStoryPresentation.Sleeve { renderer=Find(s.renderer)?.GetComponent<SkinnedMeshRenderer>(),bone=Find(s.bone) }).ToArray();
         var cameras=player.gameObject.AddComponent<ChillStoryCamera>(); presentation.cameras=cameras; cameras.view=player.view; cameras.cameraAnimator=Anim(config.camera.animator);
         cameras.fixedViews=config.camera.fixedViews.Select(Find).ToArray();
+        cameras.actor=player.character;
         cameras.poses=config.camera.poses.Select(p => new ChillStoryCamera.Pose { transform=Find(p.path),follow=Find(p.follow),lookAt=Find(p.lookAt),followOffset=Vec(p.followOffset),lookOffset=Vec(p.lookOffset),useFollow=p.useFollow,fov=p.fov }).ToArray();
         player.story.effects.presentation=presentation;
         player.story.effects.sunglasses=config.sunglasses.Select(s => Find(s.@object)?.GetComponentInChildren<Renderer>(true)).Where(r => r).ToArray();

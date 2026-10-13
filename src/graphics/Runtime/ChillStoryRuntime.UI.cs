@@ -21,7 +21,7 @@ namespace Hlc.ChillPrototype
                 language=save.language,level=DisplayLevel,completed=save.completed.Count,unlock=save.previewUnlock,saveAllowed=saveAllowed,
                 noticeMessage=noticeMessage,noticeError=noticeError,noticeRevision=noticeRevision,
                 chapter=save.chapter,title=chapter != null ? Text(chapter.TitleLocalizationID) : "",speaker=current != null && current.Talker == 1 ? "Satone" : "",
-                text=message.Substring(0,Math.Min(shownChars,message.Length)),workMinutes=save.workMinutes,breakMinutes=save.breakMinutes,
+                text=typing?typewriter.VisibleText():message.Substring(0,Math.Min(shownChars,message.Length)),workMinutes=save.workMinutes,breakMinutes=save.breakMinutes,
                 timerRunning=save.timerRunning,timerActive=timerActive,timerMeter=timerActive?(save.breakTime?remainingFraction:1-remainingFraction):0,breakTime=save.breakTime,rounds=save.rounds,exp=(float)DisplayExp,requiredExp=DisplayRequiredExp,
                 timerText=TimerLabel(save.timerRunning ? Math.Max(0,save.timerEnd-Now) : save.pausedRemaining > 0 ? save.pausedRemaining : save.workMinutes*60),
                 loopCount=save.loopCount,timerMode=save.timerMode,countupRunning=save.countupRunning,countupActive=save.countupActive,countupText=TimerLabel(CountupElapsed),timerPresets=save.timerPresets.ToArray(),

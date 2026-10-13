@@ -1,7 +1,7 @@
 """Convert recovered story tables into an explicit browser/runtime schema."""
 from pathlib import Path
 import argparse, collections, hashlib, json, re, sys
-from prepare_project import ROOT
+from prepare_project import ROOT,split_yaml
 sys.path.insert(0,str(ROOT/'.tools/python'))
 import yaml
 
@@ -80,6 +80,11 @@ def main():
           'scenarios':[{'name':k,'value':v} for k,v in scenarios.items()],
           'motions':[{'name':k,'value':v} for k,v in motions.items()],
           'parameters':table('GameParameterMaster')}
+    _,scene=split_yaml((SOURCE/'App/Scenes/RoomScene.unity').read_text('utf-8-sig'))
+    typing=[yaml.load(body,Loader=UnityLoader)['MonoBehaviour'] for kind,_,body in scene if kind==114 and '  waitForNormalChars:' in body]
+    if not typing:raise RuntimeError('Source typewriter settings are missing')
+    keys=['waitLong','waitMiddle','avoidMultiplePunctuactionWait','waitForNewLines','waitForLastCharacter']
+    data['parameters']['typing']={key:bool(typing[0][key]) if key not in ('waitLong','waitMiddle') else typing[0][key] for key in keys}
     args.output.parent.mkdir(parents=True,exist_ok=True)
     payload=json.dumps(data,ensure_ascii=False,separators=(',',':')).encode()
     args.output.write_bytes(payload)

@@ -10,6 +10,8 @@ namespace Hlc.ChillPrototype
         Coroutine roomRoutine;
         int roomVersion;
         void CancelRoom(){roomVersion++;if(roomRoutine!=null)StopCoroutine(roomRoutine);roomRoutine=null;}
+        public void ChooseRoomView(int index)
+        {if(Playing||index<0||index>2||!presentation.cameras.SelectRoomView(index))return;Settings.cameraView=index;SaveNow();}
         public ChillUnlockRule UnlockRule(string kind,string item)=>Features?.unlocks?.FirstOrDefault(r=>r.kind==kind&&string.Equals(r.item,item,StringComparison.OrdinalIgnoreCase));
         public bool ItemAvailable(string kind,string item)
         {

@@ -100,6 +100,7 @@ namespace Hlc.ChillPrototype
                 void Add(string key,string title,Action callback){var button=FeatureButton(general,key,title,y);FeatureHook(button,callback);y-=65;}
                 Add("autonomy","Satone actions",()=>{story.Settings.autonomy=!story.Settings.autonomy;story.ResetAutonomy();story.CommitSettings();});
                 Add("rest","Satone: work / break",()=>story.SetResting(!story.Settings.resting));
+                Add("cameraView","Room camera",()=>story.ChooseRoomView((story.Settings.cameraView+1)%3));
                 Add("selfTalk","Self talk",()=>{story.Settings.selfTalk=!story.Settings.selfTalk;story.CommitSettings();});
                 Add("greeting","Greeting on launch",()=>{story.Settings.autoGreeting=!story.Settings.autoGreeting;story.CommitSettings();});
                 Add("autoTime","Automatic day / evening / night",()=>{story.Settings.autoTime=!story.Settings.autoTime;story.CommitSettings();});
@@ -166,9 +167,20 @@ namespace Hlc.ChillPrototype
         static string LanguageCaption(string language)=>language=="Ja"?"日本語":language=="ZhHans"?"简体中文":language=="ZhHant"?"繁體中文":language=="Pt"?"Português":language=="Ko"?"한국어":language=="Ru"?"Русский":"English";
         public IEnumerator FocusTutorial(int command)
         {
+            SetTutorialHudVisible(true);
             string key=command==16?"_pomodoroFocusUI":command==17?"_todoFocusUI":"_noteFocusUI";var focus=RefOf("TutorialView",key);
             Set(focus,true);if(focus){var group=focus.GetComponent<CanvasGroup>();if(group)group.alpha=1;}
-            yield return new WaitForSecondsRealtime(3.5f);Set(focus,false);
+            var setup=player.story.Features.tutorialFocus?.FirstOrDefault(t=>focus&&t.path==PathOf(focus));
+            var image=setup!=null?Find(setup.image):null;var mask=setup!=null?Find(setup.mask):null;
+            if(image)Set(image,true);if(mask)Set(mask,true);
+            Vector3 initial=image?image.localScale:Vector3.one;Quaternion rotation=image?image.localRotation:Quaternion.identity;
+            float elapsed=0;while(elapsed<3.5f&&player.story.Playing){elapsed+=Time.unscaledDeltaTime;if(image){image.localRotation=Quaternion.Euler(0,0,-360*elapsed/(command==16?1.3f:1));image.localScale=initial*(1+.1f*Mathf.PingPong(elapsed,1));}yield return null;}
+            if(image){image.localRotation=rotation;image.localScale=initial;Set(image,false);}if(mask)Set(mask,false);Set(focus,false);SetTutorialHudVisible(false);
+        }
+        public void EndTutorialPresentation()
+        {
+            tutorialHudVisible=false;CloseTutorial();
+            foreach(var row in player.story.Features?.tutorialFocus??Array.Empty<ChillTutorialFocus>()){Set(Find(row.path),false);Set(Find(row.image),false);Set(Find(row.mask),false);}
         }
         void CloseTutorial(){tutorialVisible=false;Set(RefOf("TutorialView","self"),false);}
         void SetTutorialPage(int page)
@@ -194,6 +206,7 @@ namespace Hlc.ChillPrototype
             Write("MusicUI","_artistNameText",story.CurrentTrack?.artist??"");
             if(!story.FeatureReady)return;
             var s=story.Settings;
+            FeatureCaption("cameraView","Room camera: "+new[]{"Desk","Sofa","Bed"}[s.cameraView]);
             foreach(var item in featureSliders)if(item.Item1){item.Item1.SetValueWithoutNotify(item.Item2());var label=item.Item1.transform.parent.GetComponentsInChildren<TMP_Text>(true).FirstOrDefault(t=>t.name.Contains("Current"));if(label)label.text=Mathf.RoundToInt(item.Item2()*100).ToString();}
             FeatureCaption("autonomy","Satone actions: "+(s.autonomy?"ON":"OFF"));FeatureCaption("rest","Satone: "+(story.Resting?"Break":"Work"));FeatureCaption("selfTalk","Self talk: "+(s.selfTalk?"ON":"OFF"));FeatureCaption("greeting","Greeting on launch: "+(s.autoGreeting?"ON":"OFF"));FeatureCaption("autoTime","Automatic time of day: "+(s.autoTime?"ON":"OFF"));FeatureCaption("clock24",s.clock24?"24 hour clock":"12 hour clock");
             FeatureCaption("quality","Graphics: "+new[]{"Low","Medium","High"}[s.quality]);FeatureCaption("fps","Frame rate: "+s.activeFps);FeatureCaption("inactiveFps","Background: "+s.inactiveFps+" FPS");FeatureCaption("scale","Render scale: "+s.renderScale.ToString("0.00"));FeatureCaption("post","Post processing: "+(s.postProcessing?"ON":"OFF"));FeatureCaption("fit","Fit UI to screen: "+(s.mobileFit?"ON":"OFF"));

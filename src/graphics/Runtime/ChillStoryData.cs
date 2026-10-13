@@ -28,7 +28,7 @@ namespace Hlc.ChillPrototype
     }
     [Serializable] public class ChillText { public string ID, En, Ja, ZhHans, ZhHant, Pt, Ko, Ru, Voice; }
     [Serializable] public class ChillMusic { public string title, clip, credit; }
-    [Serializable] public class ChillParameters { public ChillLevelParameters LevelUpInfoData;public ChillTalkSpeed TalkSpeedData; }
+    [Serializable] public class ChillParameters { public ChillLevelParameters LevelUpInfoData;public ChillTalkSpeed TalkSpeedData;public ChillTypingPolicy typing; }
     [Serializable] public class ChillTalkSpeed
     {
         public float TalkTextWaitSecondsJp=.13f,TalkTextWaitSecondsEn=.02f,TalkTextWaitSecondsCS=.13f,TalkTextWaitSecondsCT=.13f,TalkTextWaitSecondsPt=.02f,TalkTextWaitSecondsKo=.05f,TalkTextWaitSecondsRu=.02f;

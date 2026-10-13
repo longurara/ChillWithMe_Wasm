@@ -71,7 +71,7 @@ namespace Hlc.ChillPrototype
                     if(asset is AudioClip clip)
                     {
                         MusicState.selected=track.guid;MusicState.position=0;wantsMusic=true;
-                        FinishTrack(clip,0);cachedStoryMusic=.35f;
+                        FinishTrack(clip,0);
                         // MusicService selection survives the end of the scene.
                         previousMusic=clip;previousMusicPlaying=true;previousMusicLoop=MusicState.repeat;previousMusicTime=0;
                     }
@@ -86,12 +86,12 @@ namespace Hlc.ChillPrototype
         float StoryMusicGain(ChillSentence row)=>.35f*(row.Arg2==0?1:Mathf.Clamp01(row.Arg2));
         float StoryMusicStart(ChillSentence row,float length)=>Mathf.Clamp(Number(row.Arg3),0,Mathf.Max(0,length-.05f));
         void RestoreMusicPosition(ChillSentence row)
-        {if(player.music.clip)player.music.timeSamples=Mathf.RoundToInt(StoryMusicStart(row,player.music.clip.length)*player.music.clip.frequency);}
+        {if(StoryMusic.clip)StoryMusic.timeSamples=Mathf.RoundToInt(StoryMusicStart(row,StoryMusic.clip.length)*StoryMusic.clip.frequency);}
 
         IEnumerator ChangeStoryMusicVolume(ChillSentence row)
         {
             var alias=data.music.FirstOrDefault(m=>m.title==row.Arg1);
-            if(alias==null || !player.music.clip || player.music.clip.name!=alias.clip)yield break;
+            if(alias==null || !StoryMusic.clip || StoryMusic.clip.name!=alias.clip)yield break;
             int version=++storyMusicVersion;
             yield return FadeStoryMusic(cachedStoryMusic,.35f*Mathf.Clamp01(row.Arg2),Mathf.Max(0,Number(row.Arg3)),generation,version);
         }
@@ -100,10 +100,10 @@ namespace Hlc.ChillPrototype
         {
             int token=generation,version=++storyMusicVersion;
             float target=StoryMusicGain(row);
-            if(player.music.isPlaying)yield return FadeStoryMusic(player.music.volume/Mathf.Max(.0001f,Settings.music/.35f),0,1.5f,token,version);
+            if(StoryMusic.isPlaying)yield return FadeStoryMusic(cachedStoryMusic,0,1.5f,token,version);
             if(token!=generation || version!=storyMusicVersion)yield break;
-            yield return LoadAudio("story-music",row.Arg1,player.music,chapter!=null && chapter.ID!="main_32",0,version);
-            if(token!=generation || version!=storyMusicVersion || !player.music.clip)yield break;
+            yield return LoadAudio("story-music",row.Arg1,StoryMusic,chapter!=null && chapter.ID!="main_32",0,version);
+            if(token!=generation || version!=storyMusicVersion || !StoryMusic.clip)yield break;
             RestoreMusicPosition(row);
             yield return FadeStoryMusic(0,target,Number(row.Arg4)>0?Number(row.Arg4):1.5f,token,version);
         }
@@ -114,9 +114,15 @@ namespace Hlc.ChillPrototype
             while(token==generation && version==storyMusicVersion)
             {
                 float t=Mathf.Clamp01((Time.realtimeSinceStartup-started)/Mathf.Max(.01f,seconds));
-                cachedStoryMusic=Mathf.Lerp(from,to,t);player.music.volume=Mathf.Clamp01(cachedStoryMusic*(Settings.music/.35f));
+                cachedStoryMusic=Mathf.Lerp(from,to,t);StoryMusic.volume=Mathf.Clamp01(cachedStoryMusic*(Settings.music/.35f));
                 if(t>=1)yield break;yield return null;
             }
+        }
+
+        void StopStoryMusic(ChillSentence row)
+        {
+            if(!string.IsNullOrEmpty(row.Arg1)&&StoryMusic.clip&&StoryMusic.clip.name!=row.Arg1)return;
+            storyMusicVersion++;StoryMusic.Stop();StoryMusic.clip=null;player.library.ReleaseExternal("story-music");
         }
 
         void ResetCommandWaits()

@@ -18,6 +18,7 @@ namespace Hlc.ChillPrototype
             if (presentation && name.StartsWith("AdjustWhen")) presentation.AdjustSleeve(name);
             if (story && Application.isPlaying) story.MotionSound(name);
             if(story && name=="PlayPomodoroVoice")story.OnPomodoroVoiceEvent(item.intParameter);
+            if(story && Application.isPlaying)story.OnActivityObjectEvent(name);
         }
         void OnAnimatorIK(int layer) { if (presentation && layer == 0) presentation.ApplyLookIK(); }
     }
