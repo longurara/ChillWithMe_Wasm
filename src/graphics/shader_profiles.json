@@ -1,0 +1,331 @@
+{
+  "Shader Graphs/ScreenColorGlitch": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/ScreenBlackout": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/NoiseShader": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/post_flear": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/ScreenMoveGlitch": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/post_para": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/ScreenGlitch": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/ScreenGlitchNoImage": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Distant Lands/Cozy/URP/Demo/Stlylized Leaves": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Sky Desktop": {
+    "queue": "Transparent-100",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Clouds (COZY Desktop)": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Moon": {
+    "queue": "Transparent-2",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Distant Lands/Cozy/URP/Particles/Stylized Butterfly": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Fog (Desktop)": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Distant Lands/Cozy/URP/Demo/Stylized Grass": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "TextMeshPro/Distance Field Color Glitch": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 1.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/VFX/SG_VFX_UnlitNearFade": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 0.0,
+    "dstBlend": 0.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/FurinShader": {
+    "queue": "AlphaTest",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Shader Graphs/EnvUnlit_ColorLinear_Space": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/BirdShader": {
+    "queue": "AlphaTest",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Shader Graphs/EnvUnlit": {
+    "queue": "AlphaTest",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Shader Graphs/FishShader": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Shader Graphs/BookShader": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Shader Graphs/EnvUnlit_ColorLinear": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 1.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/TreeShader": {
+    "queue": "AlphaTest",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Shader Graphs/JellyfishShader": {
+    "queue": "AlphaTest",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Shader Graphs/EnvUnlit_Alpha": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/WindowTransition": {
+    "queue": "AlphaTest",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Shader Graphs/Aurora": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Shader Graphs/RaindropShader": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 1.0,
+    "zwrite": 0.0
+  },
+  "Bakery/Light": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Distant Lands/Stylized Dynamic Coral": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Fog (Stepped)": {
+    "queue": "Transparent+1",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Clouds (Ghibli Mobile)": {
+    "queue": "Transparent",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Clouds (Luxury)": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Distant Lands/Cozy/URP/Fog Culling": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Custom/RaindropFX/WetSurfaceURP": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Clouds (Ghibli Desktop)": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Clouds (Painted)": {
+    "queue": "Transparent-1",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Clouds (COZY Mobile)": {
+    "queue": "Transparent",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Clouds (Soft)": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Clouds (Static Texture)": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Hidden/Custom/KawaseBlur": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Distant Lands/Cozy/URP/Disabled Shader": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 1.0
+  },
+  "Custom/RaindropFX/Wiper": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Fog (Physical Height)": {
+    "queue": "Transparent",
+    "renderType": "Transparent",
+    "srcBlend": 5.0,
+    "dstBlend": 10.0,
+    "zwrite": 0.0
+  },
+  "Distant Lands/Cozy/URP/Stylized Sky Mobile": {
+    "queue": "Geometry",
+    "renderType": "Opaque",
+    "srcBlend": 1.0,
+    "dstBlend": 0.0,
+    "zwrite": 1.0
+  }
+}
