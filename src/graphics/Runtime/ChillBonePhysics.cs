@@ -48,7 +48,8 @@ namespace Hlc.ChillPrototype
         {
             public Transform bone; public Group group; public Body[] bodies;
             public float[] allowances; public int parent=-1,root,depth; public readonly List<int> children=new List<int>();
-            public bool pinned,applied,coat;
+            public bool pinned,applied,coat,bakedSynchronized;
+            public Vector3 lastBakedPosition;
             public Vector3 position,previous,goal,previousGoal,tickGoal,lastTickGoal,renderFrom,anchorPosition;
             public Quaternion anchorRotation,frameRotation,frameLocalRotation,outputLocalRotation;
             public float angleLimit,radius,damping,restoration,speedLimit,maxDistance;
@@ -179,7 +180,7 @@ namespace Hlc.ChillPrototype
             frameBodies=nodes.SelectMany(n=>n.bodies).Distinct().ToArray();
             // Outfit changes rebuild the small rig map, not the multi-MB recording.
             if(loadedBake!=bakedConfiguration)
-            {loadedBake=bakedConfiguration;cachedBake=bakedConfiguration?JsonUtility.FromJson<ChillBoneBake>(bakedConfiguration.text):null;}
+            {loadedBake=bakedConfiguration;cachedBake=ChillBoneBakeCodec.Read(bakedConfiguration);}
             bake=cachedBake;
             if(bake!=null&&(bake.profileHash!=BakeProfileHash||!bake.paths.SequenceEqual(BonePaths())))bake=null;
             presentation=GetComponent<ChillGraphicsPlayer>()?.story?.presentation;
@@ -266,10 +267,10 @@ namespace Hlc.ChillPrototype
             ChillBoneBake.Clip requested=null;
             var state=character.GetCurrentAnimatorStateInfo(0);
             if(useBakedFallback&&bake!=null&&simulation&&DynamicRootCount==0&&!character.IsInTransition(0)&&(!presentation||!presentation.manualLook))
-                requested=Array.Find(bake.clips,c=>Animator.StringToHash(c.state)==state.fullPathHash&&state.normalizedTime>=0&&state.normalizedTime<=1);
+                requested=Array.Find(bake.clips,c=>Animator.StringToHash(c.state)==state.fullPathHash&&state.normalizedTime>=0&&(c.loop||state.normalizedTime<=1));
             if(requested!=activeBake&&activeBake!=null&&bakeWeight>0)requested=null;
             if(requested!=null&&requested!=activeBake){activeBake=requested;bakeWeight=0;}
-            bakeWeight=Mathf.MoveTowards(bakeWeight,requested!=null?1:0,elapsed/.12f);
+            bakeWeight=Mathf.MoveTowards(bakeWeight,requested!=null?1:0,elapsed/.25f);
             if(requested!=null)bakeTime=state.normalizedTime;
             if(bakeWeight<=0)activeBake=null;
         }
@@ -281,14 +282,30 @@ namespace Hlc.ChillPrototype
             for(int index=0;index<nodes.Count;index++)
             {
                 var node=nodes[index];
-                if(!node.bone||!node.bone.gameObject.activeInHierarchy||node.children.Count!=1)continue;
-                var child=nodes[node.children[0]];var authored=child.goal-node.goal;var solved=Render(child)-Render(node);
-                if(authored.sqrMagnitude<=1e-9f||solved.sqrMagnitude<=1e-9f)continue;
-                var world=Quaternion.FromToRotation(authored,solved)*node.frameRotation;
-                var local=node.bone.parent?Quaternion.Inverse(node.bone.parent.rotation)*world:world;
-                if(activeBake!=null&&bakeWeight>0)local=Quaternion.Slerp(local,node.frameLocalRotation*activeBake.Sample(index,bakeTime),bakeWeight);
-                node.outputLocalRotation=Quaternion.RotateTowards(node.frameLocalRotation,local,child.angleLimit);
+                if(!node.bone||!node.bone.gameObject.activeInHierarchy)continue;
+                Quaternion local=node.frameLocalRotation;float limit=node.angleLimit;
+                if(node.children.Count==1)
+                {
+                    var child=nodes[node.children[0]];var authored=child.goal-node.goal;var solved=Render(child)-Render(node);
+                    if(authored.sqrMagnitude<=1e-9f||solved.sqrMagnitude<=1e-9f)continue;
+                    var world=Quaternion.FromToRotation(authored,solved)*node.frameRotation;
+                    local=node.bone.parent?Quaternion.Inverse(node.bone.parent.rotation)*world:world;limit=child.angleLimit;
+                }
+                else if(activeBake==null||bakeWeight<=0)continue;
+                if(activeBake!=null&&bakeWeight>0)local=Quaternion.Slerp(local,node.frameLocalRotation*activeBake.Sample(index,bakeTime),Mathf.SmoothStep(0,1,bakeWeight));
+                node.outputLocalRotation=bake?.producer=="source-magica"&&bakeWeight>0?local:Quaternion.RotateTowards(node.frameLocalRotation,local,limit);
                 node.bone.localRotation=node.outputLocalRotation;node.applied=true;
+            }
+            // Keep live particles on the displayed native pose, so leaving a recording
+            // does not expose an independently drifting CPU simulation.
+            foreach(var node in nodes)
+            {
+                if(activeBake!=null&&bakeWeight>=.999f&&node.bone&&node.bone.gameObject.activeInHierarchy)
+                {
+                    var position=node.bone.position;node.previous=node.bakedSynchronized?node.lastBakedPosition:position;
+                    node.position=node.renderFrom=node.lastBakedPosition=position;node.tickGoal=node.lastTickGoal=node.goal;node.bakedSynchronized=true;
+                }
+                else node.bakedSynchronized=false;
             }
         }
         public static Vector3 Closest(Vector3 point,Vector3 a,Vector3 b,out float t){var ab=b-a;t=Mathf.Clamp01(Vector3.Dot(point-a,ab)/Mathf.Max(ab.sqrMagnitude,1e-10f));return a+ab*t;}
