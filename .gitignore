@@ -1,0 +1,24 @@
+# Recovered game data and generated Unity/WebGL output are local inputs.
+/Recovered/
+/UnityProject/
+/AssetLibrary/
+/WebPlayer/
+/CueBuild/
+/.tools/
+/logs/
+/output/
+/.playwright-cli/
+/research/python/
+/research/failed-shader-profiles/
+/preview*.png
+__pycache__/
+*.pyc
+*.pyd
+*.dll
+*.exe
+*.zip
+*.unitypackage
+.env
+.env.*
+!.env.example
+*.pid
