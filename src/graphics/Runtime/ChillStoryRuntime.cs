@@ -304,8 +304,14 @@ namespace Hlc.ChillPrototype
             loadingAudio = true;
             string name = texts.TryGetValue(row.LocalizationID, out var local) ? local.Voice : "";
             yield return LoadAudio("story-voice", name, voice, false, .8f);
+            if(voice.clip && voice.clip.loadState!=AudioDataLoadState.Loaded)
+            {
+                voice.clip.LoadAudioData();double deadline=Now+30;
+                while(Playing && voice.clip && voice.clip.loadState==AudioDataLoadState.Loading && Now<deadline)yield return null;
+            }
+            yield return null; // Let the audio source apply its queued Play.
             loadingAudio = false;
-            double finish = Now + Math.Max(.2f, row.Command==22?0:row.Arg2);
+            var autoWait=new ChillAutoAdvanceGate();float afterVoice=row.Command==0?Mathf.Max(0,row.Arg2):0;
             while (Playing)
             {
                 if (!waitForClick && chosen >= 0) { voice.Stop(); yield break; }
@@ -315,7 +321,8 @@ namespace Hlc.ChillPrototype
                     if (typing) { typing = false; shownChars = message.Length; }
                     else { voice.Stop(); yield break; }
                 }
-                if (!HistoryVisible && !typing && !voice.isPlaying && (autoRead || automaticDialogue || !waitForClick) && Now >= finish) yield break;
+                bool ready=!HistoryVisible && !typing && !voice.isPlaying && (autoRead || automaticDialogue || !waitForClick);
+                if(autoWait.Ready(ready,Now,afterVoice))yield break;
                 yield return null;
             }
         }
@@ -464,7 +471,7 @@ namespace Hlc.ChillPrototype
 
         void Update()
         {
-            if (typing) { textClock += Time.unscaledDeltaTime * 40; shownChars = Math.Min(message.Length, (int)textClock); if (shownChars == message.Length) typing = false; }
+            if (typing) { textClock += Time.unscaledDeltaTime/(data?.parameters?.TalkSpeedData ?? new ChillTalkSpeed()).Delay(save.language); shownChars = Math.Min(message.Length, (int)textClock); if (shownChars == message.Length) typing = false; }
             if (data == null) return;
             player.character.SetBool("Enable_Talk", Playing && !Replaying && voice.isPlaying && moveMouth);
             if (voice && voice.isPlaying && voiceDefect > 0) voice.pitch = 1 + Mathf.Sin(Time.unscaledTime * 24) * voiceDefect * .12f;

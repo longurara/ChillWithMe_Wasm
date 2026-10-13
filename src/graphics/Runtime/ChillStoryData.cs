@@ -28,7 +28,16 @@ namespace Hlc.ChillPrototype
     }
     [Serializable] public class ChillText { public string ID, En, Ja, ZhHans, ZhHant, Pt, Ko, Ru, Voice; }
     [Serializable] public class ChillMusic { public string title, clip, credit; }
-    [Serializable] public class ChillParameters { public ChillLevelParameters LevelUpInfoData; }
+    [Serializable] public class ChillParameters { public ChillLevelParameters LevelUpInfoData;public ChillTalkSpeed TalkSpeedData; }
+    [Serializable] public class ChillTalkSpeed
+    {
+        public float TalkTextWaitSecondsJp=.13f,TalkTextWaitSecondsEn=.02f,TalkTextWaitSecondsCS=.13f,TalkTextWaitSecondsCT=.13f,TalkTextWaitSecondsPt=.02f,TalkTextWaitSecondsKo=.05f,TalkTextWaitSecondsRu=.02f;
+        public float Delay(string language)
+        {
+            float value=language=="Ja"?TalkTextWaitSecondsJp:language=="ZhHans"?TalkTextWaitSecondsCS:language=="ZhHant"?TalkTextWaitSecondsCT:language=="Pt"?TalkTextWaitSecondsPt:language=="Ko"?TalkTextWaitSecondsKo:language=="Ru"?TalkTextWaitSecondsRu:TalkTextWaitSecondsEn;
+            return value>0 && !float.IsInfinity(value)?value:.02f;
+        }
+    }
     [Serializable] public class ChillLevelParameters
     {
         public float pomodoroExpBaseMinutes, pomodoroExpBaseMax, pomodoroExpBaseMaxHour, nextLevelNecessaryExpBase;

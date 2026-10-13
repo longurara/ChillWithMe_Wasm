@@ -55,7 +55,7 @@ namespace Hlc.ChillPrototype
                 foreach (int channel in new[] { 200,205,216 })
                 {
                     versions.TryGetValue(channel,out int token); versions[channel]=++token;
-                    StartCoroutine(ApplyLater(new ChillSentence { Command=channel,Arg1=row.Arg1,Arg2=row.Arg2,Arg3=row.Arg3 },pendingDelay,channel,token));
+                    StartCoroutine(ApplyLater(new ChillSentence { Command=channel,Arg1=row.Arg1,Arg2=row.Arg2,Arg3=row.Arg3 },pendingDelay,channel,token,true));
                 }
                 return;
             }
@@ -63,10 +63,16 @@ namespace Hlc.ChillPrototype
             versions.TryGetValue(key,out int version); versions[key]=++version;
             StartCoroutine(ApplyLater(row,pendingDelay,key,version));
         }
-        IEnumerator ApplyLater(ChillSentence row,float pendingDelay,int key,int version)
+        IEnumerator ApplyLater(ChillSentence row,float pendingDelay,int key,int version,bool sustainedTween=false)
         {
             if (pendingDelay > 0) yield return new WaitForSecondsRealtime(pendingDelay);
             if (!Current(key,version)) yield break;
+            if((row.Command==200 || row.Command==205) && !sustainedTween)
+            {
+                Set(row.Command,Mathf.Clamp01(Value(row.Arg1)));
+                if(row.Arg2>=0){yield return new WaitForSecondsRealtime(row.Arg2);if(Current(key,version))Set(row.Command,0);}
+                yield break;
+            }
             if (row.Command == 220)
             {
                 frozen = true;
@@ -161,6 +167,7 @@ namespace Hlc.ChillPrototype
         public void RestoreFinal(ChillSentence row)
         {
             if (row.Command == 220) { frozen=row.Arg2 < 0; return; }
+            if (row.Command == 200 || row.Command == 205) {Set(row.Command,row.Arg2<0?Mathf.Clamp01(Value(row.Arg1)):0);return;}
             if (row.Command == 210) { blackout=row.Arg2 < 0 ? Mathf.Clamp01(Value(row.Arg1)) : 0; return; }
             if (row.Command == 1000) { Apply(row); return; }
             if (row.Command == 200 || row.Command == 205 || row.Command == 210 || row.Command == 215 || row.Command == 216 || row.Command == 219 || row.Command == 90)
