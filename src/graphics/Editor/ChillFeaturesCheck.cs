@@ -24,6 +24,7 @@ public static class ChillFeaturesCheck
     }
     public static void Run()
     {
+        ChillStartupCheck.Run();
         EditorSceneManager.OpenScene("Assets/Prototype/Room.unity");var player=UnityEngine.Object.FindObjectOfType<ChillGraphicsPlayer>();
         ChillAppearanceBuild.Configure(player);var ui=ChillNativeUIBuild.Configure(player);ChillFeaturesBuild.Configure(player);var story=player.story;story.VerificationOnly=true;
         var data=JsonUtility.FromJson<ChillStoryData>(File.ReadAllText("Assets/StreamingAssets/chill-story.json"));var features=JsonUtility.FromJson<ChillFeatureData>(File.ReadAllText("Assets/Prototype/chill-features.json"));

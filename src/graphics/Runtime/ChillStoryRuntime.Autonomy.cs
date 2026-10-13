@@ -116,7 +116,7 @@ namespace Hlc.ChillPrototype
         int TimeOfDayIndex(){int h=DateTime.Now.Hour;return h>5&&h<11?0:h>=11&&h<=16?1:h>=17&&h<=19?2:3;}
         bool StartReaction(int scenario)
         {
-            if(Playing || autonomousSequence!=null)return false;
+            if(StartupBlocking || Playing || autonomousSequence!=null)return false;
             if(!reactionBags.TryGetValue(scenario,out var bag))reactionBags[scenario]=bag=new List<string>();
             if(bag.Count==0)bag.AddRange(data.groups.Where(g=>g.Scenario==scenario&&Unlocked(g)&&chapters.ContainsKey(g.ID)).OrderBy(_=>UnityEngine.Random.value).Select(g=>g.ID));
             if(bag.Count==0)return false;string id=bag[0];bag.RemoveAt(0);

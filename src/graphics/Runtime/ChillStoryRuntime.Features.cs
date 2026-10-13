@@ -23,6 +23,7 @@ namespace Hlc.ChillPrototype
         public bool MusicLoading {get;private set;}
         public string MusicError {get;private set;}="";
         public bool FeatureReady => Features!=null && data!=null;
+        bool StartupBlocking=>Application.isPlaying&&GetComponent<ChillStartupGate>() is ChillStartupGate gate&&!gate.Complete;
         AudioClip managedMusic,personalClip;
         bool wantsMusic,musicStarted,wasFocused=true;
         bool voicePausedForFocus,storyMusicPausedForFocus;
@@ -74,9 +75,12 @@ namespace Hlc.ChillPrototype
             ApplyFeatureSettings();InitializeAutonomy();
             foreach(var level in Settings.ambience.ToArray())if(level.volume>0)SetAmbience(level.id,level.volume,false);
             ChillPersonalMusic.Attach(gameObject.name);
-            while(!player.library.Ready)yield return null;
+            while(!player.library.Ready){if(player.library.InitializationFailed)yield break;yield return null;}
             DailyAppearance();RestoreRoom();
             if(!string.IsNullOrEmpty(MusicState.selected))SelectTrack(MusicState.selected,false,MusicState.position);
+            while(roomRoutine!=null)yield return null;
+            var startup=GetComponent<ChillStartupGate>();
+            if(startup){yield return startup.Reveal();if(startup.Failed)yield break;}
             // An interrupted story stays resumable; greetings never overwrite it.
             if(Settings.autoGreeting && string.IsNullOrEmpty(save.chapter))
             {
@@ -111,7 +115,7 @@ namespace Hlc.ChillPrototype
         {if(source==voice)cachedStoryVoice=value;else if(source==sound)cachedStorySound=value;else if(source==ambient)cachedStoryAmbient=value;else if(source==storyMusic)cachedStoryMusic=value;}
         void UpdateFeatures()
         {
-            if(!FeatureReady)return;
+            if(!FeatureReady||StartupBlocking)return;
             var s=Settings;
             if(storyMusic)storyMusic.volume=Mathf.Clamp01(cachedStoryMusic*(s.music/.35f));
             voice.volume=cachedStoryVoice*s.voice;sound.volume=cachedStorySound*s.sfx;
@@ -268,7 +272,7 @@ namespace Hlc.ChillPrototype
         public void BrowserVisibility(string value)=>OnApplicationFocus(value=="visible");
         public bool StartAutomaticScenario(int scenario)
         {
-            if(!FeatureReady || Playing || autonomousSequence!=null)return false;
+            if(!FeatureReady || StartupBlocking || Playing || autonomousSequence!=null)return false;
             var list=data.groups.Where(g=>g.Scenario==scenario&&Unlocked(g)&&chapters.ContainsKey(g.ID)).ToArray();if(list.Length==0)return false;
             var unseen=list.Where(g=>!save.completed.Contains(g.ID)).ToArray();if(unseen.Length>0)list=unseen;
             var selected=list[UnityEngine.Random.Range(0,list.Length)];

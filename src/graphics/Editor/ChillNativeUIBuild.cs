@@ -160,6 +160,7 @@ public static class ChillNativeUIBuild
     {
         var scene=EditorSceneManager.OpenScene("Assets/Prototype/Room.unity");var player=UnityEngine.Object.FindObjectOfType<ChillGraphicsPlayer>();
         ChillAppearanceBuild.Configure(player);var ui=Configure(player);ChillFeaturesBuild.Configure(player);
+        if(!player.GetComponent<ChillStartupGate>())player.gameObject.AddComponent<ChillStartupGate>();
         player.bones.configuration=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-physics.json");
         player.bones.bakedConfiguration=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-bakes.json");
         EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();

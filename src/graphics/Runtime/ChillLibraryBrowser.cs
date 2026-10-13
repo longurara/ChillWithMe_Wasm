@@ -22,6 +22,7 @@ namespace Hlc.ChillPrototype
         readonly List<string> musicPacks = new List<string>(), previewPacks = new List<string>();
         readonly Dictionary<string, List<string>> externalPacks = new Dictionary<string, List<string>>();
         public bool Ready => metadata != null;
+        public bool InitializationFailed { get; private set; }
         public bool Busy => busy;
         public string Status => status;
         public ChillAssetEntry[] MusicEntries => catalog == null ? Array.Empty<ChillAssetEntry>() : catalog.assets.Where(a => a.type == "AudioClip" && a.category == "music").OrderBy(a => a.name,StringComparer.OrdinalIgnoreCase).ToArray();
@@ -96,10 +97,12 @@ namespace Hlc.ChillPrototype
             using (var request = UnityWebRequest.Get(Application.streamingAssetsPath + "/chill-library.json"))
             {
                 yield return request.SendWebRequest();
-                if (request.result != UnityWebRequest.Result.Success) { status = "Không tải được danh sách: " + request.error; yield break; }
-                catalog = JsonUtility.FromJson<ChillAssetCatalog>(request.downloadHandler.text);
+                if (request.result != UnityWebRequest.Result.Success) { status = "Không tải được danh sách: " + request.error; InitializationFailed=true;GetComponent<ChillStartupGate>()?.Fail(status);yield break; }
+                string parseError=null;
+                try{catalog = JsonUtility.FromJson<ChillAssetCatalog>(request.downloadHandler.text);metadata=catalog.bundles.ToDictionary(b=>b.name);if(catalog.assets==null)throw new System.ArgumentException("Missing assets");}
+                catch(System.Exception error){parseError=error.Message;}
+                if(parseError!=null){status="Không đọc được danh sách: "+parseError;InitializationFailed=true;GetComponent<ChillStartupGate>()?.Fail(status);yield break;}
             }
-            metadata = catalog.bundles.ToDictionary(b => b.name);
             status = catalog.assets.Length + " asset · chọn một mục để tải và xem";
             Filter();
         }

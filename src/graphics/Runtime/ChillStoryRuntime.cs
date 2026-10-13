@@ -74,8 +74,11 @@ namespace Hlc.ChillPrototype
             using (var request = UnityWebRequest.Get(Application.streamingAssetsPath + "/chill-story.json"))
             {
                 yield return request.SendWebRequest();
-                if (request.result != UnityWebRequest.Result.Success) { status = "Không tải được cốt truyện: " + request.error; Notify(status,true); yield break; }
-                data = JsonUtility.FromJson<ChillStoryData>(request.downloadHandler.text);
+                if (request.result != UnityWebRequest.Result.Success) { status = "Không tải được cốt truyện: " + request.error; GetComponent<ChillStartupGate>()?.Fail(status); Notify(status,true); yield break; }
+                string parseError=null;
+                try{data = JsonUtility.FromJson<ChillStoryData>(request.downloadHandler.text);if(data.groups==null||data.localizations==null||data.novels==null||data.motions==null)throw new ArgumentException("Missing story data");}
+                catch(Exception error){parseError=error.Message;}
+                if(parseError!=null){status="Không đọc được cốt truyện: "+parseError;GetComponent<ChillStartupGate>()?.Fail(status);Notify(status,true);yield break;}
             }
             texts = data.localizations.GroupBy(t => t.ID).ToDictionary(g => g.Key, g => g.First());
             motions = data.motions.GroupBy(m => m.value).ToDictionary(g => g.Key, g => g.First().name);

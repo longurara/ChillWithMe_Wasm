@@ -10,26 +10,28 @@
 </head>
 <body>
   <div id="unity-container"><canvas id="unity-canvas" width="1280" height="720" tabindex="0" aria-label="Phòng của Satone"></canvas></div>
-  <div id="unity-loading-bar" role="status"><span class="eyebrow">LO-FI STORY</span><h1>Chill with You<span>.</span></h1><p>Chờ một chút, Satone đang chuẩn bị phòng.</p><progress id="unity-progress" max="1" value="0" aria-label="Tiến độ tải game"></progress><span id="load-percent">0%</span></div>
+  <div id="unity-loading-bar"><canvas id="startup-canvas" aria-hidden="true"></canvas><span id="startup-status" class="sr-only" role="status">Đang tải game…</span></div>
   <div id="unity-warning" role="alert" hidden></div>
+  <script src="ui/startup.js"></script>
   <script src="Build/WebPlayer.loader.js"></script>
   <script>
     document.addEventListener('gesturestart',event=>event.preventDefault(),{passive:false});
     document.addEventListener('gesturechange',event=>event.preventDefault(),{passive:false});
     const warning=document.getElementById('unity-warning');
+    if(!window.ChillStartup)window.ChillStartup={progress(){},fail(message){warning.hidden=false;warning.textContent=message;const retry=document.createElement('button');retry.textContent='Retry';retry.onclick=()=>location.reload();warning.appendChild(retry);},finish(){return Promise.reject(new Error('Không tải được màn hình khởi động.'));}};
     function showWarning(message,type) {
       warning.hidden=false;warning.textContent=message;
-      if(type!=='error')setTimeout(()=>{warning.hidden=true;},5000);
+      if(type==='error'){window.ChillStartup.fail(message);return;}
+      setTimeout(()=>{warning.hidden=true;},5000);
     }
-    createUnityInstance(document.getElementById('unity-canvas'),{
+    Promise.resolve().then(()=>createUnityInstance(document.getElementById('unity-canvas'),{
       dataUrl:'Build/WebPlayer.data',frameworkUrl:'Build/WebPlayer.framework.js',codeUrl:'Build/WebPlayer.wasm',streamingAssetsUrl:'StreamingAssets',
-      companyName:'HLC',productName:'Chill with You Web',productVersion:'1.22.0',devicePixelRatio:Math.min(window.devicePixelRatio||1,matchMedia('(pointer: coarse)').matches?1.5:2),showBanner:showWarning
-    },progress=>{document.getElementById('unity-progress').value=progress;document.getElementById('load-percent').textContent=Math.floor(progress*100)+'%';}).then(instance=>{
+      companyName:'HLC',productName:'Chill with You Web',productVersion:'1.23.0',devicePixelRatio:Math.min(window.devicePixelRatio||1,matchMedia('(pointer: coarse)').matches?1.5:2),showBanner:showWarning
+    },progress=>window.ChillStartup.progress(progress))).then(instance=>{
       window.chillUnityInstance=instance;
       document.addEventListener('visibilitychange',()=>instance.SendMessage('ChillPrototype','BrowserVisibility',document.hidden?'hidden':'visible'));
       window.addEventListener('pagehide',()=>instance.SendMessage('ChillPrototype','SaveFromBrowser'));
-      document.getElementById('unity-loading-bar').hidden=true;
-    }).catch(error=>{showWarning('Không mở được game. '+error,'error');document.getElementById('unity-loading-bar').hidden=true;});
+    }).catch(error=>{showWarning('Không mở được game. '+error,'error');});
   </script>
 </body>
 </html>
