@@ -1,7 +1,7 @@
 {
   "passed": true,
-  "productVersion": "1.21.0",
-  "finalBuildLog": "logs/unity-physics-release-final.log",
+  "productVersion": "1.22.0",
+  "finalBuildLog": "logs/unity-window-coat-release22.log",
   "browser": "isolated Chrome",
   "userBrowserProfileWritten": false,
   "checks": {
@@ -12,9 +12,33 @@
     "chromeMobileTouchEmulation": true,
     "defaultCostumeRestored": true
   },
-  "viewports": [[1280, 720], [844, 390]],
-  "console": {"pageErrors": 0, "errors": 0, "warningsAcrossTwoLoads": 18},
-  "mobileEmulation": {"viewport": [844, 390], "deviceScaleFactor": 2, "configuredFps": 30, "touchPoints": 1, "coarsePointer": true, "errors": 0, "physicalDevice": false},
+  "viewports": [
+    [
+      1280,
+      720
+    ],
+    [
+      844,
+      390
+    ]
+  ],
+  "console": {
+    "pageErrors": 0,
+    "errors": 0,
+    "warningsAcrossTwoLoads": 18
+  },
+  "mobileEmulation": {
+    "viewport": [
+      844,
+      390
+    ],
+    "deviceScaleFactor": 2,
+    "configuredFps": 30,
+    "touchPoints": 1,
+    "coarsePointer": true,
+    "errors": 0,
+    "physicalDevice": false
+  },
   "evidence": [
     "output/playwright/physics-costume-0.png",
     "output/playwright/physics-costume-1.png",

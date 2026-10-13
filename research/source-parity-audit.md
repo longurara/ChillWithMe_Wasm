@@ -51,3 +51,7 @@ Giữ controller nguồn qua lúc thoát truyện và sinh hoạt thường; b�
 ## Physics 1.21.0
 
 Bước cố định 60 Hz, nội suy mục tiêu animation, giới hạn catch-up, giữ offset khi resume/teleport; capsule thuôn gốc và va chạm cổ/tay bổ sung. Đổi trang phục cập nhật chuỗi tay áo, giữ xương đang dùng và tránh đăng ký trùng. Ba động tác có bake từ solver web với kiểm tra profile/rig/state. Chưa tương đương MagicaCloth Windows, chưa kiểm chứng thiết bị mobile thật. Xem [kiểm tra physics](physics-1.21.md).
+
+## Story, UI và đạo cụ 1.22.0
+
+Sửa lựa chọn thoại, vòng lặp thoại, bước chuyển Work/Break và đạo cụ sách/cốc khi quay về; nối hover/tooltip gốc, vòng hướng dẫn timer và con trỏ. Vạt áo bỏ lực kéo phụ về pose cứng. Màn splash native đã đối chiếu là Canvas/Animator, hiện web vẫn dùng loader HTML. Xem [phạm vi kiểm chứng và giới hạn](update-1.22.md).

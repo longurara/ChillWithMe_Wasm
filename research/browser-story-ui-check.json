@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "productVersion": "1.22.0",
+  "finalBuildLog": "logs/unity-window-coat-release22.log",
+  "browser": "isolated headed Chrome",
+  "userBrowserProfileWritten": false,
+  "checks": {
+    "nativeDefaultAndTalkCursor": true,
+    "twelveHudHoverCheckpoints": true,
+    "greenGuideMovesAndHidesAfterTimerStart": true,
+    "settingsGraphicsAudioLayoutViewed": true,
+    "decorationAndHabitLayoutViewed": true,
+    "newTaskAddedExactlyOneRow": {
+      "before": 0,
+      "after": 1
+    },
+    "birthdayConfirmed": {
+      "month": 2,
+      "day": 29
+    },
+    "resumeSelectionShowsBothOptions": true,
+    "choiceAdvancesToCursor11AndManualVoiceLineStays": true,
+    "storyHudHidden": true,
+    "phoneStartsFarewell": true,
+    "closingWindowCoatVisualCheckpoint": true
+  },
+  "console": {
+    "pageErrors": 0,
+    "errors": 0,
+    "knownWarningsRemain": true
+  },
+  "evidence": [
+    "output/playwright/22-window-close-2.png",
+    "output/playwright/22-green-guide-a.png",
+    "output/playwright/22-green-guide-b.png",
+    "output/playwright/22-green-guide-started.png",
+    "output/playwright/22-hover-note.png",
+    "output/playwright/22-hover-settings.png",
+    "output/playwright/22-hover-music.png",
+    "output/playwright/22-final-audio.png",
+    "output/playwright/22-final-decorations.png",
+    "output/playwright/22-final-habits.png",
+    "output/playwright/22-final-new-task.png",
+    "output/playwright/22-final-birthday-saved.png",
+    "output/playwright/22-final-farewell.png",
+    "output/playwright/22-story-choice-resume.png",
+    "output/playwright/22-story-after-choice.png"
+  ],
+  "scope": "Visual canvas checkpoints and persisted state on the final build. Open/close window geometry is measured separately by the Unity check. Error notice expiry and work-to-break browser checkpoints were captured on earlier 1.22 builds; the unchanged behavior is also covered by final Unity checks. Not a complete episode playthrough, PC visual comparison or physical mobile test."
+}

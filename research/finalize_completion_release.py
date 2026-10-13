@@ -27,6 +27,12 @@ if 'HLC_PHYSICS_CHECK_PASSED' in log:
  assert physics_browser.is_file(),'Record browser physics evidence before finalizing the release'
  evidence=json.loads(physics_browser.read_text());assert evidence['passed'] and evidence['productVersion']==version and evidence['finalBuildLog']==logname
  status.update(physicsFixedHz=60,physicsRigCheck='research/physics-check.json',physicsBakeCheck='research/physics-bake-check.json',latestBrowserCheck='research/browser-physics-check.json',physicsSourceProfile='research/physics-source-profile.json',physicsNativeParityVerified=False,physicsPhysicalMobileVerified=False)
+if 'HLC_WINDOW_COAT_CHECK_PASSED' in log:
+ for name,marker in [('window-coat-check','HLC_WINDOW_COAT_CHECK_PASSED'),('pane-layout-check','HLC_PANE_LAYOUT_CHECK_PASSED'),('hover-check','HLC_HOVER_CHECK_PASSED'),('story-flow-check','HLC_STORY_FLOW_CHECK_PASSED'),('break-props-check','HLC_BREAK_PROPS_CHECK_PASSED')]:
+  assert marker in log and json.loads((root/'research'/f'{name}.json').read_text())['passed'],name
+ story_ui=json.loads((root/'research/browser-story-ui-check.json').read_text())
+ assert story_ui['passed'] and story_ui['productVersion']==version and story_ui['finalBuildLog']==logname
+ status.update(storyFlowCheck='research/story-flow-check.json',paneLayoutCheck='research/pane-layout-check.json',hoverCheck='research/hover-check.json',windowCoatCheck='research/window-coat-check.json',latestBrowserCheck='research/browser-story-ui-check.json')
 p.write_text(json.dumps(status,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
 for name in ['bridge-check.js','profile-bridge-check.js']:
  helper=root/'WebPlayer/ui'/name
