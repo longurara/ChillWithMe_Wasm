@@ -16,7 +16,10 @@ namespace Hlc.ChillPrototype
         [Serializable] public class Binding { public string script,path; public Ref[] refs; }
         [Serializable] public class Label {public string key,en,ja;}
         [Serializable] public class Interaction {public string path;public string[] hover,use,baseline;public float hoverAlpha,useAlpha,baseAlpha;public bool hideHoverOnUse;}
-        [Serializable] public class Configuration { public Binding[] bindings;public Label[] labels;public Interaction[] interactions;public string[] storyHiddenObjects; }
+        [Serializable] public class Tooltip {public string path,key;public bool direct;}
+        [Serializable] public class TooltipPresentation {public string root,text;public float activateDelay,deactivateDelay,fadeIn,fadeOut;public float[] offset;}
+        [Serializable] public class TimerGuide {public string focus;public float fadeIn,fadeOut,rotate,scale,multiple;}
+        [Serializable] public class Configuration { public Binding[] bindings;public Label[] labels;public Interaction[] interactions;public Tooltip[] tooltips;public TooltipPresentation tooltipPresentation;public TimerGuide firstTimerGuide;public string[] storyHiddenObjects; }
         public ChillGraphicsPlayer player;
         public Canvas canvas;
         public TextAsset configuration;
@@ -191,7 +194,7 @@ namespace Hlc.ChillPrototype
             var modeParent=modeRoots.FirstOrDefault(t=>t)?.parent;
             if(modeParent)foreach(Transform child in modeParent)if(child.GetComponentInChildren<Button>(true)&&!modeRoots.Contains(child))child.gameObject.SetActive(false);
             foreach(var root in modeRoots.Where(t=>t))foreach(var graphic in root.GetComponentsInChildren<Graphic>(true))graphic.raycastTarget=graphic.GetComponent<Button>();
-            InitializeFeatureControls();InitializeWorkspaceControls();InitializeCompletionControls();Show(RefOf("FacilityProfile","_canvasGroup")?.gameObject,true);Set(RefOf("FacilityProfile","_background"),false);Set(RefOf("PlayerProfileView","self"),false);Set(RefOf("HeroineProfileView","self"),false);Close();Refresh(true);
+            InitializeFeatureControls();InitializeWorkspaceControls();InitializeCompletionControls();RepairPaneLayouts();InitializeTooltips(config);Show(RefOf("FacilityProfile","_canvasGroup")?.gameObject,true);Set(RefOf("FacilityProfile","_background"),false);Set(RefOf("PlayerProfileView","self"),false);Set(RefOf("HeroineProfileView","self"),false);Close();Refresh(true);
         }
         class Hook {public Button button;public Action action;}
         readonly List<Hook> hooks=new List<Hook>();
@@ -223,9 +226,10 @@ namespace Hlc.ChillPrototype
             openPane=name=="history"||name=="achievements"?historyPanel:RefOf(script,"self")?.gameObject;if(name=="timer-audio"&&timerAudioPane){Show(openPane,true);openPane=timerAudioPane;}Show(openPane,true);if(openPane){if(nativeUiRoot)nativeUiRoot.SetAsLastSibling();openPane.transform.SetAsLastSibling();}
             ShowWorkspacePane();
             if(name=="achievements"){if(historyTitle)historyTitle.SetTextWithoutNotify("Achievements");if(historyInput)historyInput.SetTextWithoutNotify(string.Join("\n\n",player.story.Workspace.achievements.Select(a=>"✓ "+a.Replace('_',' '))));}
-            if(name=="story")storySignature=null;if(name=="todos")todoSignature=null;if(name=="music")musicSignature=null;Refresh(true);
+            SetPaneUsing(name);if(name=="story")storySignature=null;if(name=="todos")todoSignature=null;if(name=="music")musicSignature=null;Refresh(true);
+            if(name=="decorations"){var scroll=Get<ScrollRect>("DecorationListUI","_scrollRect");if(scroll){Canvas.ForceUpdateCanvases();scroll.verticalNormalizedPosition=1;}}
         }
-        public void Close(){if(skinPopup)Show(skinPopup.gameObject,false);Set(RefOf("ProfileIconSettingView","self"),false);Set(RefOf("StatusChangeView","self"),false);Show(openPane,false);openPane=null;pane="";player.story.HistoryVisible=false;SetLanguageOpen(false);if(nativeUiRoot)nativeUiRoot.SetSiblingIndex(nativeUiSibling);}
+        public void Close(){if(tooltip)tooltip.Dismiss();SetPaneUsing("");Show(todoListPicker,false);if(habitEdit)FinishHabitEdit(false);Show(birthdayDialog,false);if(skinPopup)Show(skinPopup.gameObject,false);Set(RefOf("ProfileIconSettingView","self"),false);Set(RefOf("StatusChangeView","self"),false);Show(openPane,false);openPane=null;pane="";player.story.HistoryVisible=false;SetLanguageOpen(false);if(nativeUiRoot)nativeUiRoot.SetSiblingIndex(nativeUiSibling);}
         void ToggleHidden(){if(StoryHudHidden)return;hidden=!hidden;Set(Find("Paremt/PCPlatform/Canvas/UI"),!hidden);if(reveal)reveal.SetActive(hidden);Close();}
         void NextMusic(int step)
         {if(player.story.Playing || player.library.Busy)return;var entries=player.library.MusicEntries;if(entries.Length==0)return;int current=Array.FindIndex(entries,t=>player.music.clip && t.name==player.music.clip.name);int index=shuffle?UnityEngine.Random.Range(0,entries.Length):(current+step+entries.Length)%entries.Length;player.library.SelectMusic(entries[index].guid);}
@@ -300,7 +304,7 @@ namespace Hlc.ChillPrototype
                 var interaction=Get<ChillNativeInteraction>("TimerParentUI",pair.Item2);
                 if(interaction){if(displayedTimerMode!=state.timerMode)interaction.DeactivateAll();interaction.SetUsing(state.timerMode==pair.Item3);}
             }
-            displayedTimerMode=state.timerMode;
+            displayedTimerMode=state.timerMode;RefreshFirstGuide();
             foreach(string key in new[]{"_addWorkTimeButton","_subtractWorkTimeButton","_addBreakTimeButton","_subtractBreakTimeButton","_addLoopCountButton","_subtractLoopButtonButton","_togglePomodoroPresetButton"}){var button=Get<Button>("PomodoroTimerUI",key);if(button)button.interactable=!state.timerActive && available;}
             foreach(string script in new[]{"PomodoroTimerUI","CountupTimerUI"})foreach(string key in new[]{"_startPomodoroButton","_playOrPausePomodoroButton","_resetButton","_skipPomodoroButton","_startCountupButton","_playOrPauseCountupButton"}){var button=Get<Button>(script,key);if(button)button.interactable=available;}
             if(countup)
@@ -346,7 +350,7 @@ namespace Hlc.ChillPrototype
                 if(noticeText){noticeText.text=state.noticeMessage;noticeText.color=state.noticeError?new Color(1,.7f,.7f):Color.white;}
                 Show(noticePanel,!string.IsNullOrEmpty(state.noticeMessage));if(noticePanel)noticePanel.transform.SetAsLastSibling();
             }
-            else if(!state.noticeError && Time.unscaledTime>noticeUntil)Show(noticePanel,false);
+            else if(Time.unscaledTime>noticeUntil)Show(noticePanel,false);
             if(noticePanel && noticePanel.activeSelf)noticePanel.transform.SetAsLastSibling();
         }
         static void Highlight(Button button,bool selected){var colors=button.colors;colors.normalColor=selected?new Color(.65f,1,1):Color.white;button.colors=colors;}
@@ -369,7 +373,9 @@ namespace Hlc.ChillPrototype
         {
             string signature=player.story.Workspace.listId+completedExpanded+string.Join("|",state.todos.Select(t=>t.id+":"+t.title+":"+t.done+":"+t.due));if(signature==todoSignature)return;todoSignature=signature;
             Clear(todoRows);var parent=RefOf("TodoListUI","_uncompleteTodoUIParent");if(!parent || !todoCell)return;Layout(parent,78);Set(RefOf("TodoListUI","dummyButton"),false);
-            var completed=RefOf("TodoListUI","_completeTodoUIParent");if(completed)Layout(completed,78);Set(RefOf("TodoListUI","_completedSection"),completedExpanded);
+            var completed=RefOf("TodoListUI","_completeTodoUIParent");if(completed)Layout(completed,78);
+            var section=RefOf("TodoListUI","_completedSection") as RectTransform;
+            if(section){Set(section,true);section.sizeDelta=new Vector2(completedExpanded?364.2f:-3.2f,section.sizeDelta.y);Set(section.Find("CompleteList"),completedExpanded);}
             for(int i=0;i<state.todos.Length;i++)
             {
                 int index=i;var todo=state.todos[i];if(todo.done&&!completedExpanded)continue;var go=Cell(todoCell,todo.done&&completed?completed:parent);var input=go.GetComponentInChildren<TMP_InputField>(true);
@@ -392,7 +398,8 @@ namespace Hlc.ChillPrototype
             var talkGuide=RefOf("WantTalkUI","_wantTalkImage")?.GetComponent<Image>();if(talkGuide && wantTalkNormal)talkGuide.sprite=RecoveredSprite(wantTalkNormal);
             Set(RefOf("StorySystemUI","self"),state.playing);Set(RefOf("StorySystemUI","_heroineNameObject"),main && !string.IsNullOrEmpty(state.speaker));
             Set(RefOf("StorySystemUI","_autoButton"),state.playing && !state.automaticDialogue);Set(RefOf("StorySystemUI","_skipButton"),state.playing && !state.automaticDialogue);
-            Write("StorySystemUI","_heroineNameTextLocalizationBehavior",state.speaker);Write("StorySystemUI","_auteText",state.autoRead?"Auto ON":"Auto");Write("StorySystemUI","_skipText","Skip");
+            Write("StorySystemUI","_heroineNameTextLocalizationBehavior",state.speaker);Write("StorySystemUI","_auteText","Auto");Write("StorySystemUI","_skipText","Skip");
+            var autoCaption=Get<TMP_Text>("StorySystemUI","_auteText");if(autoCaption){autoCaption.color=state.autoRead?Color.white:new Color(.65f,.63f,.75f);autoCaption.enableWordWrapping=false;}
             // Source StorySystemUI uses NormalTextParent for greetings/reactions,
             // and MainStoryTextMessage only for main/after/DLC/extra/special stories.
             Set(RefOf("StorySystemUI","_mainStoryTextParent"),main);
@@ -432,6 +439,7 @@ namespace Hlc.ChillPrototype
         }
         void SettingsTab(string key)
         {
+            foreach(string tab in new[]{"_generalInteractableUI","_graphicInteractableUI","_audioInteractableUI","_creditsInteractableUI"}){var button=RefOf("SettingUI",tab);var style=button?button.GetComponent<ChillNativeInteraction>():null;if(style)style.SetUsing(tab==key);}
             Set(RefOf("SettingUI","_generalParent"),key=="_generalInteractableUI");Set(RefOf("SettingUI","_graphicParent"),key=="_graphicInteractableUI");Set(RefOf("SettingUI","_audioParent"),key=="_audioInteractableUI");Set(RefOf("SettingUI","_creditsParent"),key=="_creditsInteractableUI");
         }
         void OnDisable(){if(initialized)ChillGameplayUI.UseNativeUI(false);}

@@ -10,6 +10,30 @@ namespace Hlc.ChillPrototype
         string avatarSignature;
         Sprite customAvatar;
         Texture2D customAvatarTexture;
+        GameObject birthdayDialog;
+        TMP_InputField birthdayMonthInput,birthdayDayInput;
+        void OpenBirthdayDialog()
+        {
+            var root=RefOf("PlayerProfileView","self");if(!root)return;
+            if(!birthdayDialog)
+            {
+                birthdayDialog=new GameObject("WebBirthdayDialog",typeof(RectTransform),typeof(Image));birthdayDialog.transform.SetParent(root,false);
+                PlaceRect((RectTransform)birthdayDialog.transform,0,-130,420,230);birthdayDialog.GetComponent<Image>().color=new Color(.08f,.07f,.15f,.98f);
+                var title=new GameObject("Title",typeof(RectTransform),typeof(TextMeshProUGUI));title.transform.SetParent(birthdayDialog.transform,false);PlaceRect((RectTransform)title.transform,0,-15,380,38);
+                var label=title.GetComponent<TMP_Text>();label.font=Get<TMP_Text>("PlayerProfileView","_birthdayText").font;label.text="Birthday (MM / DD)";label.fontSize=26;label.alignment=TextAlignmentOptions.Center;label.raycastTarget=false;
+                birthdayMonthInput=FeatureInput(birthdayDialog.transform,"birthdayMonth","",-70,100,-65);
+                birthdayDayInput=FeatureInput(birthdayDialog.transform,"birthdayDay","",-70,100,65);
+                foreach(var input in new[]{birthdayMonthInput,birthdayDayInput}){input.characterLimit=2;input.contentType=TMP_InputField.ContentType.IntegerNumber;if(input.placeholder is TMP_Text placeholder)placeholder.text=input==birthdayMonthInput?"MM":"DD";}
+                FeatureHook(FeatureButton(birthdayDialog.transform,"cancelBirthday","Cancel",-150,160,-95),()=>Show(birthdayDialog,false));
+                FeatureHook(FeatureButton(birthdayDialog.transform,"confirmBirthday","Confirm",-150,160,95),()=>{
+                    if(!int.TryParse(birthdayMonthInput.text,out int m)||!int.TryParse(birthdayDayInput.text,out int d)||m<1||m>12||d<1||d>DateTime.DaysInMonth(2000,m)){player.story.Notify("Enter a valid month and day.",true);return;}
+                    player.story.Settings.birthdayMonth=m;player.story.Settings.birthdayDay=d;player.story.CommitSettings();Show(birthdayDialog,false);
+                });
+            }
+            birthdayMonthInput.SetTextWithoutNotify(player.story.Settings.birthdayMonth>0?player.story.Settings.birthdayMonth.ToString("00"):"");
+            birthdayDayInput.SetTextWithoutNotify(player.story.Settings.birthdayDay>0?player.story.Settings.birthdayDay.ToString("00"):"");
+            Show(birthdayDialog,true);birthdayDialog.transform.SetAsLastSibling();
+        }
         void ConfigurePlayerProfile(Transform root)
         {
             var rect=(RectTransform)root;rect.sizeDelta=new Vector2(450,440);
@@ -28,11 +52,7 @@ namespace Hlc.ChillPrototype
             Wire("FacilityProfile","_playerIconButton",()=>Open("profile"));Wire("FacilityProfile","_heroineIconButton",()=>Open("heroine-profile"));
             Wire("PlayerProfileView","_iconSettingButton",()=>ProfilePopup("ProfileIconSettingView"));Wire("PlayerProfileView","_statusChangeButton",()=>ProfilePopup("StatusChangeView"));
             Wire("ProfileIconSettingView","_closeButton",()=>Set(RefOf("ProfileIconSettingView","self"),false));Wire("ProfileIconSettingView","_customIconButton",()=>ChillBrowser.ImportAvatar(story.gameObject.name));
-            Wire("PlayerProfileView","_birthdaySettingButton",()=>{
-                var root=RefOf("PlayerProfileView","self");var old=root.Find("WebFeature_profileBirthday");if(old){Show(old.gameObject,!old.gameObject.activeSelf);return;}
-                var input=FeatureInput(root,"profileBirthday",story.Settings.birthdayMonth.ToString("00")+"-"+story.Settings.birthdayDay.ToString("00"),-105,230);
-                input.characterLimit=5;input.onEndEdit.AddListener(value=>{var parts=value.Split('-');if(parts.Length==2&&int.TryParse(parts[0],out int m)&&int.TryParse(parts[1],out int d)&&m>=1&&m<=12&&d>=1&&d<=DateTime.DaysInMonth(2000,m)){story.Settings.birthdayMonth=m;story.Settings.birthdayDay=d;story.CommitSettings();Show(input.gameObject,false);}else story.Notify("Use MM-DD.",true);});
-            });
+            Wire("PlayerProfileView","_birthdaySettingButton",OpenBirthdayDialog);
             Wire("HeroineProfileView","_closeButton",Close);Wire("HeroineProfileView","_selfTalkFilterOnButton",()=>{story.Settings.selfTalk=false;story.CommitSettings();});Wire("HeroineProfileView","_selfTalkFilterOffButton",()=>{story.Settings.selfTalk=true;story.CommitSettings();});
             Wire("HeroineProfileView","_audioInitButton",()=>{story.Settings.voice=story.Settings.ambient=1;story.Settings.selfTalk=true;story.CommitSettings();});
             foreach(var field in new[]{"_voiceVolumeChangeUI","_ambientSeVolumeChangeUI"}){
@@ -50,7 +70,7 @@ namespace Hlc.ChillPrototype
         void RefreshProfileControls()
         {
             var story=player.story;FeatureCaption("reminders","Reminders: "+(story.Workspace.reminders?"ON":"OFF"));FeatureCaption("dailyAppearance","Daily appearance: "+(story.Workspace.appearanceDaily?"ON":"OFF"));
-            Write("PlayerProfileView","_birthdayText",story.Settings.birthdayMonth>0?story.Settings.birthdayMonth.ToString("00")+"/"+story.Settings.birthdayDay.ToString("00"):"Birthday");
+            Write("PlayerProfileView","_birthdayText",story.Settings.birthdayMonth>0?story.Settings.birthdayMonth.ToString("00")+"/"+story.Settings.birthdayDay.ToString("00"):"MM/DD");
             if(profileStatus&&!profileStatus.isFocused)profileStatus.SetTextWithoutNotify(story.Workspace.profileStatus=="1"?"Away":story.Workspace.profileStatus=="2"?"Super Focus":"Active");
             if(avatarSignature==story.Workspace.profileIcon)return;avatarSignature=story.Workspace.profileIcon;
             Sprite selected=null;

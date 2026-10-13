@@ -16,8 +16,28 @@ namespace Hlc.ChillPrototype
         DateTime calendarMonth=DateTime.Today,calendarDate=DateTime.Today,habitWeek=DateTime.Today;
         string workspaceSignature;int statisticsSpan=1;
         TMP_InputField todoListTitle;
-        bool completedExpanded=true,habitEdit,restoringNoteScroll;string noteScrollId;
+        GameObject todoListPicker;
+        void ChooseTodoList()
+        {
+            if(todoListPicker&&todoListPicker.activeSelf){Show(todoListPicker,false);return;}
+            if(todoListPicker)Destroy(todoListPicker);
+            var root=RefOf("TodoListUI","self");if(!root)return;
+            todoListPicker=new GameObject("WebTodoListPicker",typeof(RectTransform),typeof(Image),typeof(ScrollRect),typeof(RectMask2D));todoListPicker.transform.SetParent(root,false);
+            PlaceRect((RectTransform)todoListPicker.transform,0,-202,330,Mathf.Min(300,player.story.Workspace.lists.Count*58+16));todoListPicker.GetComponent<Image>().color=new Color(.08f,.07f,.15f,.98f);
+            var content=new GameObject("Content",typeof(RectTransform));content.transform.SetParent(todoListPicker.transform,false);PlaceRect((RectTransform)content.transform,0,0,330,player.story.Workspace.lists.Count*58+16);
+            var scroll=todoListPicker.GetComponent<ScrollRect>();scroll.horizontal=false;scroll.vertical=true;scroll.viewport=(RectTransform)todoListPicker.transform;scroll.content=(RectTransform)content.transform;scroll.movementType=ScrollRect.MovementType.Clamped;
+            int index=0;foreach(var list in player.story.Workspace.lists){var id=list.id;FeatureHook(FeatureButton(content.transform,"todoList_"+id,list.title,-8-index++*58,310),()=>{player.story.SelectTodoList(id);todoSignature=null;Show(todoListPicker,false);});}
+            todoListPicker.transform.SetAsLastSibling();
+        }
+        bool completedExpanded,habitEdit,restoringNoteScroll;string noteScrollId;
         Coroutine paneAnimation;
+        [Serializable] class HabitSnapshot{public List<ChillHabit> habits;}
+        string habitSnapshot;
+        void FinishHabitEdit(bool saveChanges)
+        {
+            if(!saveChanges&&habitSnapshot!=null)player.story.Workspace.habits=JsonUtility.FromJson<HabitSnapshot>(habitSnapshot).habits;
+            habitEdit=false;habitSnapshot=null;player.story.SaveTimerAudio();workspaceSignature=null;
+        }
         void InitializeWorkspaceControls()
         {
             var story=player.story;
@@ -36,13 +56,13 @@ namespace Hlc.ChillPrototype
             if(todoRoot)
             {
                 todoListTitle=FeatureInput(todoRoot,"listName","Tasks",-80,150,-115);if(todoListTitle){todoListTitle.characterLimit=120;todoListTitle.onEndEdit.AddListener(story.RenameTodoList);}
-                FeatureHook(FeatureButton(todoRoot,"nextList","Choose list",-130,180,-90),()=>{var lists=story.Workspace.lists;int i=lists.FindIndex(l=>l.id==story.Workspace.listId);story.SelectTodoList(lists[(i+1)%lists.Count].id);todoSignature=null;});
+                FeatureHook(FeatureButton(todoRoot,"nextList","Choose list",-130,180,-90),ChooseTodoList);
                 FeatureHook(FeatureButton(todoRoot,"addList","+",-80,60,10),()=>{story.AddTodoList();todoSignature=null;});
                 FeatureHook(FeatureButton(todoRoot,"deleteList","Delete",-80,100,100),()=>{story.DeleteTodoList();todoSignature=null;});
             }
             var notesScroll=Get<TMP_InputField>("CurrentPageUI","_mainInputField")?.GetComponentInParent<ScrollRect>();if(notesScroll)notesScroll.onValueChanged.AddListener(value=>{if(!restoringNoteScroll){story.CurrentNote.scroll=notesScroll.verticalNormalizedPosition;}});
             var addRow=Find(ChangeRoot+"UI_FacilityTodo/AddTodoUI") as RectTransform;if(addRow)addRow.anchoredPosition+=new Vector2(0,-80);var countText=RefOf("TodoListUI","_remainTodoCountText") as RectTransform;if(countText)countText.anchoredPosition+=new Vector2(0,-80);var taskScroll=Get<ScrollRect>("TodoListUI","_todoScrollRect");if(taskScroll){var sr=(RectTransform)taskScroll.transform;sr.offsetMax+=new Vector2(0,-80);}
-            Wire("TodoListUI","_toggleCompletedSectionButton",()=>{completedExpanded=!completedExpanded;todoSignature=null;});
+            Wire("TodoListUI","_toggleCompletedSectionButton",()=>{completedExpanded=!completedExpanded;todoSignature=null;RefreshNow();FitOpenPanel();});
             Wire("CalendarUI","_facilityOpenButton",()=>Open("calendar"));Wire("CalendarUI","_closeButton",Close);
             Wire("HabitTrackerUI","_facilityOpenButton",()=>Open("habits"));Wire("HabitTrackerUI","_closeButton",Close);
             Wire("TotalWorkStatisticsUI","_openButton",()=>Open("statistics"));Wire("TotalWorkStatisticsUI","_closeButton",Close);Wire("TotalWorkStatisticsUI","_returnToCalendarButton",()=>Open("calendar"));
@@ -54,7 +74,8 @@ namespace Hlc.ChillPrototype
             var diary=Get<TMP_InputField>("CalendarUI","_diaryInputField");if(diary){diary.readOnly=false;diary.richText=false;diary.characterLimit=64000;diary.onEndEdit.RemoveAllListeners();diary.onEndEdit.AddListener(value=>story.SetDiary(ChillStoryRuntime.DateKey(calendarDate),value));}
             foreach(string key in new[]{"_workTimeHour","_workTimeMinutes","_workTimeSeconds"}){var input=Get<TMP_InputField>("CalendarUI",key);if(input){input.readOnly=false;input.contentType=TMP_InputField.ContentType.IntegerNumber;input.onEndEdit.RemoveAllListeners();input.onEndEdit.AddListener(_=>SaveCalendarTime());}}
             Wire("HabitListUI","_addHabitUIButton",()=>{story.AddHabit("New habit");workspaceSignature=null;});
-            Wire("HabitListUI","_editModeButton",()=>{habitEdit=!habitEdit;workspaceSignature=null;});
+            Wire("HabitListUI","_editModeButton",()=>{if(habitEdit)return;habitSnapshot=JsonUtility.ToJson(new HabitSnapshot{habits=story.Workspace.habits});habitEdit=true;workspaceSignature=null;});
+            var editMode=RefOf("HabitListUI","_editModeButton");if(editMode){var discard=editMode.Find("Buttons/DiscardButton");var accept=editMode.Find("Buttons/SaveButton");if(discard)Bind(discard.gameObject,()=>FinishHabitEdit(false));if(accept)Bind(accept.gameObject,()=>FinishHabitEdit(true));}
             Set(RefOf("HabitListUI","_deleteWarningDialog"),false);
             var habitRoot=RefOf("HabitTrackerUI","self");
             if(habitRoot){FeatureHook(FeatureButton(habitRoot,"previousHabitWeek","Previous week",-60,185,-200),()=>{habitWeek=habitWeek.AddDays(-7);workspaceSignature=null;});FeatureHook(FeatureButton(habitRoot,"nextHabitWeek","Next week",-60,185,200),()=>{habitWeek=habitWeek.AddDays(7);workspaceSignature=null;});}
@@ -82,7 +103,7 @@ namespace Hlc.ChillPrototype
             if(!player.story.FeatureReady)return;var story=player.story;var w=story.Workspace;
             var title=Get<TMP_InputField>("CurrentPageUI","_titleInputField");if(title&&!title.isFocused)title.SetTextWithoutNotify(story.CurrentNote.title);
             if(todoListTitle&&!todoListTitle.isFocused)todoListTitle.SetTextWithoutNotify(story.CurrentList.title);
-            FeatureCaption("nextList",story.CurrentList.title+" ▾");
+            FeatureCaption("nextList","Choose list: "+story.CurrentList.title);
             string signature=pane+story.WorkspaceRevision+calendarMonth.ToString("yyyyMM")+calendarDate.ToString("yyyyMMdd")+habitWeek.ToString("yyyyMMdd")+habitEdit+statisticsSpan;
             if(signature==workspaceSignature)return;workspaceSignature=signature;
             if(pane=="notes"){RefreshNotePages();if(noteScrollId!=w.noteId){noteScrollId=w.noteId;var scroll=Get<TMP_InputField>("CurrentPageUI","_mainInputField")?.GetComponentInParent<ScrollRect>();if(scroll){restoringNoteScroll=true;Canvas.ForceUpdateCanvases();scroll.verticalNormalizedPosition=story.CurrentNote.scroll;restoringNoteScroll=false;}}}if(pane=="calendar")RefreshCalendar();if(pane=="habits")RefreshHabits();if(pane=="statistics")RefreshStatistics();
@@ -116,12 +137,13 @@ namespace Hlc.ChillPrototype
         }
         void RefreshHabits()
         {
+            var mode=RefOf("HabitListUI","_editModeButton");if(mode){Set(mode.Find("Buttons"),habitEdit);Set(mode.Find("IconActive"),habitEdit);foreach(var text in mode.GetComponentsInChildren<TMP_Text>(true))text.gameObject.SetActive(!habitEdit);}
             Clear(habitRows);var parent=RefOf("HabitListUI","_habitParent");var source=RefOf("HabitListUI","dummyButton");if(!parent||!source)return;Set(source,false);Layout(parent,100);
             var start=habitWeek.Date.AddDays(-(int)habitWeek.DayOfWeek);var weekRoot=RefOf("HabitListUI","_weekLabelUI");
             if(weekRoot){var rows=JsonUtility.FromJson<Configuration>(configuration.text).bindings.Where(b=>b.script=="HabitDateLabelUI"&&b.path.StartsWith(PathOf(weekRoot)+"/")).OrderBy(b=>b.path,StringComparer.Ordinal).ToArray();for(int i=0;i<Math.Min(7,rows.Length);i++){var binding=rows[i];var date=start.AddDays(i);foreach(var r in binding.refs){var target=Find(r.path);if(!target)continue;var text=target.GetComponent<TMP_Text>();if(r.name=="_dayNumText"&&text)text.text=date.Day.ToString();if(r.name=="_dayOfWeekText"&&text)text.text=date.ToString("ddd",CultureInfo.InvariantCulture);if(r.name=="_dayOfWeekTextForEditMode")Set(target,habitEdit);if(r.name=="_dayOfWeekText")Set(target,!habitEdit);if(r.name=="_monthObj")Set(target,false);if(r.name=="_todayObj")Set(target,date.Date==DateTime.Today&&!habitEdit);if(r.name=="_completedImage")Set(target,false);}}}
             foreach(var habit in player.story.Workspace.habits)
             {
-                var go=Cell(source.gameObject,parent);var input=go.GetComponentInChildren<TMP_InputField>(true);if(input){input.readOnly=false;input.characterLimit=120;input.SetTextWithoutNotify(habit.title);input.onEndEdit.RemoveAllListeners();input.onEndEdit.AddListener(value=>player.story.EditHabit(habit.id,value,habit.weekdays,habit.paused));}
+                var go=Cell(source.gameObject,parent);var input=go.GetComponentInChildren<TMP_InputField>(true);if(input){input.readOnly=!habitEdit;input.characterLimit=120;input.SetTextWithoutNotify(habit.title);input.onEndEdit.RemoveAllListeners();input.onEndEdit.AddListener(value=>player.story.EditHabit(habit.id,value,habit.weekdays,habit.paused));}
                 foreach(var button in go.GetComponentsInChildren<Button>(true)){if(button.name=="RemoveButton"){Show(button.gameObject,habitEdit);Bind(button.gameObject,()=>player.story.DeleteHabit(habit.id));}else if(button.name=="PlayPauseButton")Bind(button.gameObject,()=>player.story.EditHabit(habit.id,habit.title,habit.weekdays,!habit.paused));else if(button.name.Contains("Drag")){button.gameObject.SetActive(true);var drag=button.gameObject.GetComponent<ChillNativeRowDrag>()??button.gameObject.AddComponent<ChillNativeRowDrag>();drag.moved=step=>player.story.MoveHabit(habit.id,step);}}
                 Set(go.transform.Find("PauseMask"),habit.paused);
                 var days=go.transform.Find("Days");if(days)for(int i=0;i<Math.Min(7,days.childCount);i++){var cell=days.GetChild(i);var key=ChillStoryRuntime.DateKey(start.AddDays(i));int day=i;var button=cell.Find("BaseCircle")?.GetComponent<Button>();var edit=cell.Find("EditEnableButton");Set(edit,habitEdit);if(edit)Bind(edit.gameObject,()=>player.story.EditHabit(habit.id,habit.title,habit.weekdays^(1<<day),habit.paused));if(button){Bind(button.gameObject,()=>player.story.ToggleHabit(habit.id,key));button.interactable=player.story.HabitScheduled(habit,key);button.GetComponent<Image>().color=button.interactable?Color.white:new Color(1,1,1,.3f);}Set(cell.Find("Check"),habit.completed.Contains(key));Set(cell.Find("CheckBg"),habit.completed.Contains(key));}

@@ -2,6 +2,8 @@
   "controllers": 107,
   "references": 1440,
   "storyHiddenObjects": 11,
+  "hoverBindings": 603,
+  "tooltipTargets": 124,
   "nativeCanvas": "Paremt/PCPlatform/Canvas",
   "source": "E:\\02_Projects\\chill-with-you-web\\Recovered\\ExportedProject\\Assets\\App\\Scenes\\RoomScene.unity"
 }

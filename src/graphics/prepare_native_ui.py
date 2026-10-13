@@ -44,9 +44,9 @@ interactions=[]
 for t,i,b in blocks:
     if t!=114:continue
     script=re.search(r'm_Script: .*guid: ([a-f0-9]+)',b)
-    if not script or scripts.get(script.group(1))!='InteractableUI':continue
+    if not script or scripts.get(script.group(1)) not in {'InteractableUI','InteractableUISettingTab'}:continue
     p=path(go_id(b))
-    if not p.startswith('Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/'):continue
+    if not p.startswith('Paremt/PCPlatform/Canvas/'):continue
     raw=yaml.safe_load(b)['MonoBehaviour']
     interactions.append({'path':p,'hover':[reference(r) for r in raw.get('_mouseOverImage',[])],'use':[reference(r) for r in raw.get('_usingImage',[])],'baseline':[reference(r) for r in raw.get('_baseImage',[])],
         'hoverAlpha':raw.get('_mouseOverImageAlpha',1),'useAlpha':raw.get('_usingImageAlpha',1),'baseAlpha':raw.get('_baseImageAlpha',1),'hideHoverOnUse':bool(raw.get('_hideMouseOverOnUse',False))})
@@ -56,7 +56,23 @@ for t,i,b in blocks:
     if t==114 and script and scripts.get(script.group(1))=='UIShowManagerForPC':
         story_hidden.extend(reference(r) for r in yaml.safe_load(b)['MonoBehaviour'].get('_deactivationUIObjectsForStoryPlay',[]))
 if not story_hidden or any(not p for p in story_hidden):raise RuntimeError('Source story HUD references are missing')
-config={'bindings':bindings,'interactions':interactions,'storyHiddenObjects':story_hidden,'labels':[{'key':r['ID'],'en':r['En'],'ja':r['Ja']} for r in story['localizations'] if r['ID'].startswith('ui_') or r['ID']=='heroine_name']}
+tooltips=[];tooltip_ui=None;tooltip_service=None;first_timer_guide=None
+for t,i,b in blocks:
+    if t!=114:continue
+    script=re.search(r'm_Script: .*guid: ([a-f0-9]+)',b);name=scripts.get(script.group(1)) if script else None
+    p=path(go_id(b))
+    if not p.startswith('Paremt/PCPlatform/Canvas/'):continue
+    raw=yaml.safe_load(b)['MonoBehaviour']
+    if name=='TooltipTarget':
+        data=raw.get('_data',{})
+        if data.get('ContentLocalizeID'):tooltips.append({'path':p,'key':data['ContentLocalizeID'],'direct':bool(data.get('IsDirectStringBind'))})
+    elif name=='TooltipUI':
+        tooltip_ui={'root':p,'text':reference(raw['_textLocalization']),'offset':[raw['_pointerOffset']['x'],raw['_pointerOffset']['y']],'fadeIn':raw['_fadeInDuration'],'fadeOut':raw['_fadeOutDuration']}
+    elif name=='TooltipService':tooltip_service=raw
+    elif name=='FirstTimerGuideView':first_timer_guide={'focus':reference(raw['_focusImage']),'fadeIn':raw['_fadeInDuration'],'fadeOut':raw['_fadeOutDuration'],'rotate':raw['_rotateDuration'],'scale':raw['_scaleDuration'],'multiple':raw['_scaleAdjustMultiple']}
+if not tooltip_ui or not tooltip_service:raise RuntimeError('Native PC tooltip configuration is missing')
+tooltip_ui.update(activateDelay=tooltip_service['_activateDelay'],deactivateDelay=tooltip_service['_deactivateDelay'])
+config={'bindings':bindings,'interactions':interactions,'tooltips':tooltips,'tooltipPresentation':tooltip_ui,'firstTimerGuide':first_timer_guide,'storyHiddenObjects':story_hidden,'labels':[{'key':r['ID'],'en':r['En'],'ja':r['Ja']} for r in story['localizations'] if r['ID'].startswith('ui_') or r['ID']=='heroine_name']}
 (ROOT/'UnityProject/Assets/Prototype/native-ui.json').write_text(json.dumps(config,ensure_ascii=False,indent=2),encoding='utf-8')
-(ROOT/'research/native-ui-binding-report.json').write_text(json.dumps({'controllers':len(bindings),'references':sum(len(b['refs']) for b in bindings),'storyHiddenObjects':len(story_hidden),'nativeCanvas':'Paremt/PCPlatform/Canvas','source':str(source/'App/Scenes/RoomScene.unity')},indent=2),encoding='utf-8')
+(ROOT/'research/native-ui-binding-report.json').write_text(json.dumps({'controllers':len(bindings),'references':sum(len(b['refs']) for b in bindings),'storyHiddenObjects':len(story_hidden),'hoverBindings':len(interactions),'tooltipTargets':len(tooltips),'nativeCanvas':'Paremt/PCPlatform/Canvas','source':str(source/'App/Scenes/RoomScene.unity')},indent=2),encoding='utf-8')
 print('Native UI controllers',len(bindings),'references',sum(len(b['refs']) for b in bindings))

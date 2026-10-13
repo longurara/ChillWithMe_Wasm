@@ -18,7 +18,7 @@ namespace Hlc.ChillPrototype
         readonly List<Tuple<Slider,Func<float>>> featureSliders=new List<Tuple<Slider,Func<float>>>();
         GameObject ambientPanel;
         Button playlistSelector;
-        TMP_InputField playlistName,birthdayInput,timeBoundariesInput;
+        TMP_InputField playlistName,timeBoundariesInput;
         Coroutine creditsRoutine;
         Transform creditsParent;
         bool featureDataControls,seekDragging;
@@ -29,7 +29,7 @@ namespace Hlc.ChillPrototype
             var go=Instantiate(source.gameObject,parent,false);go.name="WebFeature_"+key;Show(go,true);FixSprites(go);CleanEvents(go);
             foreach(var animator in go.GetComponentsInChildren<Animator>(true))animator.enabled=false;
             var rect=(RectTransform)go.transform;rect.anchorMin=rect.anchorMax=new Vector2(.5f,1);rect.pivot=new Vector2(.5f,1);rect.anchoredPosition=new Vector2(x,y);rect.sizeDelta=new Vector2(width,52);
-            var text=go.GetComponentInChildren<TMP_Text>(true);if(text){text.text=caption;text.richText=false;text.enableAutoSizing=true;text.fontSizeMin=16;text.fontSizeMax=24;}
+            var text=go.GetComponentInChildren<TMP_Text>(true);if(text){text.text=caption;text.richText=false;text.color=Color.white;text.enableAutoSizing=true;text.fontSizeMin=16;text.fontSizeMax=24;}
             foreach(var group in go.GetComponentsInChildren<CanvasGroup>(true)){group.alpha=1;group.interactable=group.blocksRaycasts=true;}
             var button=go.GetComponent<Button>();button.onClick.RemoveAllListeners();button.interactable=true;featureButtons[key]=button;return button;
         }
@@ -109,7 +109,7 @@ namespace Hlc.ChillPrototype
                 Add("tutorial","Replay tutorial",()=>{Close();story.Tutorial();});
                 Add("credits","Credits",()=>{Close();if(creditsRoutine!=null)StopCoroutine(creditsRoutine);creditsRoutine=StartCoroutine(PlayNativeCredits(story.Features));});
                 Add("farewell","Say goodbye and save",()=>{Close();story.Farewell();});
-                birthdayInput=FeatureInput(general,"birthday","Birthday: MM-DD",y);if(birthdayInput)birthdayInput.onEndEdit.AddListener(value=>{var parts=value.Replace("Birthday:","").Trim().Split('-');if(parts.Length==2&&int.TryParse(parts[0],out int month)&&int.TryParse(parts[1],out int day)&&month>=1&&month<=12&&day>=1&&day<=DateTime.DaysInMonth(2000,month)){story.Settings.birthdayMonth=month;story.Settings.birthdayDay=day;story.CommitSettings();}});
+                FeatureHook(FeatureButton(general,"birthday","Set birthday",y),()=>{Open("profile");OpenBirthdayDialog();});
                 timeBoundariesInput=FeatureInput(general,"timeBoundaries","06:00 / 17:00 / 19:00",y-65);
                 if(timeBoundariesInput)timeBoundariesInput.onEndEdit.AddListener(value=>{
                     var parts=value.Split('/');var hours=new float[3];bool valid=parts.Length==3;
@@ -213,7 +213,7 @@ namespace Hlc.ChillPrototype
             if(playlistSelector){var label=playlistSelector.GetComponentInChildren<TMP_Text>(true);if(label)label.text=story.MusicState.playlist;}
             var shuffleIcon=Get<Image>("MusicUI","_shuffleChangeButtonImage");if(shuffleIcon)shuffleIcon.color=story.MusicState.shuffle?Color.white:new Color(1,1,1,.4f);
             var repeatIcon=Get<Image>("MusicUI","_loopChangeButtonImage");if(repeatIcon)repeatIcon.color=story.MusicState.repeat?Color.white:new Color(1,1,1,.4f);
-            if(birthdayInput&&!birthdayInput.isFocused)birthdayInput.SetTextWithoutNotify(s.birthdayMonth==0?"Birthday: MM-DD":"Birthday: "+s.birthdayMonth.ToString("00")+"-"+s.birthdayDay.ToString("00"));
+            FeatureCaption("birthday",s.birthdayMonth==0?"Set birthday":"Birthday: "+s.birthdayMonth.ToString("00")+" / "+s.birthdayDay.ToString("00"));
             if(timeBoundariesInput&&!timeBoundariesInput.isFocused)timeBoundariesInput.SetTextWithoutNotify(string.Join(" / ",new[]{s.dayStart,s.sunsetStart,s.nightStart}.Select(h=>TimeSpan.FromMinutes(Math.Round(h*60)).ToString(@"hh\:mm"))));
             var seek=Get<Slider>("MusicUI","musicProgressSlider");if(seek)seek.interactable=player.music.clip&&!state.playing&&!story.MusicLoading;
             if(languageOpen&&languageDropdown)languageDropdown.sizeDelta=new Vector2(languageDropdown.sizeDelta.x,languageClosedHeight+400);
@@ -226,8 +226,10 @@ namespace Hlc.ChillPrototype
             var panel=ambientPanel&&ambientPanel.activeSelf?ambientPanel:openPane;if(!panel)return;
             var rect=panel.transform as RectTransform;var space=canvas.transform as RectTransform;
             if(space.rect.width<200||space.rect.height<100){rect.localScale=Vector3.one;return;}
-            float scale=Mathf.Min(1,space.rect.width*.96f/Mathf.Max(1,rect.rect.width),space.rect.height*.94f/Mathf.Max(1,rect.rect.height));rect.localScale=new Vector3(scale,scale,1);
+            float extra=pane=="todos"&&completedExpanded?365:0;
+            float scale=Mathf.Min(1,space.rect.width*.96f/Mathf.Max(1,rect.rect.width+extra),space.rect.height*.94f/Mathf.Max(1,rect.rect.height));rect.localScale=new Vector3(scale,scale,1);
             var corners=new Vector3[4];rect.GetWorldCorners(corners);var bounds=new Bounds(space.InverseTransformPoint(corners[0]),Vector3.zero);for(int i=1;i<4;i++)bounds.Encapsulate(space.InverseTransformPoint(corners[i]));
+            if(extra>0)bounds.Encapsulate(new Vector3(bounds.max.x+extra*scale,bounds.max.y,bounds.max.z));
             Vector3 shift=Vector3.zero;if(bounds.max.x>space.rect.xMax)shift.x=space.rect.xMax-bounds.max.x;if(bounds.min.x<space.rect.xMin)shift.x=space.rect.xMin-bounds.min.x;
             if(bounds.max.y>space.rect.yMax)shift.y=space.rect.yMax-bounds.max.y;if(bounds.min.y<space.rect.yMin)shift.y=space.rect.yMin-bounds.min.y;rect.localPosition+=shift;
         }
