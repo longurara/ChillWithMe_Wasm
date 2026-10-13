@@ -14,7 +14,7 @@ A work-in-progress browser port of **Chill with You: Lo-Fi Story**. Spend time w
 
 ## Current Status
 
-Version **1.22.0** builds for WebGL. Recent fixes improve story choices, activity transitions, held props, and original UI effects. This is an unfinished port: some visuals, physics, AI behavior, and events still differ from the Windows game. Cloud saves are not available yet. Mobile and Safari support have not been fully verified.
+Version **1.23.0** builds for WebGL. The original loading screen now stays visible until the room is ready. This is an unfinished port: some visuals, physics, AI behavior, and events still differ from the Windows game. Cloud saves are not available yet. Mobile and Safari support have not been fully verified.
 
 ## Run Locally
 
@@ -52,4 +52,4 @@ Progress stays in your browser. Export your save from **Settings → General** b
 
 - [Build tools](src/graphics/README.md)
 - [Implemented features and remaining differences](research/source-parity-audit.md)
-- [Latest verification](research/update-1.22.md)
+- [Latest verification](research/startup-1.23.md)
