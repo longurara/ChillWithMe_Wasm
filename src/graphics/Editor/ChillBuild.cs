@@ -156,6 +156,7 @@ public static class ChillBuild
         player.bones = player.gameObject.AddComponent<ChillBonePhysics>();
         player.bones.character = actor;
         player.bones.configuration = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-physics.json");
+        player.bones.bakedConfiguration = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-bakes.json");
         player.bones.enabled = true;
         player.library = player.gameObject.AddComponent<ChillLibraryBrowser>();
         player.library.character = actor; player.library.music = player.music; player.library.view = view;
@@ -184,7 +185,7 @@ public static class ChillBuild
         PlayerSettings.SetManagedStrippingLevel(BuildTargetGroup.WebGL, ManagedStrippingLevel.Low);
         PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
         PlayerSettings.WebGL.template = "APPLICATION:Default";
-        PlayerSettings.bundleVersion = "1.20.1";
+        PlayerSettings.bundleVersion = "1.21.0";
         PlayerSettings.WebGL.dataCaching = false;
         PlayerSettings.WebGL.memorySize = 512;
         PlayerSettings.WebGL.initialMemorySize = 256;
@@ -412,7 +413,7 @@ public static class ChillBuild
     public static void BuildWebGL()
     {
         if (!File.Exists(ScenePath)) Prepare();
-        PlayerSettings.bundleVersion = "1.20.1";
+        PlayerSettings.bundleVersion = "1.21.0";
         PlayerSettings.WebGL.template = "APPLICATION:Default";
         PlayerSettings.WebGL.initialMemorySize = 256;
         PlayerSettings.WebGL.maximumMemorySize = 2048;

@@ -1,0 +1,20 @@
+{
+    "passed": true,
+    "fixedTicks": true,
+    "slowFrameBounded": true,
+    "resumePreservesOffset": true,
+    "teleportFinite": true,
+    "garmentRebindStable": true,
+    "authoredPosePreserved": true,
+    "collisionPushesOutside": true,
+    "baseNodes": 94,
+    "outfits": 5,
+    "motions": 6,
+    "frames": 2700,
+    "maximumSubsteps": 2,
+    "fpsRotationDifference": 0.0,
+    "maximumOffset": 40.00026321411133,
+    "maximumHumanError": 0.0,
+    "maximumPositionError": 0.0,
+    "comparison": "Source parameters and rig checked; PC runtime and physical mobile comparison pending."
+}

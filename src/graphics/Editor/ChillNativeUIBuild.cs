@@ -159,7 +159,10 @@ public static class ChillNativeUIBuild
     static void Build(bool refreshLightingBundles)
     {
         var scene=EditorSceneManager.OpenScene("Assets/Prototype/Room.unity");var player=UnityEngine.Object.FindObjectOfType<ChillGraphicsPlayer>();
-        ChillAppearanceBuild.Configure(player);var ui=Configure(player);ChillFeaturesBuild.Configure(player);EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();
+        ChillAppearanceBuild.Configure(player);var ui=Configure(player);ChillFeaturesBuild.Configure(player);
+        player.bones.configuration=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-physics.json");
+        player.bones.bakedConfiguration=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-bakes.json");
+        EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();
         Debug.Log("HLC_CHILL_NATIVE_UI_READY canvas="+PathOf(ui.canvas.transform)+" nativePrefabs=4");
         if(refreshLightingBundles)ChillAssets.RebuildForLighting();
         ChillBuild.BuildWebGL();
