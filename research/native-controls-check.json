@@ -1,0 +1,12 @@
+{
+    "passed": true,
+    "languageSwitch": true,
+    "historyReadOnly": true,
+    "storyLocks": true,
+    "errorNotice": true,
+    "userSaveWritten": false,
+    "browserGameplayRun": false,
+    "workModes": 3,
+    "environmentChoices": 24,
+    "hooks": 101
+}

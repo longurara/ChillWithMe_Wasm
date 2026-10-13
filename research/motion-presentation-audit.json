@@ -1,0 +1,18 @@
+{
+    "passed": true,
+    "storyMotions": 106,
+    "propActions": 42,
+    "cameras": 15,
+    "eventMethods": 128,
+    "clothNodes": 94,
+    "simulationFrames": 1080,
+    "maxSecondaryRotation": 25.048521041870118,
+    "maxPositionError": 0.0,
+    "maxHumanoidRotationError": 0.0,
+    "errors": [],
+    "previews": [
+        "preview-motion-300.png",
+        "preview-motion-50.png",
+        "preview-motion-1702.png"
+    ]
+}

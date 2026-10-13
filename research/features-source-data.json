@@ -1,0 +1,210 @@
+{
+  "music": 43,
+  "ambient": 30,
+  "policies": 292,
+  "actions": [
+    {
+      "name": "HeroineStateBreakForward",
+      "motions": [
+        "BreakBase006",
+        "BreakBase006_DropPen",
+        "BreakBase006_Keyboard",
+        "BreakBase006_PlayPenLoop",
+        "BreakBase006_Interest"
+      ]
+    },
+    {
+      "name": "HeroineStateBreakListenMusic",
+      "motions": [
+        "BreakBase003_ListenMusicLow",
+        "BreakBase003_ListenMusicHigh"
+      ]
+    },
+    {
+      "name": "HeroineStateBreakMovie",
+      "motions": [
+        "BreakBase001",
+        "BreakBase001_Laugh",
+        "BreakBase001_Loop2",
+        "BreakBase001_Suspenseful",
+        "BreakBase001_OutTrash"
+      ]
+    },
+    {
+      "name": "HeroineStateBreakReadBook",
+      "motions": [
+        "BreakBase002",
+        "BreakBase002_Interest",
+        "BreakBase002_NextPage",
+        "BreakBase002_PreviousPage"
+      ]
+    },
+    {
+      "name": "HeroineStateBreakSleep",
+      "motions": [
+        "BreakBase005",
+        "BreakBase005_JumpUp",
+        "BreakBase005_JumpUp_End",
+        "BreakBase005_Sleep"
+      ]
+    },
+    {
+      "name": "HeroineStateBreakTeaTime",
+      "motions": [
+        "BreakBase004_UseCoffeeMaker",
+        "BreakBase004",
+        "BreakBase004_CoolingDrinkTea",
+        "BreakBase002",
+        "BreakBase004_DrinkHot",
+        "BreakBase004_DrinkTea",
+        "BreakBase004_Stretch"
+      ]
+    },
+    {
+      "name": "HeroineStateFromBookToPc",
+      "motions": [
+        "Wild002_FromBookToPc"
+      ]
+    },
+    {
+      "name": "HeroineStateFromBookToReport",
+      "motions": [
+        "Wild002_FromBookToReport"
+      ]
+    },
+    {
+      "name": "HeroineStateFromPcToBook",
+      "motions": [
+        "Wild002_FromPcToBook"
+      ]
+    },
+    {
+      "name": "HeroineStateFromPcToReport",
+      "motions": [
+        "Wild002_FromPcToReport"
+      ]
+    },
+    {
+      "name": "HeroineStateFromReportToBook",
+      "motions": [
+        "Wild002_FromReportToBook"
+      ]
+    },
+    {
+      "name": "HeroineStateFromReportToPc",
+      "motions": [
+        "Wild002_FromReportToPc"
+      ]
+    },
+    {
+      "name": "HeroineStateGameStartDirection",
+      "motions": [
+        "GameStart_End"
+      ]
+    },
+    {
+      "name": "HeroineStateLeaveChairGoFar",
+      "motions": [
+        "Wild003_LeaveChair_Cup",
+        "Wild003_LeaveChair_Normal",
+        "Base001",
+        "Wild003_LeaveChair_Cupcake_Comeback",
+        "Wild003_LeaveChair_Cookie_Comeback"
+      ]
+    },
+    {
+      "name": "HeroineStateWildCloseWindow",
+      "motions": [
+        "Wild001_Motion9_CloseWindow"
+      ]
+    },
+    {
+      "name": "HeroineStateWildGuts",
+      "motions": [
+        "Wild001_Motion4_Guts"
+      ]
+    },
+    {
+      "name": "HeroineStateWildMemorie",
+      "motions": [
+        "Wild001_Motion25_Memorie"
+      ]
+    },
+    {
+      "name": "HeroineStateWildOpenWindow",
+      "motions": [
+        "Wild001_Motion8_OpenWindow"
+      ]
+    },
+    {
+      "name": "HeroineStateWildStretchFullBody",
+      "motions": [
+        "Wild001_Motion1_StretchFllBody"
+      ]
+    },
+    {
+      "name": "HeroineStateWildStretchShoulder",
+      "motions": [
+        "Wild001_Motion2_StretchShoulder"
+      ]
+    },
+    {
+      "name": "HeroineStateWildTea",
+      "motions": [
+        "Wild001_Motion3_Tea"
+      ]
+    },
+    {
+      "name": "HeroineStateWorkBook",
+      "motions": [
+        "WorkBase002",
+        "WorkBase002_Loop2",
+        "WorkBase002_Loop2_PageFlip",
+        "WorkBase002_Thinking",
+        "WorkBase002_PageFlip",
+        "WorkBase002_KeyType",
+        "WorkBase002_DrinkTea"
+      ]
+    },
+    {
+      "name": "HeroineStateWorkPC",
+      "motions": [
+        "WorkBase001",
+        "Base001",
+        "WorkBase001_Thinking",
+        "WorkBase001_Stop",
+        "WorkBase001_DrinkTea",
+        "WorkBase001_Break2",
+        "WorkBase001_Break"
+      ]
+    },
+    {
+      "name": "HeroineStateWorkReport",
+      "motions": [
+        "WorkBase003",
+        "WorkBase003_BigThinking",
+        "WorkBase003_BrushAwayTrash",
+        "WorkBase003_DrinkTea",
+        "WorkBase003_Loop2",
+        "WorkBase003_SmallThinking"
+      ]
+    },
+    {
+      "name": "HeroineStateEventNewYearCountdown",
+      "motions": [
+        "Base001"
+      ]
+    },
+    {
+      "name": "HeroineStateLeaveChairGoSofa",
+      "motions": [
+        "Wild003_LeaveChair_Sofa",
+        "Base001",
+        "Wild003_LeaveChair_Sofa_Control_Headphone",
+        "Wild003_LeaveChair_Sofa_Look_Outside",
+        "Wild003_LeaveChair_Sofa_Thinking"
+      ]
+    }
+  ],
+  "credits": 15
+}

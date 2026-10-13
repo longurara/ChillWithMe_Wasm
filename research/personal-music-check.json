@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "wavHeader": true,
+  "stereoInterleaving": true,
+  "sampleBounds": true,
+  "decodedSizeLimit": true,
+  "missingFileError": true,
+  "removeAcknowledged": true,
+  "removeErrorReported": true,
+  "id3v23": true,
+  "id3v24": true,
+  "utf8TitleAndArtist": true,
+  "malformedTagFallback": true,
+  "browserStorageTested": false
+}

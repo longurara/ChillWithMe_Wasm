@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "productVersion": "1.19.0",
+  "browser": "isolated headless Chrome",
+  "origin": "http://127.0.0.1:8093",
+  "viewport": [
+    1280,
+    720
+  ],
+  "userBrowserProfileWritten": false,
+  "checks": {
+    "multiPageNotesCreateEdit": true,
+    "todoCreateEditComplete": true,
+    "multipleTodoLists": true,
+    "habitCreateEditCheck": true,
+    "calendarDiaryEdit": true,
+    "reloadPersistsNotesTodoHabitDiary": true,
+    "saveBackupExists": true,
+    "profileEntryOpensOnFinalBuild": true,
+    "sourceHabitExampleHiddenOnFinalBuild": true,
+    "prototypeDebugUIHidden": true,
+    "startupLocalizationAfterAsyncDataLoad": true
+  },
+  "finalBuildLog": "logs/unity-completion-release13.log",
+  "evidence": [
+    "output/playwright/completion-final-hud.png",
+    "output/playwright/completion-final-profile.png",
+    "output/playwright/completion-final-habits.png",
+    "output/playwright/completion-task-add.png"
+  ],
+  "relatedStorageReport": "research/browser-storage-check.json",
+  "limitations": [
+    "Full original Windows parity is not claimed.",
+    "Mobile/Safari and every UI interaction were not exercised.",
+    "Chrome reported a connection reset to Unity cloud configuration; local gameplay checks succeeded.",
+    "Profile avatar chooser was checked at the browser bridge level; not full Unity UI end-to-end."
+  ]
+}

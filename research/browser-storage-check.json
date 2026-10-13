@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "indexedDBBlobRoundTrip": true,
+  "capacity200": true,
+  "duplicateAtCapacity": true,
+  "browserAudioDecode": true,
+  "remove": true,
+  "userProfileWritten": false,
+  "browser": "isolated Chrome session",
+  "fileChooserImport": true,
+  "avatarFileChooserImport": true,
+  "avatarCrop": [
+    256,
+    256
+  ],
+  "avatarCallback": "ProfileIconImported"
+}

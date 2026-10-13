@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "requests": [
+    {
+      "path": "/",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2254
+    },
+    {
+      "path": "/ui/native.css",
+      "status": 200,
+      "contentType": "text/css",
+      "bytes": 1257
+    },
+    {
+      "path": "/Build/WebPlayer.loader.js",
+      "status": 200,
+      "contentType": "application/javascript",
+      "bytes": 13114
+    },
+    {
+      "path": "/Build/WebPlayer.framework.js",
+      "status": 200,
+      "contentType": "application/javascript",
+      "bytes": 437113
+    },
+    {
+      "path": "/Build/WebPlayer.data",
+      "status": 200,
+      "contentType": "application/octet-stream",
+      "bytes": 102561264
+    },
+    {
+      "path": "/Build/WebPlayer.wasm",
+      "status": 200,
+      "contentType": "application/wasm",
+      "bytes": 33236544
+    },
+    {
+      "path": "/StreamingAssets/chill-story.json",
+      "status": 200,
+      "contentType": "application/json",
+      "bytes": 1601192
+    },
+    {
+      "path": "/StreamingAssets/chill-library.json",
+      "status": 200,
+      "contentType": "application/json",
+      "bytes": 2767249
+    },
+    {
+      "path": "/assetpacks/music/pack-0030",
+      "status": 200,
+      "contentType": "application/octet-stream",
+      "bytes": 30302
+    },
+    {
+      "path": "/assetpacks/music/pack-0031",
+      "status": 200,
+      "contentType": "application/octet-stream",
+      "bytes": 11256
+    },
+    {
+      "path": "/assetpacks/music/pack-0032",
+      "status": 200,
+      "contentType": "application/octet-stream",
+      "bytes": 26304
+    }
+  ],
+  "gameplayTested": false
+}

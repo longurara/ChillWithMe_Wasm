@@ -1,0 +1,1016 @@
+{
+  "method": "Read-only scene YAML comparison",
+  "sharedTransforms": 6890,
+  "transformOrFovDifferences": [
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandPinky1/Character_LeftHandPinky2",
+      "original": {
+        "m_LocalPosition": "{x: -0.023990981, y: -0.00024362221, z: -2.1316282E-16}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0.3277812, w: 0.9447537}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.023990996, y: -0.00024361261, z: -6.984917e-10}",
+        "m_LocalRotation": "{x: -0.043929454, y: -0.057520483, z: 0.27332944, w: 0.95919377}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandThumb1/Character_RightHandThumb2/Character_RightHandThumb3",
+      "original": {
+        "m_LocalPosition": "{x: -0.021123666, y: 5.3152675E-05, z: -0.002549878}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0.17271319, w: 0.9849722}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.02112369, y: 0.0000531324, z: -0.0025498832}",
+        "m_LocalRotation": "{x: -0.031351764, y: -0.13907306, z: -0.13218884, w: -0.9809189}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandIndex1",
+      "original": {
+        "m_LocalPosition": "{x: -0.0638379, y: -0.0013264117, z: -0.021741359}",
+        "m_LocalRotation": "{x: -0.057082783, y: -0.04345942, z: 0.23256454, w: 0.96993124}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.06383795, y: -0.001326459, z: -0.021741383}",
+        "m_LocalRotation": "{x: 0.06413963, y: -0.002113819, z: -0.26854643, w: -0.9611267}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_RightUpLeg/Character_RightLeg/Character_RightFoot",
+      "original": {
+        "m_LocalPosition": "{x: -0.4274965, y: 1.110223E-18, z: -7.9936054E-17}",
+        "m_LocalRotation": "{x: 0.8625382, y: -0.5059919, z: -2.1458914E-07, w: -4.0414918E-07}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.4274965, y: 0, z: 0}",
+        "m_LocalRotation": "{x: -0.7559799, y: 0.6507675, z: -0.05679333, w: -0.042080022}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandIndex1/Character_RightHandIndex2",
+      "original": {
+        "m_LocalPosition": "{x: -0.03269919, y: -0.0010994973, z: 2.5737806E-06}",
+        "m_LocalRotation": "{x: 0.0060958583, y: 0.016353196, z: 0.34923148, w: 0.936874}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.032699216, y: -0.0010994772, z: 0.0000025732406}",
+        "m_LocalRotation": "{x: -0.048784003, y: 0.040461034, z: -0.33737966, w: -0.9392327}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm",
+      "original": {
+        "m_LocalPosition": "{x: -0.22548681, y: -0.0062201773, z: 0.019204868}",
+        "m_LocalRotation": "{x: 0.7070076, y: -0.011846572, z: -0.011846572, w: 0.7070076}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.22548686, y: -0.006220172, z: 0.01920487}",
+        "m_LocalRotation": "{x: -0.5425836, y: 0.6172336, z: -0.45810866, w: -0.33876583}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandIndex1/Character_RightHandIndex2/Character_RightHandIndex3",
+      "original": {
+        "m_LocalPosition": "{x: -0.02210832, y: 0.0015951642, z: 0.0002181716}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0.22119527, w: 0.97522956}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.02210834, y: 0.0015951728, z: 0.00021817484}",
+        "m_LocalRotation": "{x: -0.040332165, y: 0.028320245, z: -0.21754205, w: -0.974806}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm",
+      "original": {
+        "m_LocalPosition": "{x: -0.079872, y: -0.018818473, z: 2.2204459E-17}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0.36132336, w: 0.9324406}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.079872005, y: -0.018818453, z: 0}",
+        "m_LocalRotation": "{x: -0.20550823, y: 0.46244168, z: 0.39315146, w: 0.76768875}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_RightUpLeg/Character_RightLeg",
+      "original": {
+        "m_LocalPosition": "{x: -0.39692396, y: 1.110223E-18, z: 9.7699626E-17}",
+        "m_LocalRotation": "{x: 1, y: -0, z: 0, w: -6.123234E-17}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.39692396, y: 0, z: 0}",
+        "m_LocalRotation": "{x: -0.49251664, y: 0.8681498, z: 0.008671124, w: -0.060565446}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandPinky1",
+      "original": {
+        "m_LocalPosition": "{x: -0.06284335, y: -0.004538025, z: -0.028532932}",
+        "m_LocalRotation": "{x: -0.1304518, y: -0.030702386, z: 0.22702816, w: 0.9646232}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.06284337, y: -0.004537991, z: -0.028532935}",
+        "m_LocalRotation": "{x: -0.16612853, y: -0.065946035, z: 0.15632519, w: 0.9713984}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandIndex1",
+      "original": {
+        "m_LocalPosition": "{x: -0.06383764, y: -0.0013259843, z: 0.021741383}",
+        "m_LocalRotation": "{x: 0.057082783, y: 0.04345942, z: 0.23256454, w: 0.96993124}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.06383764, y: -0.0013260075, z: 0.021741385}",
+        "m_LocalRotation": "{x: 0.051712755, y: 0.027558677, z: 0.25794435, w: 0.96438116}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandRing1/Character_RightHandRing2",
+      "original": {
+        "m_LocalPosition": "{x: -0.03302769, y: -0.0006141858, z: 3.2057715E-06}",
+        "m_LocalRotation": "{x: -1.4121207E-08, y: -4.761521E-09, z: 0.3195144, w: 0.9475814}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.03302769, y: -0.00061415375, z: 0.000003198157}",
+        "m_LocalRotation": "{x: -0.03736824, y: -0.0648938, z: -0.7463091, w: -0.6613737}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2",
+      "original": {
+        "m_LocalPosition": "{x: -0.095288835, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.09528887, y: 0, z: 0}",
+        "m_LocalRotation": "{x: -0.01317017, y: 0.00932702, z: -0.16029103, w: 0.9869379}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_LeftUpLeg/Character_LeftLeg/Character_LeftFoot",
+      "original": {
+        "m_LocalPosition": "{x: -0.42749682, y: -1.7763568E-17, z: 0}",
+        "m_LocalRotation": "{x: 0.8625382, y: -0.5059919, z: 2.1467908E-07, w: 4.0399587E-07}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.42749682, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0.80589485, y: -0.56944627, z: -0.16076775, w: -0.020450024}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_Neck",
+      "original": {
+        "m_LocalPosition": "{x: -0.19377558, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.19377553, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0.030312473, y: -0.010902184, z: -0.027265463, w: 0.9991091}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandPinky1",
+      "original": {
+        "m_LocalPosition": "{x: -0.06284412, y: -0.004538576, z: 0.028532939}",
+        "m_LocalRotation": "{x: 0.1304518, y: 0.030702386, z: 0.22702816, w: 0.9646232}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.06284415, y: -0.0045386176, z: 0.028532961}",
+        "m_LocalRotation": "{x: -0.1446286, y: -0.13041128, z: -0.6729523, w: -0.7135901}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandThumb1/Character_RightHandThumb2",
+      "original": {
+        "m_LocalPosition": "{x: -0.024787473, y: -0.00013270107, z: -0.00021499481}",
+        "m_LocalRotation": "{x: 0.04067014, y: 0.13061188, z: 0.09820845, w: 0.98571885}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.024787514, y: -0.00013272272, z: -0.00021498252}",
+        "m_LocalRotation": "{x: -0.06362753, y: -0.16707206, z: -0.08664138, w: -0.9800672}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand",
+      "original": {
+        "m_LocalPosition": "{x: -0.21276505, y: 0.011936792, z: 0.011055463}",
+        "m_LocalRotation": "{x: -0.7071068, y: 3.0377166E-16, z: 3.6351766E-16, w: 0.7071068}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.21276519, y: 0.011936804, z: 0.011055427}",
+        "m_LocalRotation": "{x: 0.6545728, y: 0.014810888, z: 0.026737537, w: -0.75538087}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandRing1",
+      "original": {
+        "m_LocalPosition": "{x: -0.06500938, y: 0.00011021186, z: -0.012296507}",
+        "m_LocalRotation": "{x: -0.074050084, y: -0.019051518, z: 0.24843514, w: 0.96562606}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.06500936, y: 0.000110249995, z: -0.012296509}",
+        "m_LocalRotation": "{x: -0.105451226, y: -0.045537066, z: 0.11862931, w: 0.9862726}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandRing1",
+      "original": {
+        "m_LocalPosition": "{x: -0.06500476, y: 0.00011489644, z: 0.0122965}",
+        "m_LocalRotation": "{x: 0.074050084, y: 0.019051518, z: 0.24843514, w: 0.96562606}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.06500479, y: 0.000114888666, z: 0.01229651}",
+        "m_LocalRotation": "{x: -0.07938886, y: -0.07361302, z: -0.69640595, w: -0.7094345}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandIndex1/Character_LeftHandIndex2",
+      "original": {
+        "m_LocalPosition": "{x: -0.03270485, y: -0.0011021197, z: -2.6326381E-06}",
+        "m_LocalRotation": "{x: -0.0060958583, y: -0.016353196, z: 0.34923148, w: 0.936874}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.032704845, y: -0.0011021236, z: -0.0000026309563}",
+        "m_LocalRotation": "{x: -0.047212902, y: 0.016829854, z: 0.21995659, w: 0.97422117}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandMiddle1/Character_RightHandMiddle2",
+      "original": {
+        "m_LocalPosition": "{x: -0.033672463, y: -0.00119487, z: -1.2957905E-07}",
+        "m_LocalRotation": "{x: -1.0032564E-08, y: -3.224107E-09, z: 0.30595365, w: 0.95204645}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.03367248, y: -0.0011948914, z: -0.00000013131631}",
+        "m_LocalRotation": "{x: -0.04180797, y: -0.0012701505, z: -0.47714758, w: -0.8778273}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine",
+      "original": {
+        "m_LocalPosition": "{x: -0.071784295, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.07178432, y: 0, z: 0}",
+        "m_LocalRotation": "{x: -0.0018340312, y: -0.0058784178, z: -0.08119647, w: 0.9966792}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_RightUpLeg",
+      "original": {
+        "m_LocalPosition": "{x: 0.079173945, y: -3.1272138E-09, z: -0.0674103}",
+        "m_LocalRotation": "{x: -0, y: 0, z: 1, w: -6.123234E-17}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 0.07917392, y: 0, z: -0.0674103}",
+        "m_LocalRotation": "{x: -0.057939783, y: 0.039144833, z: -0.81970245, w: 0.56850564}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandThumb1",
+      "original": {
+        "m_LocalPosition": "{x: -0.021626841, y: -0.010053158, z: -0.02324486}",
+        "m_LocalRotation": "{x: -0.31273186, y: -0.3096344, z: 0.04521538, w: 0.89681715}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.021626847, y: -0.010053122, z: -0.023244876}",
+        "m_LocalRotation": "{x: 0.2889731, y: 0.21694757, z: -0.10753754, w: -0.9262095}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandMiddle1",
+      "original": {
+        "m_LocalPosition": "{x: -0.06567697, y: 0.0013842488, z: -0.00496497}",
+        "m_LocalRotation": "{x: 0.02240882, y: 0.0057318816, z: 0.2477423, w: 0.9685498}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.06567706, y: 0.0013842967, z: -0.0049649687}",
+        "m_LocalRotation": "{x: -0.008789903, y: -0.040276248, z: -0.43155077, w: -0.90114623}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_Neck/Character_Head",
+      "original": {
+        "m_LocalPosition": "{x: -0.04722633, y: 0, z: -1.8351114E-17}",
+        "m_LocalRotation": "{x: -0.5, y: 0.5, z: 0.5, w: 0.5}",
+        "m_LocalScale": "{x: 1.03, y: 1.03, z: 1.03}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.04722631, y: 0, z: -1.8351114e-17}",
+        "m_LocalRotation": "{x: -0.5287611, y: 0.4501708, z: 0.54002196, w: 0.47553584}",
+        "m_LocalScale": "{x: 1.03, y: 1.03, z: 1.03}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandMiddle1/Character_LeftHandMiddle2/Character_LeftHandMiddle3",
+      "original": {
+        "m_LocalPosition": "{x: -0.02371802, y: -8.157891E-05, z: -1.9730715E-08}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0.18934548, w: 0.9819105}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.023718042, y: -0.00008157038, z: -0.000000022526356}",
+        "m_LocalRotation": "{x: -0.041764006, y: -0.0076216217, z: 0.17507105, w: 0.98364013}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandPinky1/Character_RightHandPinky2/Character_RightHandPinky3",
+      "original": {
+        "m_LocalPosition": "{x: -0.01656991, y: 0.0005748687, z: 1.8852461E-07}",
+        "m_LocalRotation": "{x: -1.355189E-08, y: -2.9791425E-09, z: 0.2147055, w: 0.97667885}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.01656994, y: 0.00057488715, z: 0.00000018579848}",
+        "m_LocalRotation": "{x: -0.04796775, y: -0.13144694, z: -0.653573, w: -0.7438167}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm",
+      "original": {
+        "m_LocalPosition": "{x: 0.08022603, y: 0.018820478, z: -1.628264E-13}",
+        "m_LocalRotation": "{x: -7.8998114E-18, y: -3.7303477E-16, z: 0.9324406, w: -0.36132336}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 0.08022603, y: 0.018820485, z: 0}",
+        "m_LocalRotation": "{x: -0.13938501, y: -0.07697137, z: -0.8352983, w: 0.52623576}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand",
+      "original": {
+        "m_LocalPosition": "{x: -0.2127086, y: 0.011936793, z: -0.010788157}",
+        "m_LocalRotation": "{x: 0.7071068, y: 0, z: -0, w: 0.7071068}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.2127086, y: 0.011936796, z: -0.010788164}",
+        "m_LocalRotation": "{x: 0.81454325, y: 0.06680429, z: -0.11458048, w: 0.564737}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder",
+      "original": {
+        "m_LocalPosition": "{x: -0.17848165, y: 0.028437108, z: 0.034353722}",
+        "m_LocalRotation": "{x: -0.5000032, y: 0.49999678, z: 0.49999678, w: 0.5000032}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.1784817, y: 0.028437108, z: 0.03435372}",
+        "m_LocalRotation": "{x: -0.46180367, y: 0.48717254, z: 0.52510923, w: 0.5231259}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1",
+      "original": {
+        "m_LocalPosition": "{x: -0.0740516, y: 0, z: 6.5771036E-17}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.07405162, y: 0, z: 6.5771036e-17}",
+        "m_LocalRotation": "{x: -0.0059060953, y: 0.010573453, z: -0.15975107, w: 0.9870831}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandRing1/Character_LeftHandRing2/Character_LeftHandRing3",
+      "original": {
+        "m_LocalPosition": "{x: -0.020674707, y: 0.00051024515, z: -1.433291E-06}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0.1879447, w: 0.98217964}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.02067469, y: 0.0005102752, z: -0.0000014269021}",
+        "m_LocalRotation": "{x: -0.04517633, y: -0.02961704, z: 0.26147476, w: 0.96369755}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandPinky1/Character_LeftHandPinky2/Character_LeftHandPinky3",
+      "original": {
+        "m_LocalPosition": "{x: -0.016568527, y: 0.0005745362, z: 4.973799E-16}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0.2147055, w: 0.97667885}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.016568517, y: 0.00057452236, z: -0.0000000011059453}",
+        "m_LocalRotation": "{x: -0.046761807, y: -0.04427079, z: 0.18425044, w: 0.9807677}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandMiddle1/Character_LeftHandMiddle2",
+      "original": {
+        "m_LocalPosition": "{x: -0.033673264, y: -0.001195984, z: 7.542081E-08}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0.30595365, w: 0.95204645}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.033673283, y: -0.0011959802, z: 0.00000007286141}",
+        "m_LocalRotation": "{x: -0.041733284, y: -0.0076339627, z: 0.29018074, w: 0.956031}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandIndex1/Character_LeftHandIndex2/Character_LeftHandIndex3",
+      "original": {
+        "m_LocalPosition": "{x: -0.022105286, y: 0.0015946438, z: -0.00021823072}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0.22119527, w: 0.97522956}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.022105275, y: 0.0015945828, z: -0.00021821975}",
+        "m_LocalRotation": "{x: -0.04033513, y: 0.005168161, z: 0.09871379, w: 0.9942847}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandThumb1",
+      "original": {
+        "m_LocalPosition": "{x: -0.021626126, y: -0.0100515615, z: 0.023244867}",
+        "m_LocalRotation": "{x: 0.31273186, y: 0.3096344, z: 0.04521538, w: 0.89681715}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.021626115, y: -0.010051509, z: 0.023244862}",
+        "m_LocalRotation": "{x: 0.32098854, y: 0.29619378, z: 0.17831403, w: 0.88172543}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_LeftUpLeg/Character_LeftLeg",
+      "original": {
+        "m_LocalPosition": "{x: -0.39692324, y: 0, z: -3.5527136E-17}",
+        "m_LocalRotation": "{x: 1, y: -0, z: 2.4135764E-33, w: 6.123234E-17}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.39692324, y: 0, z: 0}",
+        "m_LocalRotation": "{x: -0.50377345, y: 0.85440505, z: 0.033056404, w: 0.122929275}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_LeftUpLeg",
+      "original": {
+        "m_LocalPosition": "{x: 0.07917431, y: 0, z: 0.06741033}",
+        "m_LocalRotation": "{x: -6.123234E-17, y: 8.576552E-33, z: 1, w: -6.123234E-17}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 0.07917434, y: 0, z: 0.06741033}",
+        "m_LocalRotation": "{x: 0.08286468, y: -0.113081574, z: -0.817153, w: 0.5591127}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandRing1/Character_RightHandRing2/Character_RightHandRing3",
+      "original": {
+        "m_LocalPosition": "{x: -0.02067102, y: 0.0005083876, z: 1.3257884E-06}",
+        "m_LocalRotation": "{x: -2.2986569E-08, y: -4.398588E-09, z: 0.1879447, w: 0.98217964}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.020670988, y: 0.0005084278, z: 0.0000013168888}",
+        "m_LocalRotation": "{x: -0.043581296, y: -0.056960322, z: -0.64997476, w: -0.75656396}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips",
+      "original": {
+        "m_LocalPosition": "{x: -0, y: 0.97513205, z: 0.007125293}",
+        "m_LocalRotation": "{x: 0.5, y: -0.5, z: -0.5, w: 0.5}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.00000023841858, y: 0.5959849, z: 0.19483793}",
+        "m_LocalRotation": "{x: 0.43395385, y: -0.5582867, z: -0.4339539, w: 0.5582868}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandMiddle1",
+      "original": {
+        "m_LocalPosition": "{x: -0.065677725, y: 0.0013840225, z: 0.004964971}",
+        "m_LocalRotation": "{x: -0.02240882, y: -0.0057318816, z: 0.2477423, w: 0.9685498}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.06567775, y: 0.0013840669, z: 0.0049649673}",
+        "m_LocalRotation": "{x: -0.03845685, y: -0.019923065, z: 0.19132322, w: 0.9805711}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandThumb1/Character_LeftHandThumb2/Character_LeftHandThumb3",
+      "original": {
+        "m_LocalPosition": "{x: -0.021123482, y: 5.3794425E-05, z: 0.0025493684}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0.17271319, w: 0.9849722}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.02112349, y: 0.00005380108, z: 0.0025493694}",
+        "m_LocalRotation": "{x: -0.03131568, y: -0.19066067, z: 0.15958652, w: 0.9680909}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandPinky1/Character_RightHandPinky2",
+      "original": {
+        "m_LocalPosition": "{x: -0.023986986, y: -0.00024192249, z: -4.583974E-07}",
+        "m_LocalRotation": "{x: -9.955665E-09, y: -3.4541063E-09, z: 0.3277812, w: 0.9447537}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.023987029, y: -0.00024192504, z: -0.00000045448485}",
+        "m_LocalRotation": "{x: -0.03755991, y: -0.14513402, z: -0.7381066, w: -0.6578176}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Paremt/CharacterUseObjects/WorkspaceLayout/m_keyboard",
+      "original": {
+        "m_LocalPosition": "{x: -2.5874453, y: -0.009049085, z: -1.7335663}",
+        "m_LocalRotation": "{x: -0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -2.4199991, y: 0.04229764, z: -1.7225115}",
+        "m_LocalRotation": "{x: 0.005554894, y: -0.039799735, z: -0.002882545, w: 0.99918807}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder",
+      "original": {
+        "m_LocalPosition": "{x: -0.17848264, y: 0.028437106, z: -0.0343537}",
+        "m_LocalRotation": "{x: 0.49999678, y: 0.5000032, z: -0.5000032, w: 0.49999678}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.17848265, y: 0.028437108, z: -0.0343537}",
+        "m_LocalRotation": "{x: 0.54016674, y: 0.5628817, z: -0.427837, w: 0.4564424}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm",
+      "original": {
+        "m_LocalPosition": "{x: -0.22581284, y: -0.005591723, z: -0.019204868}",
+        "m_LocalRotation": "{x: -0.7070076, y: 0.011846572, z: -0.011846572, w: 0.7070076}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.22581284, y: -0.0055917194, z: -0.01920487}",
+        "m_LocalRotation": "{x: -0.5618968, y: 0.49012262, z: 0.21502583, w: 0.63072634}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Paremt/CharacterUseObjects/WorkspaceLayout/m_textbook/root",
+      "original": {
+        "m_LocalPosition": "{x: 0.3692801, y: 0.71760947, z: 0.7868202}",
+        "m_LocalRotation": "{x: 0.0017429327, y: 0.21761562, z: 0.0019701303, w: 0.976031}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.03853085, y: 0.7206257, z: 0.6273046}",
+        "m_LocalRotation": "{x: -0.004917221, y: -0.09748665, z: 0.017682886, w: 0.9950676}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandRing1/Character_LeftHandRing2",
+      "original": {
+        "m_LocalPosition": "{x: -0.033019222, y: -0.00061170355, z: -2.8222987E-06}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0.3195144, w: 0.9475814}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.03301925, y: -0.0006117451, z: -0.0000028306376}",
+        "m_LocalRotation": "{x: -0.042782143, y: -0.041519977, z: 0.40870056, w: 0.9107193}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_LeftShoulder/Character_LeftArm/Character_LeftForeArm/Character_LeftHand/Character_LeftHandThumb1/Character_LeftHandThumb2",
+      "original": {
+        "m_LocalPosition": "{x: -0.02479098, y: -0.00013636408, z: 0.0002155493}",
+        "m_LocalRotation": "{x: -0.04067014, y: -0.13061188, z: 0.09820845, w: 0.98571885}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.024790969, y: -0.00013633065, z: 0.00021555174}",
+        "m_LocalRotation": "{x: -0.063756324, y: -0.17206526, z: 0.08960837, w: 0.97892755}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    {
+      "path": "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_RightShoulder/Character_RightArm/Character_RightForeArm/Character_RightHand/Character_RightHandMiddle1/Character_RightHandMiddle2/Character_RightHandMiddle3",
+      "original": {
+        "m_LocalPosition": "{x: -0.023717893, y: -8.2302955E-05, z: 1.3807849E-08}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0.18934548, w: 0.9819105}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.023717916, y: -0.00008231505, z: 0.000000011641511}",
+        "m_LocalRotation": "{x: -0.042269167, y: -0.0013755665, z: -0.3690828, w: -0.92843384}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    }
+  ],
+  "selectedObjects": {
+    "CameraTransforms/CameraTransform0": {
+      "original": {
+        "m_LocalPosition": "{x: 0, y: 1, z: 0}",
+        "m_LocalRotation": "{x: -0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 0, y: 1, z: 0}",
+        "m_LocalRotation": "{x: -0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    "RoomCameraManager": {
+      "original": {
+        "m_LocalPosition": "{x: 0, y: 1, z: 0}",
+        "m_LocalRotation": "{x: -0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 0, y: 1, z: 0}",
+        "m_LocalRotation": "{x: -0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    "Character/Character/Character": {
+      "original": {
+        "m_LocalPosition": "{x: -0, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 0, y: 0, z: 0}",
+        "m_LocalRotation": "{x: -0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_Neck/Character_Head/m_magicalprincess_beret/Head": {
+      "original": {
+        "m_LocalPosition": "{x: -5.0289802E-17, y: 1.4572587, z: 0.007125293}",
+        "m_LocalRotation": "{x: 0.7071068, y: -0.7071068, z: -4.3297806E-17, w: 4.3297806E-17}",
+        "m_LocalScale": "{x: 1.03, y: 1.03, z: 1.03}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -5.0289802e-17, y: 1.4572587, z: 0.007125293}",
+        "m_LocalRotation": "{x: 0.7071068, y: -0.7071068, z: -4.3297806e-17, w: 4.3297806e-17}",
+        "m_LocalScale": "{x: 1.03, y: 1.03, z: 1.03}",
+        "active": "1"
+      }
+    },
+    "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_Neck/Character_Head/m_magicalprincess_beret/m_magicalprincess_star": {
+      "original": {
+        "m_LocalPosition": "{x: 1.1010091E-17, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 1.1010091e-17, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_Neck/Character_Head/m_magicalprincess_beret/m_magicalprincess_beret": {
+      "original": {
+        "m_LocalPosition": "{x: -0, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    "RoomCameraManager/Cameras": {
+      "original": {
+        "m_LocalPosition": "{x: 0, y: -1, z: 0}",
+        "m_LocalRotation": "{x: -0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 0, y: -1, z: 0}",
+        "m_LocalRotation": "{x: -0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    "Character": {
+      "original": {
+        "m_LocalPosition": "{x: 2.7356207, y: 0, z: 1.6960006}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 2.7356207, y: 0, z: 1.6960006}",
+        "m_LocalRotation": "{x: 0, y: 0, z: 0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    "RoomCameraManager/Cameras/MainCamera": {
+      "original": {
+        "m_LocalPosition": "{x: 1.876, y: 1.074, z: 2.687}",
+        "m_LocalRotation": "{x: 0.016634997, y: 0.9040673, z: -0.034593765, w: 0.4256629}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1",
+        "fov": "35",
+        "lensShift": "{x: 0, y: 0}"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 1.876, y: 1.074, z: 2.687}",
+        "m_LocalRotation": "{x: 0.016634997, y: 0.9040673, z: -0.034593765, w: 0.4256629}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1",
+        "fov": "35",
+        "lensShift": "{x: 0, y: 0}"
+      }
+    },
+    "map_model/model/m_musicbox/m_music_box": {
+      "original": {
+        "m_LocalPosition": "{x: -0, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    "map_model/model/m_radio": {
+      "original": {
+        "m_LocalPosition": "{x: 3.442, y: 0.7145, z: 1.499}",
+        "m_LocalRotation": "{x: -0, y: 0.353668, z: -0, w: 0.93537104}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 3.442, y: 0.7145, z: 1.499}",
+        "m_LocalRotation": "{x: -0, y: 0.353668, z: -0, w: 0.93537104}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_Neck/Character_Head/m_magicalprincess_beret": {
+      "original": {
+        "m_LocalPosition": "{x: 0, y: -1.4148142, z: -0.0069177845}",
+        "m_LocalRotation": "{x: -0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 0.9708738, y: 0.9708738, z: 0.9708738}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 0, y: -1.4148142, z: -0.0069177845}",
+        "m_LocalRotation": "{x: -0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 0.9708738, y: 0.9708738, z: 0.9708738}",
+        "active": "1"
+      }
+    },
+    "map_model/model/m_radio/m_radio": {
+      "original": {
+        "m_LocalPosition": "{x: -0, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    "map_model/model/m_musicbox": {
+      "original": {
+        "m_LocalPosition": "{x: 3.603, y: 0.95132446, z: -1.329}",
+        "m_LocalRotation": "{x: -0, y: -0.78794914, z: -0, w: 0.61574036}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 3.603, y: 0.95132446, z: -1.329}",
+        "m_LocalRotation": "{x: -0, y: -0.78794914, z: -0, w: 0.61574036}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    "Character/Character/Character/Character_Hips/Character_Spine/Character_Spine1/Character_Spine2/Character_Neck/Character_Head/m_magicalprincess_beret/Head/HeadEnd": {
+      "original": {
+        "m_LocalPosition": "{x: -0.14124168, y: 0, z: 0}",
+        "m_LocalRotation": "{x: -0.011730982, y: 0.33240518, z: -0.033261158, w: 0.942477}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: -0.14124168, y: 0, z: 0}",
+        "m_LocalRotation": "{x: -0.011730982, y: 0.33240518, z: -0.033261158, w: 0.942477}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    },
+    "Character/Character": {
+      "original": {
+        "m_LocalPosition": "{x: -0, y: 0, z: 0}",
+        "m_LocalRotation": "{x: 0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      },
+      "port": {
+        "m_LocalPosition": "{x: 0, y: 0, z: 0}",
+        "m_LocalRotation": "{x: -0, y: -0, z: -0, w: 1}",
+        "m_LocalScale": "{x: 1, y: 1, z: 1}",
+        "active": "1"
+      }
+    }
+  }
+}

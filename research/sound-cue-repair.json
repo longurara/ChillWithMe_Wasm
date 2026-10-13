@@ -1,0 +1,20 @@
+[
+  {
+    "name": "bulbul_systemse_cancel",
+    "bytes": 226348,
+    "sourceSha256": "4cb01fad4bf51940cc28fa45637b682f5bd85c07767d23cde423645f4f97c103",
+    "payloadUnchanged": true
+  },
+  {
+    "name": "bulbul_systemse_click",
+    "bytes": 71468,
+    "sourceSha256": "0c221b6e5542dfc3987ad659f5f67135cb30ddbba871ba02f0d3007d19c4f7c8",
+    "payloadUnchanged": true
+  },
+  {
+    "name": "bulbul_systemse_completetask",
+    "bytes": 193580,
+    "sourceSha256": "4edeefaa82230ca553589d827a90177e4abb877189636e5bc2b7c334e070db42",
+    "payloadUnchanged": true
+  }
+]

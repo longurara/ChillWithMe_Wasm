@@ -1,0 +1,27 @@
+{
+  "path": "map_model/model/Platform_PC/m_standlight_mobile (1)/Point Light",
+  "intensity": 0.23999999463558197,
+  "range": 1.0,
+  "color": {
+    "r": 0.8627451062202454,
+    "g": 0.7581753134727478,
+    "b": 0.3490195870399475,
+    "a": 1.0
+  },
+  "perPixelAdditionalLights": true,
+  "originalLightParameters": true,
+  "deskPixelROI": [
+    40,
+    570,
+    140,
+    603
+  ],
+  "meanRGBDelta": [
+    5.387878787878788,
+    7.648181818181818,
+    10.652424242424242
+  ],
+  "changedDeskPixels": 1805,
+  "browserGameplayRun": false,
+  "passed": true
+}

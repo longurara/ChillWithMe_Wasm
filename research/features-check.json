@@ -1,0 +1,18 @@
+{
+    "passed": true,
+    "userSaveWritten": false,
+    "browserGameplayRun": false,
+    "musicPlaylist": true,
+    "favorites": true,
+    "seek": true,
+    "settingsRoundTrip": true,
+    "invalidSettingsRejected": true,
+    "nativeTutorial": true,
+    "nativeRaycasts": true,
+    "animationPaths": true,
+    "storySkip": true,
+    "resumePreserved": true,
+    "musicTracks": 43,
+    "ambientTracks": 30,
+    "nativeHooks": 530
+}

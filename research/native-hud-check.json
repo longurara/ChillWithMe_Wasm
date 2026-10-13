@@ -1,0 +1,14 @@
+{
+    "passed": true,
+    "timerStateSwitch": true,
+    "countupStateSwitch": true,
+    "timerPresets": true,
+    "levelSeparated": true,
+    "talkLogReceivesClicks": true,
+    "volumePopup": true,
+    "nativeSpritePadding": true,
+    "userSaveWritten": false,
+    "browserGameplayRun": false,
+    "musicRows": 149,
+    "recoveredSprites": 40
+}

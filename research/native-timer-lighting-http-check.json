@@ -1,0 +1,50 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "contentType": "text/html",
+    "bytes": "2030"
+  },
+  {
+    "path": "ui/native.css",
+    "status": 200,
+    "contentType": "text/css",
+    "bytes": "1188"
+  },
+  {
+    "path": "Build/WebPlayer.loader.js",
+    "status": 200,
+    "contentType": "application/javascript",
+    "bytes": "13114"
+  },
+  {
+    "path": "Build/WebPlayer.framework.js",
+    "status": 200,
+    "contentType": "application/javascript",
+    "bytes": "430252"
+  },
+  {
+    "path": "Build/WebPlayer.data",
+    "status": 200,
+    "contentType": "application/octet-stream",
+    "bytes": "97838978"
+  },
+  {
+    "path": "Build/WebPlayer.wasm",
+    "status": 200,
+    "contentType": "application/wasm",
+    "bytes": "33115600"
+  },
+  {
+    "path": "StreamingAssets/chill-library.json",
+    "status": 200,
+    "contentType": "application/json",
+    "bytes": "2766595"
+  },
+  {
+    "path": "assetpacks/material/pack-0000",
+    "status": 200,
+    "contentType": "application/octet-stream",
+    "bytes": "417219"
+  }
+]

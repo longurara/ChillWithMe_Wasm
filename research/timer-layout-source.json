@@ -1,0 +1,647 @@
+{
+  "original": {
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroInterface": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: -15.600006, y: -15.899994}",
+      "m_SizeDelta": "{x: 100, y: 100}",
+      "components": [
+        {
+          "id": "26133",
+          "m_Script": "{fileID: -405508275, guid: d3e719b59ab71ba3f6b398058c866280, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroPauseCoverImage": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 0}",
+      "m_SizeDelta": "{x: 280, y: 280}",
+      "components": [
+        {
+          "id": "26516",
+          "m_Script": "{fileID: -765806418, guid: d3e719b59ab71ba3f6b398058c866280, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: 607061958d6a4be4d92f2bc57df0ee4e, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "0",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "1"
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/Meter/PomodoroMeterImage": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 0}",
+      "m_SizeDelta": "{x: 280, y: 280}",
+      "components": [
+        {
+          "id": "29040",
+          "m_Script": "{fileID: -765806418, guid: d3e719b59ab71ba3f6b398058c866280, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: e49b91d23c992a449939f814c76f35e9, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "3",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "0"
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing": {
+      "active": "0",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 0}",
+      "m_SizeDelta": "{x: 100, y: 100}",
+      "components": []
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroInterface/PomodoroResetButton": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0, y: 1}",
+      "m_AnchorMax": "{x: 0, y: 1}",
+      "m_AnchoredPosition": "{x: 26, y: -26}",
+      "m_SizeDelta": "{x: 52, y: 52}",
+      "components": [
+        {
+          "id": "23216",
+          "m_Script": "{fileID: -765806418, guid: d3e719b59ab71ba3f6b398058c866280, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: f23d44cda58c23e4a86d9eb75d316b92, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "0",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "1"
+        },
+        {
+          "id": "23306",
+          "m_Script": "{fileID: 11500000, guid: 6030ae268c211031403f4b8162d13c89, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        },
+        {
+          "id": "24646",
+          "m_Script": "{fileID: 1392445389, guid: d3e719b59ab71ba3f6b398058c866280, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        },
+        {
+          "id": "27654",
+          "m_Script": "{fileID: 11500000, guid: 32d87d92dbaafeae89f861befab0ba4a, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroInterface/PomodoroPlayOrPauseButton": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0, y: 1}",
+      "m_AnchorMax": "{x: 0, y: 1}",
+      "m_AnchoredPosition": "{x: 65.2, y: -26}",
+      "m_SizeDelta": "{x: 52, y: 52}",
+      "components": [
+        {
+          "id": "24440",
+          "m_Script": "{fileID: 1392445389, guid: d3e719b59ab71ba3f6b398058c866280, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        },
+        {
+          "id": "25903",
+          "m_Script": "{fileID: -765806418, guid: d3e719b59ab71ba3f6b398058c866280, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: b27f04800a451bf46a2c6be148252ce7, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "0",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "1"
+        },
+        {
+          "id": "27628",
+          "m_Script": "{fileID: 11500000, guid: 6030ae268c211031403f4b8162d13c89, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        },
+        {
+          "id": "27910",
+          "m_Script": "{fileID: 11500000, guid: 32d87d92dbaafeae89f861befab0ba4a, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/TimeText": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 3.0399933}",
+      "m_SizeDelta": "{x: 199.9, y: 50}",
+      "components": [
+        {
+          "id": "20515",
+          "m_Script": "{fileID: 1453722849, guid: 67dfb1fdfb2b407222eda8e23ac8b724, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroInterface/PomodoroNextButton": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0, y: 1}",
+      "m_AnchorMax": "{x: 0, y: 1}",
+      "m_AnchoredPosition": "{x: 104.4, y: -26}",
+      "m_SizeDelta": "{x: 52, y: 52}",
+      "components": [
+        {
+          "id": "26224",
+          "m_Script": "{fileID: 11500000, guid: 6030ae268c211031403f4b8162d13c89, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        },
+        {
+          "id": "26552",
+          "m_Script": "{fileID: 11500000, guid: 32d87d92dbaafeae89f861befab0ba4a, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        },
+        {
+          "id": "27785",
+          "m_Script": "{fileID: -765806418, guid: d3e719b59ab71ba3f6b398058c866280, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: cd6c0c317bf02ba4190d0cd86b29817a, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "0",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "1"
+        },
+        {
+          "id": "29209",
+          "m_Script": "{fileID: 1392445389, guid: d3e719b59ab71ba3f6b398058c866280, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/Meter/PomodoroMeterBaseImage": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 0}",
+      "m_SizeDelta": "{x: 280, y: 280}",
+      "components": [
+        {
+          "id": "26408",
+          "m_Script": "{fileID: -765806418, guid: d3e719b59ab71ba3f6b398058c866280, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: 2b7be71abe40d904f9c63f7283466fca, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "0",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "1"
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroTypeText": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 39.259995}",
+      "m_SizeDelta": "{x: 280, y: 50}",
+      "components": [
+        {
+          "id": "20222",
+          "m_Script": "{fileID: 1453722849, guid: 67dfb1fdfb2b407222eda8e23ac8b724, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        },
+        {
+          "id": "21234",
+          "m_Script": "{fileID: 11500000, guid: b97911d51efab6a865c0d659c8a77511, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/RemainLoopCountText": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 70.9}",
+      "m_SizeDelta": "{x: 99.48, y: 39.9}",
+      "components": [
+        {
+          "id": "20584",
+          "m_Script": "{fileID: 1453722849, guid: 67dfb1fdfb2b407222eda8e23ac8b724, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/Meter": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 0}",
+      "m_SizeDelta": "{x: 100, y: 100}",
+      "components": []
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroRestCoverImage": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 0}",
+      "m_SizeDelta": "{x: 266, y: 262}",
+      "components": [
+        {
+          "id": "23946",
+          "m_Script": "{fileID: -765806418, guid: d3e719b59ab71ba3f6b398058c866280, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: 020e889c6f6fc28489623a63fea85bf1, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "0",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "1"
+        }
+      ]
+    }
+  },
+  "port": {
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroInterface": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: -15.600006, y: -15.899994}",
+      "m_SizeDelta": "{x: 100, y: 100}",
+      "components": [
+        {
+          "id": "26133",
+          "m_Script": "{fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroPauseCoverImage": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 0}",
+      "m_SizeDelta": "{x: 280, y: 280}",
+      "components": [
+        {
+          "id": "26516",
+          "m_Script": "{fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: 607061958d6a4be4d92f2bc57df0ee4e, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "0",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "1"
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/Meter/PomodoroMeterImage": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 0}",
+      "m_SizeDelta": "{x: 280, y: 280}",
+      "components": [
+        {
+          "id": "29040",
+          "m_Script": "{fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: e49b91d23c992a449939f814c76f35e9, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "3",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "0"
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing": {
+      "active": "0",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 0}",
+      "m_SizeDelta": "{x: 100, y: 100}",
+      "components": []
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroInterface/PomodoroResetButton": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0, y: 1}",
+      "m_AnchorMax": "{x: 0, y: 1}",
+      "m_AnchoredPosition": "{x: 26, y: -26}",
+      "m_SizeDelta": "{x: 52, y: 52}",
+      "components": [
+        {
+          "id": "23216",
+          "m_Script": "{fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: f23d44cda58c23e4a86d9eb75d316b92, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "0",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "1"
+        },
+        {
+          "id": "24646",
+          "m_Script": "{fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroInterface/PomodoroPlayOrPauseButton": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0, y: 1}",
+      "m_AnchorMax": "{x: 0, y: 1}",
+      "m_AnchoredPosition": "{x: 65.2, y: -26}",
+      "m_SizeDelta": "{x: 52, y: 52}",
+      "components": [
+        {
+          "id": "24440",
+          "m_Script": "{fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        },
+        {
+          "id": "25903",
+          "m_Script": "{fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: b27f04800a451bf46a2c6be148252ce7, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "0",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "1"
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/TimeText": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 3.0399933}",
+      "m_SizeDelta": "{x: 199.9, y: 50}",
+      "components": [
+        {
+          "id": "20515",
+          "m_Script": "{fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroInterface/PomodoroNextButton": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0, y: 1}",
+      "m_AnchorMax": "{x: 0, y: 1}",
+      "m_AnchoredPosition": "{x: 104.4, y: -26}",
+      "m_SizeDelta": "{x: 52, y: 52}",
+      "components": [
+        {
+          "id": "27785",
+          "m_Script": "{fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: cd6c0c317bf02ba4190d0cd86b29817a, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "0",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "1"
+        },
+        {
+          "id": "29209",
+          "m_Script": "{fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/Meter/PomodoroMeterBaseImage": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 0}",
+      "m_SizeDelta": "{x: 280, y: 280}",
+      "components": [
+        {
+          "id": "26408",
+          "m_Script": "{fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: 2b7be71abe40d904f9c63f7283466fca, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "0",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "1"
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroTypeText": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 39.259995}",
+      "m_SizeDelta": "{x: 280, y: 50}",
+      "components": [
+        {
+          "id": "20222",
+          "m_Script": "{fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/RemainLoopCountText": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 70.9}",
+      "m_SizeDelta": "{x: 99.48, y: 39.9}",
+      "components": [
+        {
+          "id": "20584",
+          "m_Script": "{fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "",
+          "m_PreserveAspect": "",
+          "m_Alpha": "",
+          "m_FillAmount": ""
+        }
+      ]
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/Meter": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 0}",
+      "m_SizeDelta": "{x: 100, y: 100}",
+      "components": []
+    },
+    "Paremt/PCPlatform/Canvas/UI/UI_FacilityPomodoro/PomodoroTimer/PomodoroUsing/PomodoroRestCoverImage": {
+      "active": "1",
+      "m_LocalScale": "{x: 1, y: 1, z: 1}",
+      "m_AnchorMin": "{x: 0.5, y: 0.5}",
+      "m_AnchorMax": "{x: 0.5, y: 0.5}",
+      "m_AnchoredPosition": "{x: 0, y: 0}",
+      "m_SizeDelta": "{x: 266, y: 262}",
+      "components": [
+        {
+          "id": "23946",
+          "m_Script": "{fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}",
+          "m_Enabled": "1",
+          "m_Sprite": "{fileID: 21300000, guid: 020e889c6f6fc28489623a63fea85bf1, type: 2}",
+          "m_Color": "{r: 1, g: 1, b: 1, a: 1}",
+          "m_Type": "0",
+          "m_PreserveAspect": "0",
+          "m_Alpha": "",
+          "m_FillAmount": "1"
+        }
+      ]
+    }
+  }
+}

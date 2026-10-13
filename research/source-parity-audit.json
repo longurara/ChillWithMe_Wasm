@@ -1,0 +1,1006 @@
+{
+  "date": "2026-10-13",
+  "method": "Đối chiếu masters/controllers/UI nguồn, kiểm tra state/callback/raycast trong Unity; thao tác UI và save/reload, IndexedDB/audio/import trong Chrome riêng. Xem browser-gameplay-check.json và browser-storage-check.json; không xác nhận mobile/Safari hay toàn bộ engine Windows.",
+  "originalAssemblySha256": "2daf4eb479a910d9bcb7a4a33c2ab7cdf8f6831d9841fbfe61ccfd9494fc9e7f",
+  "sourceCsFiles": 1429,
+  "portRuntimeCsFiles": 42,
+  "commandEnumValues": 50,
+  "commandsWithoutSwitchCase": [],
+  "features": [
+    {
+      "id": 1,
+      "feature": "Ghi chú nhiều trang",
+      "status": "Đã triển khai",
+      "remaining": "Tạo/chọn/xóa/đổi tên nhiều trang, kéo thứ tự, nội dung và vị trí cuộn riêng.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/NoteService.cs",
+          "line": 86,
+          "anchor": "public void AddPage"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/NoteService.cs",
+          "line": 194,
+          "anchor": "public void SwapAfter"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Workspace.cs",
+          "line": 42,
+          "anchor": "AddNote"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "feature": "Danh sách công việc",
+      "status": "Đã triển khai",
+      "remaining": "Nhiều danh sách, đổi tên, sửa việc, thứ tự, hạn và ngày hoàn thành; liên kết lịch.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/FacilityTodo.cs",
+          "line": 166,
+          "anchor": "public void OnClickButtonAddTodoList"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/TodoUI.cs",
+          "line": 469,
+          "anchor": "public void SetExpire"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/TodoListData.cs",
+          "line": 45,
+          "anchor": "public void SwapTodo"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Workspace.cs",
+          "line": 48,
+          "anchor": "AddTodoList"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "feature": "Lịch và nhật ký theo ngày",
+      "status": "Đã triển khai",
+      "remaining": "Duyệt tháng/ngày, nhật ký riêng từng ngày, việc đến hạn/hoàn thành, đánh dấu thói quen và chỉnh thời gian.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/FacilityCalendar.cs",
+          "line": 171,
+          "anchor": "public void OnEndEditDiary"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/CalendarUI.cs",
+          "line": 371,
+          "anchor": "public void ChangeShowMonth"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Workspace.cs",
+          "line": 41,
+          "anchor": "Calendar"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "feature": "Theo dõi thói quen",
+      "status": "Đã triển khai",
+      "remaining": "Tạo/sửa/xóa, lịch ngày trong tuần, lịch sử đánh dấu, tạm dừng và thứ tự; thuật toán lịch sử khoảng tạm dừng chưa giống toàn bộ nguồn.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/HabitDataService.cs",
+          "line": 63,
+          "anchor": "public string CreateHabit"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/HabitDataService.cs",
+          "line": 262,
+          "anchor": "public void SetHabitDayCompleted"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Workspace.cs",
+          "line": 67,
+          "anchor": "AddHabit"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "feature": "Thống kê làm việc",
+      "status": "Đã triển khai",
+      "remaining": "Ghi thời gian theo ngày, chia phiên qua nửa đêm, biểu đồ tuần/tháng/năm và dữ liệu tổng từ save cũ.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/StatisticsService.cs",
+          "line": 110,
+          "anchor": "public void ManualUpdateWorkTime"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/StatisticsService.cs",
+          "line": 177,
+          "anchor": "CreateGraphData"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Workspace.cs",
+          "line": 43,
+          "anchor": "Statistics"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "feature": "Pomodoro đầy đủ",
+      "status": "Đã triển khai",
+      "remaining": "Start/pause/reset/skip, vòng/phút và năm preset; thống kê, EXP và âm thanh liên kết.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/PomodoroService.cs",
+          "line": 463,
+          "anchor": "public void SetLoopCount"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/PomodoroPresetUI.cs",
+          "line": 87,
+          "anchor": "public void OpenPresetEditor"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.TimerFeatures.cs",
+          "line": 12,
+          "anchor": "TimerSound"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "feature": "Đồng hồ đếm lên Countup",
+      "status": "Đã triển khai",
+      "remaining": "Countup start/pause/resume/reset, thời gian làm việc và lời thoại theo chế độ.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/CountupService.cs",
+          "line": 183,
+          "anchor": "public void StartCountup"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/CountupTimerService.cs",
+          "line": 22,
+          "anchor": "public void PlayTimer"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.TimerFeatures.cs",
+          "line": 21,
+          "anchor": "TimerVoice"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "feature": "Timer liên kết Satone/âm báo",
+      "status": "Đã triển khai",
+      "remaining": "Chọn âm bắt đầu/kết thúc, volume/mute riêng từng chế độ, bật/tắt giọng Satone và phản ứng phiên ngắn/dài/liên tiếp.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/PomodoroService.cs",
+          "line": 332,
+          "anchor": "public void OnTimerEnd"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/TimerCoreService.cs",
+          "line": 405,
+          "anchor": "public void StartTalk"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/TimerSeService.cs",
+          "line": 37,
+          "anchor": "public void PlayFinish"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Completion.cs",
+          "line": 20,
+          "anchor": "RefreshTimerAudio"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 9,
+      "feature": "Thông báo nhắc việc/timer",
+      "status": "Đã triển khai cho web",
+      "remaining": "Nhắc việc đến hạn và kết thúc timer; chỉ xin quyền khi bật. Thông báo hệ điều hành phụ thuộc quyền/trình duyệt, không thay dịch vụ chạy nền khi đóng trang.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/NotificationCtrl.cs",
+          "line": 67,
+          "anchor": "public void SetPomodoroPush"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/SettingService.cs",
+          "line": 487,
+          "anchor": "public void ChangeReminderNotification"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Profile.cs",
+          "line": 9,
+          "anchor": "Notify"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "feature": "Quản lý playlist",
+      "status": "Đã port quản lý playlist web",
+      "remaining": "Tạo/xóa/thêm/xóa/đổi thứ tự, favorites và lưu danh sách. Đổi thứ tự bằng nút; chưa có kéo thả theo UI gốc.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/MusicService.cs",
+          "line": 526,
+          "anchor": "public bool RegisterFavoriteMusic"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/MusicService.cs",
+          "line": 634,
+          "anchor": "public void SwapAfter"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/MusicService.cs",
+          "line": 602,
+          "anchor": "public void SetFavoriteTag"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 11,
+      "feature": "Nhập nhạc cá nhân",
+      "status": "Đã port import cho trình duyệt",
+      "remaining": "File/folder lưu IndexedDB, giải mã WAV khi phát và báo lỗi. Metadata file cá nhân dùng tên file; chưa đọc toàn bộ tag ID3. Chưa kiểm tra storage end-to-end trên trình duyệt.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/FacilityMusic.cs",
+          "line": 193,
+          "anchor": "ImportLocalMusicAsync"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/MusicService.cs",
+          "line": 152,
+          "anchor": "public bool AddLocalMusicItem"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 12,
+      "feature": "Phát nhạc đúng hành vi gốc",
+      "status": "Đã port các điều khiển chính",
+      "remaining": "43 bài MusicMaster, seek/auto-next/shuffle/repeat/metadata/khôi phục paused. Chưa tái hiện đầy đủ mọi fade/transition audio nguồn.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/MusicService.cs",
+          "line": 511,
+          "anchor": "public void SetMusicProgress"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/MusicService.cs",
+          "line": 211,
+          "anchor": "public async UniTask<bool> PlayNextMusic"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 13,
+      "feature": "AI sinh hoạt tự nhiên của Satone",
+      "status": "Đã mở rộng, còn khác nguồn",
+      "remaining": "Trọng số/growth/cooldown theo nhóm gốc, work/break/wild/rời ghế, trà/ăn/sleep và mesh đồ ăn hiếm. Các nhánh chuyển tiếp nội bộ của AI chưa khớp hoàn toàn engine nguồn.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/HeroineAI.cs",
+          "line": 469,
+          "anchor": "public void UpdateHeroineAI"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/HeroineAI.cs",
+          "line": 512,
+          "anchor": "private void AutoActionChange"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/LeaveChairJudge.cs",
+          "line": 197,
+          "anchor": "public bool HasLeaveChairPlan"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.WeightedActions.cs",
+          "line": 25,
+          "anchor": "Weighted"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 14,
+      "feature": "Bấm nhân vật để phản ứng",
+      "status": "Đã nối phản ứng nhân vật",
+      "remaining": "Bấm vùng renderer nhân vật, cooldown và các nhóm phản ứng/đánh thức. Hit test là bounds, chưa có mesh/collider picking chính xác hoàn toàn.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/FacilityClickHeroine.cs",
+          "line": 94,
+          "anchor": "private void UpdateHeroineClickFlag"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/FacilityClickHeroine.cs",
+          "line": 383,
+          "anchor": "public void AnswerChoiceStory"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Autonomy.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 15,
+      "feature": "Chế độ làm việc/vị trí phòng",
+      "status": "Một phần",
+      "remaining": "Đã nối chọn đọc/viết/gõ trong General và lưu lựa chọn. Chuyển bàn/sofa/giường và controller di chuyển chưa port.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/FacilityLocation.cs",
+          "line": 81,
+          "anchor": "public void OnClickButtonSofa"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/NextActionSelector.cs",
+          "line": 209,
+          "anchor": "public void UpdateNextWorkAction"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillGraphicsPlayer.cs",
+          "line": 80,
+          "anchor": "public void PlayState"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillGraphicsPlayer.cs",
+          "line": 97,
+          "anchor": "if (ChillGameplayUI.Active) return"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.cs",
+          "line": 59,
+          "anchor": "public void Initialize"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "feature": "Trang trí và preset phòng",
+      "status": "Đã triển khai",
+      "remaining": "29 nhóm lựa chọn, skin/màu nguồn, điều kiện mở khóa/điểm, reset, lưu/nạp/xóa preset phòng. Popup mua đồ dùng adapter web.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/DecorationService.cs",
+          "line": 274,
+          "anchor": "public void ChangeDecoration"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/DecorationDataService.cs",
+          "line": 89,
+          "anchor": "public void SaveCurrentToPreset"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Completion.cs",
+          "line": 64,
+          "anchor": "ShowSkinSelector"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "feature": "Cảnh cửa sổ và ambient",
+      "status": "Một phần mở rộng",
+      "remaining": "Giữ 24 cảnh cửa sổ và thêm 30 ambient độc lập, lưu mức, tự đổi ngày/chiều/đêm theo giờ cấu hình. Chưa port mọi phối hợp ambient/environment riêng của nguồn.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/EnvironmentDataService.cs",
+          "line": 51,
+          "anchor": "public void SetVolume"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/EnvironmentDataService.cs",
+          "line": 119,
+          "anchor": "public void LoadPreset"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/AutoTimeWindowViewChanger.cs",
+          "line": 264,
+          "anchor": "public void ApplyTimeOfDayFromCurrentTime"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 18,
+      "feature": "Trang phục/kiểu tóc theo ngày",
+      "status": "Đã triển khai",
+      "remaining": "Bốn kiểu tóc, năm trang phục, material/xương theo nguồn và chọn theo trọng số tháng mỗi ngày; các quy tắc sự kiện giới hạn thời gian chưa đầy đủ.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/CostumeChangeService.cs",
+          "line": 132,
+          "anchor": "public async UniTask ChangeTodayCostume"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/ChangeHairService.cs",
+          "line": 26,
+          "anchor": "public void TodayChangeHair"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillWardrobe.cs",
+          "line": 16,
+          "anchor": "Apply"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "feature": "Mở khóa/điểm mua đồ",
+      "status": "Đã triển khai",
+      "remaining": "Master điều kiện story/level/points, mua một lần và kiểm tra số dư; mở khóa môi trường và nhạc.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/PlayerPointService.cs",
+          "line": 32,
+          "anchor": "public bool ConsumePoint"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/UnlockConditionService.cs",
+          "line": 82,
+          "anchor": "public bool Purchase"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/UnlockMusic.cs",
+          "line": 41,
+          "anchor": "public bool IsUnlocked"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Room.cs",
+          "line": 17,
+          "anchor": "Purchase"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "feature": "Achievement",
+      "status": "Đã triển khai cục bộ",
+      "remaining": "Lưu achievement và thông báo, xem trong hồ sơ; không nối achievement/stats Steam.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/AchievementService.cs",
+          "line": 17,
+          "anchor": "public void Setup"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/AchievementService.cs",
+          "line": 187,
+          "anchor": "public void UpdateTotalTimerWorkHour"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Workspace.cs",
+          "line": 44,
+          "anchor": "Achievement"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "feature": "UI truyện/nhật ký thoại",
+      "status": "Một phần mở rộng",
+      "remaining": "Talk Log/row con, Skip, lịch sử thoại tối đa 200 mục và bảo toàn resume khi hội thoại tự động. Chưa đồng bộ toàn bộ bố cục/stats log nguồn.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/ScenarioReader.cs",
+          "line": 624,
+          "anchor": "public void SkipStory"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/StorySystemUI.cs",
+          "line": 232,
+          "anchor": "public void ChangeMessageType"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 22,
+      "feature": "Ngữ nghĩa lệnh kịch bản",
+      "status": "Một phần",
+      "remaining": "Có case cho mọi giá trị CommandType nhưng hành vi chưa đều tương đương: command 25 vốn chỉ phát ở talk log được gộp BGM thường; command 50 vốn chờ tín hiệu controller được đổi thành chờ Next; PomodoroVoiceText chưa đồng bộ AI/timer.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/ScenarioReader.cs",
+          "line": 239,
+          "anchor": "case CommandType.TalkLogOnlyPlayBGM"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/ScenarioReader.cs",
+          "line": 827,
+          "anchor": "case CommandType.ReadNextForScript"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/ScenarioReader.cs",
+          "line": 671,
+          "anchor": "case CommandType.PomodoroVoiceText"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.cs",
+          "line": 319,
+          "anchor": "case 2: case 50:"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.cs",
+          "line": 324,
+          "anchor": "case 5: case 25: case 26:"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.cs",
+          "line": 317,
+          "anchor": "case 22: yield return Speak"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "feature": "Tutorial/trợ giúp",
+      "status": "Đã nối tutorial native",
+      "remaining": "Click Satone, focus timer/note/todo và bốn trang sprite nguồn ở bảy ngôn ngữ. Chưa đối chiếu toàn bộ lượt tutorial trong gameplay trình duyệt.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/TutorialService.cs",
+          "line": 123,
+          "anchor": "public async UniTask FocusPomodoro"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/RoomGameManager.cs",
+          "line": 411,
+          "anchor": "case MainState.Tutorial3:"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 24,
+      "feature": "Credits/kết thúc",
+      "status": "Đã nối credits native",
+      "remaining": "15 nhóm Canvas, fade/hold/delay lấy từ nguồn; có nút Credits và lệnh truyện. Chưa port service Windows/Steam liên quan ending.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/EndCreditsService.cs",
+          "line": 48,
+          "anchor": "public async UniTask Play"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 25,
+      "feature": "Special/collaboration/sự kiện",
+      "status": "Đã mở rộng, còn khác nguồn",
+      "remaining": "Bảy nhánh special có EXP/level độc lập, các story unlock nối dữ liệu gốc; sinh nhật/lịch/chào/tạm biệt đã nối. Không khẳng định đủ mọi sự kiện/collaboration của bản Windows.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/SpecialService.cs",
+          "line": 478,
+          "anchor": "private async UniTask ChangeSpecial"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/SpecialService.cs",
+          "line": 703,
+          "anchor": "public void OnEndStory"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/LimitedTimeEventService.cs",
+          "line": 21,
+          "anchor": "public void ActivateEvent"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Collaboration.cs",
+          "line": 7,
+          "anchor": "Collaboration"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 26,
+      "feature": "Hồ sơ người chơi/Satone",
+      "status": "Đã triển khai",
+      "remaining": "Tên, avatar preset/custom, trạng thái, sinh nhật; profile Satone volume/mute/self-talk; avatar custom lưu vào save web.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/ProfileService.cs",
+          "line": 34,
+          "anchor": "ImportProfileIconTexture"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/ProfileService.cs",
+          "line": 111,
+          "anchor": "public void SetStatus"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/SettingBirthdayService.cs",
+          "line": 10,
+          "anchor": "OpenBirthDaySettingDialog"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Profile.cs",
+          "line": 24,
+          "anchor": "InitializeProfileControls"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "feature": "Cài đặt/ngôn ngữ",
+      "status": "Một phần mở rộng",
+      "remaining": "Bảy ngôn ngữ, AI, audio channels, auto-time, 12/24h, quality/FPS/render scale/post/fullscreen và fit UI. Chưa đủ mọi tùy chọn nguồn/plugin OS.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/SettingService.cs",
+          "line": 360,
+          "anchor": "public void ChangeAudioMixerVolume"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/SettingService.cs",
+          "line": 200,
+          "anchor": "public void ChangeTimeFormat"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/SettingService.cs",
+          "line": 343,
+          "anchor": "public void ChangeRenderScale"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 28,
+      "feature": "Save đầy đủ/tương thích nguồn",
+      "status": "Đã mở rộng cho web",
+      "remaining": "Save cục bộ, import/export/backup, migrate dữ liệu web cũ và kiểm tra dữ liệu nhập; nhạc riêng lưu IndexedDB, không nằm trong JSON. Không tương thích save Windows.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/SaveDataIO.cs",
+          "line": 18,
+          "anchor": "public class"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/SaveDataManager.cs",
+          "line": 11,
+          "anchor": "public class"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillBrowserSave.cs",
+          "line": 11,
+          "anchor": "Write"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 29,
+      "feature": "Account/cloud/Steam/tính năng OS",
+      "status": "Hoãn theo yêu cầu",
+      "remaining": "Cloud/account để sau theo lựa chọn của người dùng. API Steam và plugin OS native không chạy trong WebGL.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/LoginFlow.cs",
+          "line": 43,
+          "anchor": "public async UniTask LoginAsync"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/Web/SaveDataSync.cs",
+          "line": 10,
+          "anchor": "public class"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/SettingService.cs",
+          "line": 188,
+          "anchor": "public void ChangeAlwaysOnTop"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/SettingService.cs",
+          "line": 494,
+          "anchor": "public void ChangePictureInPicture"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillBrowserSave.cs",
+          "line": 15,
+          "anchor": "Load"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "feature": "Đồ họa/camera/mô phỏng",
+      "status": "Một phần mở rộng",
+      "remaining": "Bốn post profile chuyển thông số Beautify/LiftGammaGain sang URP, giữ đèn bàn gốc. Chưa pixel parity/Cinemachine/MagicaCloth gốc đầy đủ.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/DirectionService.cs",
+          "line": 6,
+          "anchor": "public class"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/RoomCameraManager.cs",
+          "line": 9,
+          "anchor": "public class"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 31,
+      "feature": "UI mobile/vòng đời ứng dụng",
+      "status": "Một phần mở rộng",
+      "remaining": "Fit khung native, touch/gesture, save khi pagehide/focus, FPS nền và fullscreen theo trình duyệt. Chưa kiểm chứng mobile/Safari trên thiết bị thật.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/SettingService.cs",
+          "line": 494,
+          "anchor": "public void ChangePictureInPicture"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    },
+    {
+      "id": 32,
+      "feature": "Animation UI/khóa chức năng",
+      "status": "Đã mở rộng, còn khác nguồn",
+      "remaining": "Fade mở cửa sổ, kéo vị trí và lưu, raycast/callback gốc được thay bằng adapter, loại callback prefab cũ. Tween đóng/mở chưa giống toàn bộ animation nguồn.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/NoteUI.cs",
+          "line": 97,
+          "anchor": "public void Activate"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/FacilityLockEventService.cs",
+          "line": 15,
+          "anchor": "public void SendLockEvent"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/TooltipService.cs",
+          "line": 5,
+          "anchor": "public class"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.cs",
+          "line": 66,
+          "anchor": "CleanEvents"
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "feature": "Khởi động/chào/tạm biệt",
+      "status": "Đã nối các luồng web chính",
+      "remaining": "Chào theo thời gian lần ghé trước, phản ứng focus, tạm biệt và lưu; không đóng tab. Chưa mọi biến thể nguồn/lifecycle Windows.",
+      "original": [
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/Bulbul/RoomGameManager.cs",
+          "line": 350,
+          "anchor": "case MainState.EndGameStartDirection:"
+        },
+        {
+          "path": "Recovered/ExportedProject/Assets/Scripts/Assembly-CSharp/SmallTalkSelector.cs",
+          "line": 66,
+          "anchor": "public float LotterySmallTalk"
+        }
+      ],
+      "port": [
+        {
+          "path": "src/graphics/Runtime/ChillStoryRuntime.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        },
+        {
+          "path": "src/graphics/Runtime/ChillNativeUI.Features.cs",
+          "line": 1,
+          "anchor": "Feature implementation"
+        }
+      ],
+      "verification": "research/features-check.json; research/features-1-3-6-7-8.md"
+    }
+  ],
+  "sourceDataIssues": "6 missing localization references: research/story-data-report.json; source-data issue, not 6 unimplemented features.",
+  "updatedAt": "2026-10-13T00:09:08.925457+07:00",
+  "nativeControlsCheck": "research/native-controls-check.json",
+  "nativeHudCheck": "research/native-hud-check.json",
+  "deskLampCheck": "research/desk-lamp-render-check.json",
+  "selectedFeatureGroups": [
+    1,
+    3,
+    6,
+    7,
+    8
+  ],
+  "completeOriginalGameParity": false,
+  "cloudDeferredByUser": true
+}

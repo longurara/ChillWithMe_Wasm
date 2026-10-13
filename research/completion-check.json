@@ -1,0 +1,20 @@
+{
+    "passed": true,
+    "oldSaveMigration": true,
+    "noteIsolation": true,
+    "todoIsolation": true,
+    "reorder": true,
+    "calendarMidnight": true,
+    "diary": true,
+    "habitSchedule": true,
+    "pointsAndPurchases": true,
+    "roomPresets": true,
+    "saveRoundTrip": true,
+    "invalidSaveRejected": true,
+    "weightedActions": true,
+    "timerOptions": true,
+    "nativePanes": true,
+    "userSaveWritten": false,
+    "panes": 10,
+    "hooks": 369
+}

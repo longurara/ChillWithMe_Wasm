@@ -1,0 +1,3882 @@
+{
+  "events": [
+    {
+      "clip": "anim_break_forward_base (1)",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0.51381683,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_break_forward_base (1)",
+      "name": "RubbingClothes4",
+      "time": 0.6045921,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_forward_base (1)",
+      "name": "RubbingClothes2",
+      "time": 1.2474971,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_forward_base",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 3
+    },
+    {
+      "clip": "anim_break_forward_base",
+      "name": "RubbingClothes2",
+      "time": 0.50367105,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_forward_base",
+      "name": "RubbingClothes3",
+      "time": 1.4156989,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_forward_base",
+      "name": "RubbingClothes4",
+      "time": 2.0959816,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_base_end",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_break_movie_base_end",
+      "name": "RubbingClothes2",
+      "time": 0.26096487,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_base_end",
+      "name": "AdjustWhenLiftingElbowFromArmrest",
+      "time": 0.53054047,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_break_movie_base_loop",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 2
+    },
+    {
+      "clip": "anim_break_movie_base_loop2_end",
+      "name": "PlayChairAnimationEndBreakMovie",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_base_loop2_loop",
+      "name": "PlayChairAnimationLoopBreakMovie",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_base_loop2_loop",
+      "name": "RubbingClothes4",
+      "time": 1.4019607,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_base_loop2_loop",
+      "name": "RubbingClothes4",
+      "time": 2.6176472,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_base_loop2_loop",
+      "name": "PlayChairCreaking",
+      "time": 3.0490196,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_base_loop2_loop",
+      "name": "RubbingClothes4",
+      "time": 3.245098,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_base_loop2_start",
+      "name": "PlayChairAnimationStartBreakMovie",
+      "time": 0.013157895,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_base_loop2_start",
+      "name": "PlayChairCreaking",
+      "time": 0.22794117,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_base_start",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 2
+    },
+    {
+      "clip": "anim_break_movie_base_start",
+      "name": "AdjustWhenPlacingElbowOnArmrest",
+      "time": 0.08347876,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_base_start",
+      "name": "RubbingClothes2",
+      "time": 0.46564326,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_sub_laugh_end",
+      "name": "RubbingClothes3",
+      "time": 0.44298267,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_sub_laugh_start",
+      "name": "RubbingClothes3",
+      "time": 0.3125,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_sub_laugh_start",
+      "name": "PlayLaughVoice",
+      "time": 0.5390625,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_sub_suspense_start",
+      "name": "RubbingClothes3",
+      "time": 0.71820176,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_sub_trash",
+      "name": "RubbingClothes2",
+      "time": 3.7653508,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_movie_sub_trash",
+      "name": "PlayChairCreaking",
+      "time": 4.374269,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_music_base",
+      "name": "RubbingClothes3",
+      "time": 2.3596492,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_music_low_end",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_break_music_low_start",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 2
+    },
+    {
+      "clip": "anim_break_music_low_start",
+      "name": "RubbingClothes3",
+      "time": 0.747807,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_music_low_start",
+      "name": "PlayChairCreaking",
+      "time": 0.9890352,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_novel_base_end",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_break_novel_base_end",
+      "name": "PlayChairAnimationEndBreakReadBook",
+      "time": 0.16029282,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_novel_base_end",
+      "name": "DeactivateBook",
+      "time": 0.9618451,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_novel_base_loop",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 2
+    },
+    {
+      "clip": "anim_break_novel_base_start_0",
+      "name": "PlayChairAnimationStartBreakReadBook",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_novel_base_start_0",
+      "name": "RubbingClothes3",
+      "time": 0.7931286,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_novel_base_start_0",
+      "name": "ActivateBook",
+      "time": 0.96160847,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_novel_base_start_0",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 1.0684298,
+      "text": "",
+      "integer": 2
+    },
+    {
+      "clip": "anim_break_novel_sub_action_start",
+      "name": "PlayInterestVoice",
+      "time": 2.1473281,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_novel_sub_pageflip_back",
+      "name": "NovelFlipPage",
+      "time": 0.2704679,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_novel_sub_pageflip_back",
+      "name": "BreakBookBackPage",
+      "time": 0.27096775,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_novel_sub_pageflip_next",
+      "name": "BreakBookNextPage",
+      "time": 0.20698924,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_novel_sub_pageflip_next",
+      "name": "NovelFlipPage",
+      "time": 0.20833333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_playingwithapen_drop",
+      "name": "PlayPenAnimationPickupDroppedPen",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_playingwithapen_drop",
+      "name": "PlayChairAnimationPickupDroppedPen",
+      "time": 0.15922637,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_playingwithapen_drop",
+      "name": "PlayDropPen",
+      "time": 1.4299729,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_playingwithapen_drop",
+      "name": "PlayDropPenVoice",
+      "time": 1.5096377,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_playingwithapen_drop",
+      "name": "PlayChairCaster",
+      "time": 2.7106245,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_playingwithapen_drop",
+      "name": "PlayChairCaster",
+      "time": 6.5620847,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_playingwithapen_end",
+      "name": "PlayPenAnimationEndSpinning",
+      "time": 0.58205974,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_playingwithapen_end",
+      "name": "DeactivatePen",
+      "time": 2.6548429,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_playingwithapen_loop",
+      "name": "PlayPenAnimationLoopSpinning",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_playingwithapen_start",
+      "name": "PlayPenAnimationStartSpinning",
+      "time": 1.1052631,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_playingwithapen_start",
+      "name": "ActivatePenForSpin",
+      "time": 1.129682,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_sleep_sub_wakeup_start",
+      "name": "PlayChairCreaking",
+      "time": 0.13304092,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_sleep_sub_wakeup_start",
+      "name": "PlayJumpUpStartVoice",
+      "time": 0.1485316,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_sleep_sub_wakeup_start",
+      "name": "RubbingClothes3",
+      "time": 0.18055536,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_sleep_sub_wakeup_start",
+      "name": "PlayJumpUpEndVoice",
+      "time": 2.1191518,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_base_end",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_break_tea_base_end",
+      "name": "DeactivateCop",
+      "time": 0.9990541,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_base_end",
+      "name": "PlaceCup",
+      "time": 1.0011127,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_base_loop",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 2
+    },
+    {
+      "clip": "anim_break_tea_base_start",
+      "name": "ActivateCop",
+      "time": 0.9731319,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_base_start",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 1.0086356,
+      "text": "",
+      "integer": 2
+    },
+    {
+      "clip": "anim_break_tea_base_start",
+      "name": "PlayCupSoundForSmallMovement",
+      "time": 1.3498243,
+      "text": "",
+      "integer": 2
+    },
+    {
+      "clip": "anim_break_tea_sub",
+      "name": "PlayDrinkToCoolVoice_2",
+      "time": 1.8189497,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub",
+      "name": "Drink",
+      "time": 7.1986456,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_drink",
+      "name": "PlayCupSoundForSmallMovement",
+      "time": 1.3736638,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_drink_end",
+      "name": "Drink",
+      "time": 0.25487328,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_drink_end",
+      "name": "PlayCupSoundAfterDrinking",
+      "time": 0.40136057,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_hot",
+      "name": "PlayDrinkHotVoice",
+      "time": 1.6429329,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_hot",
+      "name": "OnEndDrinkHotReaction",
+      "time": 2.744453,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_hot",
+      "name": "PlayDrinkToCoolVoice",
+      "time": 3.16358,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_end_0",
+      "name": "PlayChairAnimationEndUseCoffeeMaker",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_end_0",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 4
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_end_0",
+      "name": "TakeCopFromCoffeeMaker",
+      "time": 3.313725,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_end_0",
+      "name": "DeactivateCop",
+      "time": 4.1993537,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_end_0",
+      "name": "PlaceCup",
+      "time": 4.2244363,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_end_0",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 6.0172715,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_loop_0",
+      "name": "PlayChairAnimationLoopUseCoffeeMaker",
+      "time": 0.019283295,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_loop_0",
+      "name": "PlayDropCoffeeFromCoffeeMaker",
+      "time": 5.4745245,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_loop_0",
+      "name": "PourDrinksFromCoffeeMaker",
+      "time": 5.8285713,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_start_0",
+      "name": "PlayChairAnimationStartUseCoffeeMaker",
+      "time": 0.1969697,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_start_0",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 2.015485,
+      "text": "",
+      "integer": 4
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_start_0",
+      "name": "PlaceCup",
+      "time": 4.5333333,
+      "text": "CoffeeMaker",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_start_0",
+      "name": "PutCopOnCoffeeMaker",
+      "time": 4.5371222,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_start_0",
+      "name": "PlayCoffeeMakerAll",
+      "time": 5.42562,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_break_tea_sub_maker_start_0",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 6.039724,
+      "text": "",
+      "integer": 3
+    },
+    {
+      "clip": "anim_break_yawn_1_start",
+      "name": "PlayPomodoroVoice",
+      "time": 0.37471884,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_break_yawn_2_start",
+      "name": "PlayPomodoroVoice",
+      "time": 0,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_start_fromoutside_001",
+      "name": "PlayChairAnimationStartSitFromOutSide",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_start_fromoutside_001",
+      "name": "RubbingClothes3",
+      "time": 2.5962856,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_start_fromoutside_001",
+      "name": "RubbingClothes2",
+      "time": 4.518777,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_start_fromoutside_001",
+      "name": "RubbingClothes1",
+      "time": 6.349951,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_start_fromoutside_001",
+      "name": "PlayChairCreaking",
+      "time": 7.491691,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_start_haircheck",
+      "name": "PlayPomodoroVoice",
+      "time": 0.20618556,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_story_base001_base",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_story_base001_base",
+      "name": "AdjustWhenLiftingElbowFromArmrest",
+      "time": 0.9142858,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_story_base001_base",
+      "name": "AdjustWhenFinishShowSnack",
+      "time": 1.117647,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_story_base001_sub_125_1",
+      "name": "RubbingClothes2",
+      "time": 0.12162162,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_125_2",
+      "name": "RubbingClothes2",
+      "time": 0.88976467,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_12_1",
+      "name": "RubbingClothes2",
+      "time": 2.033579,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_20",
+      "name": "PlayChairCreaking",
+      "time": 0.20229319,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_20",
+      "name": "RubbingClothes2",
+      "time": 0.2768223,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_20",
+      "name": "RubbingClothes2",
+      "time": 2.3043172,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_20",
+      "name": "RubbingClothes2",
+      "time": 4.067158,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_27_1",
+      "name": "PlayChairAnimationFirst",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_27_1",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 6
+    },
+    {
+      "clip": "anim_story_base001_sub_27_1",
+      "name": "PlayChairCreaking",
+      "time": 0.35380834,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_27_1",
+      "name": "RubbingClothes2",
+      "time": 0.5675676,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_27_5",
+      "name": "RubbingClothes2",
+      "time": 0.46437347,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_27_7",
+      "name": "RubbingClothes2",
+      "time": 0.3144963,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_27_8",
+      "name": "PlayChairAnimationSecond",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_27_8",
+      "name": "PlayChairCreaking",
+      "time": 0.17690417,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_27_8",
+      "name": "RubbingClothes2",
+      "time": 0.32923833,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_28_0",
+      "name": "PlayChairAnimationSubBase006",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_28_1",
+      "name": "PlayChairAnimationSubBase006",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_28_1",
+      "name": "RubbingClothes2",
+      "time": 4.0458636,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_28_1",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 9.508714,
+      "text": "",
+      "integer": 6
+    },
+    {
+      "clip": "anim_story_base001_sub_28_1",
+      "name": "RubbingClothes2",
+      "time": 10.457003,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_28_1",
+      "name": "PlayChairCreaking",
+      "time": 10.768223,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_28_3_0",
+      "name": "PlayChairCreaking",
+      "time": 0.07371008,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_28_3_0",
+      "name": "RubbingClothes2",
+      "time": 0.16216215,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_28_4",
+      "name": "RubbingClothes2",
+      "time": 0.26945126,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_28_5_end",
+      "name": "RubbingClothes2",
+      "time": 0.5536446,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_28_6",
+      "name": "RubbingClothes2",
+      "time": 11.846848,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_28_6",
+      "name": "RubbingClothes2",
+      "time": 12.027027,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_confidence_end",
+      "name": "RubbingClothes3",
+      "time": 0.18421048,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_confidence_start",
+      "name": "RubbingClothes2",
+      "time": 0.47514617,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_copycat (2)",
+      "name": "RubbingClothes4",
+      "time": 0.043320633,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_copycat",
+      "name": "RubbingClothes2",
+      "time": 0.19204992,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_deep_start",
+      "name": "PlayPomodoroVoice",
+      "time": 0.16219461,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_story_base001_sub_distress (2)",
+      "name": "RubbingClothes3",
+      "time": 0.38083553,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_distress",
+      "name": "RubbingClothes3",
+      "time": 0.46683046,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_dropshoulders_start",
+      "name": "RubbingClothes3",
+      "time": 0.33552632,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_eieio (2)",
+      "name": "RubbingClothes3",
+      "time": 0.12899253,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_eieio",
+      "name": "RubbingClothes2",
+      "time": 0.6228501,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_eieio",
+      "name": "RubbingClothes3",
+      "time": 1.8206389,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_frustration1_start",
+      "name": "RubbingClothes3",
+      "time": 0.10233918,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_frustration2_start",
+      "name": "RubbingClothes3",
+      "time": 0.108918265,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_introduce_end",
+      "name": "RubbingClothes4",
+      "time": 0.15487823,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_introduce_start",
+      "name": "RubbingClothes4",
+      "time": 0.17456716,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_jump_end",
+      "name": "RubbingClothes3",
+      "time": 0.2351666,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_jump_start",
+      "name": "RubbingClothes2",
+      "time": 0.0877193,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_jump_start",
+      "name": "PlayChairCreaking",
+      "time": 0.50438595,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_lookpenguin_start",
+      "name": "PlayChairCreaking",
+      "time": 0.32063884,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_lookpenguin_start",
+      "name": "RubbingClothes2",
+      "time": 0.35197368,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_magicalprincess_1_start_0",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 2
+    },
+    {
+      "clip": "anim_story_base001_sub_magicalprincess_2_middle_0",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_story_base001_sub_magicalprincess_2_start",
+      "name": "PlayHandClap",
+      "time": 0.83757716,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_newyear_countdown_1",
+      "name": "RubbingClothes2",
+      "time": 0.38344228,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_newyear_countdown_2",
+      "name": "PlayHandClap",
+      "time": 4.3391438,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_nod",
+      "name": "PlayPomodoroVoice",
+      "time": 0.17614472,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_story_base001_sub_openbook_endloop_0",
+      "name": "PlayBearsRestaurantBookAnim",
+      "time": 0,
+      "text": "EndLoop",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_openbook_end_0",
+      "name": "PlayBearsRestaurantBookAnim",
+      "time": 0,
+      "text": "End",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_openbook_end_0",
+      "name": "RubbingClothes2",
+      "time": 1.3731289,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_openbook_end_0",
+      "name": "PlayPutNote",
+      "time": 2.3113213,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_openbook_end_0",
+      "name": "RubbingClothes3",
+      "time": 2.848732,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_openbook_loopchange1",
+      "name": "PlayBearsRestaurantBookAnim",
+      "time": 0,
+      "text": "LoopChange1",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_openbook_loopchange1",
+      "name": "PlayPutNote",
+      "time": 0.7612032,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_openbook_loopchange1",
+      "name": "RubbingClothes4",
+      "time": 1.9761441,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_openbook_loopchange1",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 2.0392158,
+      "text": "",
+      "integer": 7
+    },
+    {
+      "clip": "anim_story_base001_sub_openbook_loopchange2",
+      "name": "PlayBearsRestaurantBookAnim",
+      "time": 0,
+      "text": "LoopChange2",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_openbook_middleloop",
+      "name": "PlayBearsRestaurantBookAnim",
+      "time": 0,
+      "text": "MiddleLoop",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_openbook_startloop",
+      "name": "PlayBearsRestaurantBookAnim",
+      "time": 0,
+      "text": "StartLoop",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_presshands_end",
+      "name": "RubbingClothes3",
+      "time": 0.35526323,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_presshands_start",
+      "name": "RubbingClothes2",
+      "time": 0.21929824,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_presshands_start",
+      "name": "PlayHandClap",
+      "time": 0.6343346,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_presshands_start",
+      "name": "PlayPomodoroVoice",
+      "time": 0.89205635,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_story_base001_sub_shy_end",
+      "name": "RubbingClothes2",
+      "time": 0.22989772,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_shy_start",
+      "name": "RubbingClothes2",
+      "time": 0.58442986,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_thinking1_end",
+      "name": "RubbingClothes3",
+      "time": 0.255848,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base001_sub_thinking1_start",
+      "name": "RubbingClothes2",
+      "time": 0.14053571,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base002_sub_magicalprincess_eat_1_start_0",
+      "name": "StartEat1",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base002_sub_magicalprincess_eat_1_start_0",
+      "name": "RubbingClothes2",
+      "time": 1.6,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base002_sub_magicalprincess_eat_1_start_0",
+      "name": "TidyingEat1",
+      "time": 2.606392,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base002_sub_magicalprincess_eat_2_start_0",
+      "name": "StartEat2",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base002_sub_magicalprincess_eat_2_start_0",
+      "name": "RubbingClothes2",
+      "time": 0.8333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base002_sub_magicalprincess_eat_2_start_0",
+      "name": "TidyingEat2",
+      "time": 2.1659243,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base002_sub_magicalprincess_start_0",
+      "name": "TakeBreadForStory",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base002_sub_magicalprincess_start_0",
+      "name": "PlayWalk_1",
+      "time": 0.5,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base002_sub_magicalprincess_start_0",
+      "name": "RubbingClothes3",
+      "time": 2.4,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base002_sub_magicalprincess_start_0",
+      "name": "StopWalk_1",
+      "time": 2.5333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base002_sub_magicalprincess_start_0",
+      "name": "PlayChairCreaking",
+      "time": 3.7666667,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_base002_sub_magicalprincess_thinking_start",
+      "name": "RubbingClothes3",
+      "time": 0.53333336,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase001_sub_fun",
+      "name": "RubbingClothes4",
+      "time": 0.2297614,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase001_sub_joy",
+      "name": "RubbingClothes4",
+      "time": 0.24180242,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase001_sub_joy",
+      "name": "RubbingClothes3",
+      "time": 1.1348684,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase001_sub_sad",
+      "name": "RubbingClothes2",
+      "time": 0.14166667,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase001_sub_sad",
+      "name": "RubbingClothes3",
+      "time": 1.6177208,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase002_base_end",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_story_subbase002_base_end",
+      "name": "RubbingClothes2",
+      "time": 0.44407904,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase002_base_start",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 3
+    },
+    {
+      "clip": "anim_story_subbase002_base_start",
+      "name": "RubbingClothes2",
+      "time": 0.5,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase002_sub_fun",
+      "name": "RubbingClothes2",
+      "time": 0.29623443,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase002_sub_sad",
+      "name": "RubbingClothes3",
+      "time": 0.20233454,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase003sub_sad",
+      "name": "RubbingClothes2",
+      "time": 0.248538,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase003_base_end",
+      "name": "RubbingClothes2",
+      "time": 0.44223782,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase003_base_start",
+      "name": "RubbingClothes3",
+      "time": 0.7091765,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase003_base_start",
+      "name": "RubbingClothes2",
+      "time": 1.2383041,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase003_sub_fun",
+      "name": "RubbingClothes3",
+      "time": 0.28046197,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_story_subbase_002_base_loop",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 3
+    },
+    {
+      "clip": "anim_wild_banzai",
+      "name": "RubbingClothes2",
+      "time": 0.46078432,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_banzai",
+      "name": "PlayPomodoroVoice",
+      "time": 1.0888253,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_banzai",
+      "name": "PlayChairCreaking",
+      "time": 1.3529412,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_banzai",
+      "name": "RubbingClothes3",
+      "time": 1.6862745,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_banzai",
+      "name": "RubbingClothes2",
+      "time": 2.4411764,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_banzai",
+      "name": "RubbingClothes4",
+      "time": 3.77451,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_breath",
+      "name": "PlayPomodoroVoice",
+      "time": 0.07772021,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_completetask",
+      "name": "RubbingClothes2",
+      "time": 0.641767,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_completetask",
+      "name": "PlayPomodoroVoice",
+      "time": 0.9190755,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_deep_breath",
+      "name": "PlayPomodoroVoice",
+      "time": 0,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_eieio",
+      "name": "PlayPomodoroVoice",
+      "time": 0.40476188,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_eieio",
+      "name": "RubbingClothes4",
+      "time": 0.45751634,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_eieio",
+      "name": "RubbingClothes4",
+      "time": 1.3316994,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_eieio",
+      "name": "RubbingClothes2",
+      "time": 1.8055553,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_eieio",
+      "name": "RubbingClothes3",
+      "time": 2.9003267,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_fidget",
+      "name": "PlayPomodoroVoice",
+      "time": 0.30680606,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_good",
+      "name": "PlayPomodoroVoice",
+      "time": 0,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_good",
+      "name": "RubbingClothes3",
+      "time": 0.47742045,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_good",
+      "name": "RubbingClothes4",
+      "time": 1.1917872,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_good",
+      "name": "RubbingClothes3",
+      "time": 2.7902067,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_goodbye",
+      "name": "RubbingClothes3",
+      "time": 2.0263157,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_goodbye",
+      "name": "RubbingClothes4",
+      "time": 4.0526314,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_guts",
+      "name": "PlayPomodoroVoice",
+      "time": 0.41785717,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_guts",
+      "name": "PlayGutsVoice",
+      "time": 0.7560764,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_guts_2",
+      "name": "PlayPomodoroVoice",
+      "time": 0,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_guts_2",
+      "name": "RubbingClothes4",
+      "time": 0.11525555,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_guts_2",
+      "name": "RubbingClothes3",
+      "time": 0.9118862,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_guts_3",
+      "name": "PlayPomodoroVoice",
+      "time": 0,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_guts_3",
+      "name": "RubbingClothes3",
+      "time": 0.1246613,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_guts_3",
+      "name": "RubbingClothes2",
+      "time": 2.2600818,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_gymnastics",
+      "name": "RubbingClothes3",
+      "time": 1.0514057,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_gymnastics",
+      "name": "PlayPomodoroVoice",
+      "time": 1.3132622,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_gymnastics",
+      "name": "RubbingClothes4",
+      "time": 3.4136546,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_bookfrompc",
+      "name": "FromPcToBook",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_bookfrompc",
+      "name": "PlayPutNote",
+      "time": 2.2831573,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_bookfrompc",
+      "name": "PlayPutKeyboard",
+      "time": 2.7880933,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_bookfromreport_0",
+      "name": "FromReportToBook",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_bookfromreport_0",
+      "name": "PlayMoveNote",
+      "time": 2.3756492,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_bookfromreport_0",
+      "name": "PlayMoveNote",
+      "time": 3.5664244,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_bookfromreport_0",
+      "name": "PlayPutKeyboard",
+      "time": 5.113022,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_pcfrombook_0",
+      "name": "FromBookToPc",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_pcfrombook_0",
+      "name": "PlayMoveNote",
+      "time": 1.9427793,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_pcfrombook_0",
+      "name": "PlayPutKeyboard",
+      "time": 2.765351,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_pcfromreport_0",
+      "name": "FromReportToPc",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_pcfromreport_0",
+      "name": "PlayMoveNote",
+      "time": 0.86988306,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_pcfromreport_0",
+      "name": "PlayMoveKeyboard",
+      "time": 2.9378884,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_reportfrombook_0",
+      "name": "FromBookToReport",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_reportfrombook_0",
+      "name": "PlayMoveKeyboard",
+      "time": 0.76953644,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_reportfrombook_0",
+      "name": "PlayMoveNote",
+      "time": 2.0836658,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_reportfrombook_0",
+      "name": "PlayPutNote",
+      "time": 4.423273,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_reportfrompc",
+      "name": "FromPcToReport",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_reportfrompc",
+      "name": "PlayPutNote",
+      "time": 0.9420341,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_reportfrompc",
+      "name": "PlayPutKeyboard",
+      "time": 2.7413552,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_layout_reportfrompc",
+      "name": "PlayPutNote",
+      "time": 3.2276065,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_eat_1_0",
+      "name": "StartEat1",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_eat_1_0",
+      "name": "RubbingClothes2",
+      "time": 0.4,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_eat_1_0",
+      "name": "RubbingClothes3",
+      "time": 2.9,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_eat_1_0",
+      "name": "TidyingEat1",
+      "time": 3.7333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_eat_2",
+      "name": "StartEat2",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_eat_2",
+      "name": "RubbingClothes3",
+      "time": 1.3666667,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_eat_2",
+      "name": "TidyingEat2",
+      "time": 2.2666667,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_eat_3_0",
+      "name": "RubbingClothes2",
+      "time": 0.73333335,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_eat_3_0",
+      "name": "TidyingEat3",
+      "time": 2.5333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_end",
+      "name": "RubbingClothes2",
+      "time": 1.2333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_end",
+      "name": "PlayEatenCupcakeRubHands",
+      "time": 3.6666667,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_start_0",
+      "name": "PlayWalk_1",
+      "time": 0.5,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_start_0",
+      "name": "RubbingClothes3",
+      "time": 2.5,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_start_0",
+      "name": "StopWalk_1",
+      "time": 2.5666666,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_A_comeback_start_0",
+      "name": "PlayChairCreaking",
+      "time": 3.7333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_eat_1_0",
+      "name": "StartEat1",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_eat_1_0",
+      "name": "RubbingClothes2",
+      "time": 0.4,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_eat_1_0",
+      "name": "RubbingClothes2",
+      "time": 2.9,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_eat_1_0",
+      "name": "TidyingEat1",
+      "time": 3.7333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_eat_2",
+      "name": "StartEat2",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_eat_2",
+      "name": "RubbingClothes3",
+      "time": 1.3666667,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_eat_2",
+      "name": "TidyingEat2",
+      "time": 2.1333334,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_eat_3_0",
+      "name": "RubbingClothes2",
+      "time": 0.73333335,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_eat_3_0",
+      "name": "TidyingEat3",
+      "time": 2.7628095,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_end_0",
+      "name": "RubbingClothes2",
+      "time": 1.2666667,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_end_0",
+      "name": "PlayEatenCupcakeRubHands",
+      "time": 3.6666667,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_start_0",
+      "name": "PlayWalk_1",
+      "time": 0.5,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_start_0",
+      "name": "RubbingClothes3",
+      "time": 2.4,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_start_0",
+      "name": "StopWalk_1",
+      "time": 2.6,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_bread_B_comeback_start_0",
+      "name": "PlayChairCreaking",
+      "time": 3.7333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_camera_loop",
+      "name": "PlayChairAnimationLeaveChairCookieShow",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_eat_1",
+      "name": "PlayChairAnimationLeaveChairCookieEatStart1",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_eat_1",
+      "name": "RubbingClothes3",
+      "time": 0.43333334,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_eat_1",
+      "name": "RubbingClothes4",
+      "time": 2.6666667,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_eat_1",
+      "name": "EatCookie1",
+      "time": 3.7333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_eat_2",
+      "name": "PlayChairAnimationLeaveChairCookieEatStart2",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_eat_2",
+      "name": "RubbingClothes3",
+      "time": 0.3,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_eat_2",
+      "name": "EatCookie2",
+      "time": 3.0666666,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_eat_loop_1",
+      "name": "PlayChairAnimationLeaveChairCookieEatLoop1",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_eat_loop_2",
+      "name": "PlayChairAnimationLeaveChairCookieEatLoop2",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_end",
+      "name": "PlayChairAnimationLeaveChairCookieEatEnd",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_end",
+      "name": "RubbingClothes2",
+      "time": 1.2333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_end",
+      "name": "AdjustWhenFinishShowSnack",
+      "time": 2.4,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_end",
+      "name": "PlayEatenCupcakeRubHands",
+      "time": 5.1,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_start",
+      "name": "PlayChairAnimationLeaveChairCookieComeback",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_start",
+      "name": "PlayWalk_1",
+      "time": 0.43333334,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_start",
+      "name": "RubbingClothes3",
+      "time": 2.2333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_start",
+      "name": "StopWalk_1",
+      "time": 2.3333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_start",
+      "name": "PlayChairCreaking",
+      "time": 3.5333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cookie_comeback_start",
+      "name": "AdjustWhenStartShowSnack",
+      "time": 4.633333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_camera_loop_0",
+      "name": "PlayChairAnimationLeaveChairCupcakeShow",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_eat_1",
+      "name": "PlayChairAnimationLeaveChairCupcakeEatStart1",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_eat_1",
+      "name": "RubbingClothes2",
+      "time": 0.4,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_eat_1",
+      "name": "RubbingClothes3",
+      "time": 2.9666667,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_eat_1",
+      "name": "EatCake1",
+      "time": 3.7409737,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_eat_2_0",
+      "name": "PlayChairAnimationLeaveChairCupcakeEatStart2",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_eat_2_0",
+      "name": "RubbingClothes4",
+      "time": 0.2,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_eat_2_0",
+      "name": "EatCake2",
+      "time": 3.054441,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_eat_loop_1",
+      "name": "PlayChairAnimationLeaveChairCupcakeEatLoop1",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_eat_loop_2_0",
+      "name": "PlayChairAnimationLeaveChairCupcakeEatLoop2",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_end",
+      "name": "PlayChairAnimationLeaveChairCupcakeEatEnd",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_end",
+      "name": "PlayEatenCupcakeCrushCup",
+      "time": 1.1782244,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_end",
+      "name": "CrashCup",
+      "time": 1.2501556,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_end",
+      "name": "AdjustWhenFinishShowSnack",
+      "time": 2.6666667,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_end",
+      "name": "PlayEatenCupcakeRubHands",
+      "time": 5.105636,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_start",
+      "name": "PlayChairAnimationLeaveChairCupcakeComeback",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_start",
+      "name": "PlayWalk_1",
+      "time": 0.5,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_start",
+      "name": "RubbingClothes3",
+      "time": 2.4,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_start",
+      "name": "StopWalk_1",
+      "time": 2.5666666,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_start",
+      "name": "PlayChairCreaking",
+      "time": 3.7333333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cupcake_comeback_start",
+      "name": "AdjustWhenStartShowSnack",
+      "time": 4.2,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_comeback_0",
+      "name": "PlayChairAnimationLeaveChairCupComeback",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_comeback_0",
+      "name": "PlayMotionCupIceShakeAll",
+      "time": 1.0344955,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_comeback_0",
+      "name": "PlayWalk_1",
+      "time": 1.0541034,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_comeback_0",
+      "name": "RubbingClothes3",
+      "time": 3.2313254,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_comeback_0",
+      "name": "StopWalk_1",
+      "time": 3.4230053,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_comeback_0",
+      "name": "PlayChairCreaking",
+      "time": 4.2492156,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_comeback_0",
+      "name": "PlayCupSoundForSmallMovement",
+      "time": 5.203125,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_comeback_0",
+      "name": "PlayIcewaterSwirlGlassF",
+      "time": 6.5948277,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_comeback_0",
+      "name": "DeactivateCop",
+      "time": 7.9330835,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_comeback_0",
+      "name": "PlaceCup",
+      "time": 7.9368134,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_go",
+      "name": "PlayChairAnimationLeaveChairCupGo",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_go",
+      "name": "ActivateCop",
+      "time": 0.73,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_go",
+      "name": "PlayChairCaster",
+      "time": 1.7486901,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_go",
+      "name": "PlayChairCreaking",
+      "time": 3.4561815,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_go",
+      "name": "RubbingClothes2",
+      "time": 3.5511098,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_cup_go",
+      "name": "PlayWalk_1",
+      "time": 5.1655717,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_normal_comeback",
+      "name": "PlayChairAnimationLeaveChairNormalComeback",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_normal_comeback",
+      "name": "PlayWalk_1",
+      "time": 0.44675776,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_normal_comeback",
+      "name": "RubbingClothes3",
+      "time": 2.3935742,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_normal_comeback",
+      "name": "StopWalk_1",
+      "time": 2.5355594,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_normal_comeback",
+      "name": "PlayChairCreaking",
+      "time": 3.8156862,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_normal_comeback",
+      "name": "PlayChairCaster",
+      "time": 4.203046,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_normal_go_0",
+      "name": "PlayChairAnimationLeaveChairNormalGo",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_normal_go_0",
+      "name": "PlayChairCaster",
+      "time": 0.22731113,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_normal_go_0",
+      "name": "PlayChairCreaking",
+      "time": 2.1220992,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_normal_go_0",
+      "name": "RubbingClothes2",
+      "time": 2.2209933,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_normal_go_0",
+      "name": "PlayWalk_1",
+      "time": 3.7208846,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_comeback",
+      "name": "PlayChairAnimationLeaveChairSofaComeback",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_comeback",
+      "name": "RubbingClothes3",
+      "time": 0.98152614,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_comeback",
+      "name": "PlayWalk_1",
+      "time": 3.2683249,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_comeback",
+      "name": "StopWalk_1",
+      "time": 4.2372556,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_comeback",
+      "name": "RubbingClothes2",
+      "time": 4.584772,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_comeback",
+      "name": "PlayChairCreaking",
+      "time": 5.4977226,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_comeback",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 5.7545366,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_comeback",
+      "name": "PlayChairCaster",
+      "time": 6.000089,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_comeback",
+      "name": "RubbingClothes3",
+      "time": 7.595316,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_go_0",
+      "name": "PlayChairAnimationLeaveChairSofaGo",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_go_0",
+      "name": "PlayChairCaster",
+      "time": 0.6449688,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_go_0",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 3.5605028,
+      "text": "",
+      "integer": 8
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_go_0",
+      "name": "RubbingClothes2",
+      "time": 3.6664543,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_go_0",
+      "name": "PlayWalk_1",
+      "time": 4.175936,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_go_0",
+      "name": "StopWalk_1",
+      "time": 5.3471065,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_leavechair_sofa_go_0",
+      "name": "PlaySitSofa",
+      "time": 6.1050544,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_memorie",
+      "name": "WindingMusicbox",
+      "time": 4.3932295,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_memorie",
+      "name": "PlayMusicbox",
+      "time": 11.260163,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_stretchfullbody",
+      "name": "PlayPomodoroVoice",
+      "time": 0.44285715,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_stretchfullbody",
+      "name": "RubbingClothes3",
+      "time": 0.9584609,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_stretchfullbody",
+      "name": "PlayStretchStartVoice",
+      "time": 1.5104166,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_stretchfullbody",
+      "name": "PlayChairCreaking",
+      "time": 1.7368422,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_stretchfullbody",
+      "name": "PlayStretchEndVoice",
+      "time": 2.9561403,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_stretchshoulder",
+      "name": "RubbingClothes3",
+      "time": 0.57894737,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_stretchshoulder",
+      "name": "PlayStretchStartVoice",
+      "time": 1.125,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_stretchshoulder",
+      "name": "PlayPomodoroVoice",
+      "time": 1.220339,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_stretchshoulder",
+      "name": "PlayStretchEndVoice",
+      "time": 3.3859649,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_stretch_1",
+      "name": "RubbingClothes",
+      "time": 1.2144579,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_stretch_1",
+      "name": "RubbingClothes",
+      "time": 3.7445784,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_stretch_2",
+      "name": "RubbingClothes2",
+      "time": 0.50120485,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_stretch_2",
+      "name": "PlayPomodoroVoice",
+      "time": 0.93273556,
+      "text": "",
+      "integer": 2
+    },
+    {
+      "clip": "anim_wild_stretch_2",
+      "name": "RubbingClothes4",
+      "time": 3.4901145,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_stretch_2",
+      "name": "PlayPomodoroVoice",
+      "time": 4.1755114,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_tea_base",
+      "name": "ActivateCop",
+      "time": 0.68361586,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_tea_base",
+      "name": "PlayCupSoundForSmallMovement",
+      "time": 0.9434698,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_tea_base",
+      "name": "Drink",
+      "time": 4.0674343,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_tea_base",
+      "name": "PlayCupSoundAfterDrinking",
+      "time": 4.451092,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_tea_base",
+      "name": "PlayPomodoroVoice",
+      "time": 5.636647,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_tea_base",
+      "name": "PlaceCup",
+      "time": 6.4762635,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_tea_base",
+      "name": "DeactivateCop",
+      "time": 6.6127605,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_tired",
+      "name": "RubbingClothes4",
+      "time": 0.9951807,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_tired",
+      "name": "PlayPomodoroVoice",
+      "time": 3.3591955,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_tired",
+      "name": "RubbingClothes3",
+      "time": 5.6,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_tired2_loop",
+      "name": "PlayPomodoroVoice",
+      "time": 0.040928368,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_tired2_start",
+      "name": "RubbingClothes4",
+      "time": 0.89417666,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_tired2_start",
+      "name": "PlayPomodoroVoice",
+      "time": 2.7547169,
+      "text": "",
+      "integer": 3
+    },
+    {
+      "clip": "anim_wild_tired2_start",
+      "name": "PlayPomodoroVoice",
+      "time": 4.0148163,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_tired2_start",
+      "name": "PlayPomodoroVoice",
+      "time": 4.269996,
+      "text": "",
+      "integer": 2
+    },
+    {
+      "clip": "anim_wild_wanttotalk2_end",
+      "name": "RubbingClothes3",
+      "time": 0.44225156,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_wanttotalk2_end",
+      "name": "RubbingClothes2",
+      "time": 0.97953206,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_wanttotalk2_start",
+      "name": "RubbingClothes3",
+      "time": 0.33991227,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_wanttotalk2_start",
+      "name": "RubbingClothes2",
+      "time": 0.6615497,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_wet",
+      "name": "RubbingClothes3",
+      "time": 0.5735294,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_wet",
+      "name": "PlayPomodoroVoice",
+      "time": 1.2,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_wet",
+      "name": "RubbingClothes4",
+      "time": 1.375,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_window_0",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 5
+    },
+    {
+      "clip": "anim_wild_window_0",
+      "name": "PlayChairAnimationOpenWindow",
+      "time": 0.23703703,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_window_0",
+      "name": "PlayWindowAnimationOpenWindow",
+      "time": 0.24683195,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_window_0",
+      "name": "PlayChairCaster",
+      "time": 0.51348436,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_window_0",
+      "name": "PlayOpenWindow",
+      "time": 4.5005393,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_window_0",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 8.003454,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_wild_window_close_0",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 5
+    },
+    {
+      "clip": "anim_wild_window_close_0",
+      "name": "PlayChairAnimationCloseWindow",
+      "time": 0.23703703,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_window_close_0",
+      "name": "PlayWindowAnimationCloseWindow",
+      "time": 0.24683195,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_window_close_0",
+      "name": "PlayChairCaster",
+      "time": 0.48327935,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_window_close_0",
+      "name": "PlayCloseWindow",
+      "time": 4.3495145,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_wild_window_close_0",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 7.519861,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_work_book_base_end",
+      "name": "RubbingClothes2",
+      "time": 0.63651323,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_end",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0.6794555,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_work_book_base_end",
+      "name": "PlayChairCreaking",
+      "time": 0.8190789,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_end",
+      "name": "PutWorkBook",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_end",
+      "name": "PlayPutNote",
+      "time": 0.92647076,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_end",
+      "name": "RubbingClothes3",
+      "time": 1.0588236,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_end",
+      "name": "RubbingClothes2",
+      "time": 1.1764708,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_pageflip",
+      "name": "WorkBookNextPage",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_pageflip",
+      "name": "RubbingClothes4",
+      "time": 0.38562116,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_pageflip",
+      "name": "TextbookFlipPage",
+      "time": 1.4444441,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_pageflip",
+      "name": "RubbingClothes3",
+      "time": 1.7385621,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_start",
+      "name": "TakeWorkBook",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_start",
+      "name": "PlayMoveNote",
+      "time": 0.39869282,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_start",
+      "name": "RubbingClothes4",
+      "time": 0.89542484,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_start",
+      "name": "RubbingClothes2",
+      "time": 1.366013,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_loop2_start",
+      "name": "PlayPutNote",
+      "time": 1.9673203,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_start",
+      "name": "RubbingClothes2",
+      "time": 0.3949602,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_base_start",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0.8403465,
+      "text": "",
+      "integer": 3
+    },
+    {
+      "clip": "anim_work_book_sub_keytype_end",
+      "name": "StopKeyboard",
+      "time": 0.18201733,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_sub_keytype_end",
+      "name": "RubbingClothes4",
+      "time": 0.2549019,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_sub_keytype_end",
+      "name": "RubbingClothes3",
+      "time": 0.38970566,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_sub_keytype_start",
+      "name": "RubbingClothes4",
+      "time": 0.28921568,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_sub_keytype_start",
+      "name": "RubbingClothes3",
+      "time": 0.5661765,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_sub_keytype_start",
+      "name": "PlayKeyboard",
+      "time": 0.9364035,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_sub_pageflip",
+      "name": "WorkBookNextPage",
+      "time": 0,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_book_sub_pageflip",
+      "name": "TextbookFlipPage",
+      "time": 1.2222222,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_base_end",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0.50643563,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_work_pc_base_loop",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 3
+    },
+    {
+      "clip": "anim_work_pc_base_loop",
+      "name": "PlayKeyboard",
+      "time": 0.61897075,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_base_loop",
+      "name": "PlayKeyboard",
+      "time": 3.732719,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_base_loop",
+      "name": "PlayKeyboard",
+      "time": 7.11246,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_base_loop2_end",
+      "name": "RubbingClothes2",
+      "time": 0.4649494,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_base_loop2_end",
+      "name": "PlaceCup",
+      "time": 1.0343139,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_base_loop2_end",
+      "name": "DeactivateCop",
+      "time": 1.0686276,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_base_loop2_end",
+      "name": "RubbingClothes3",
+      "time": 1.632353,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_base_loop2_start",
+      "name": "RubbingClothes4",
+      "time": 0.2973856,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_base_loop2_start",
+      "name": "ActivateCop",
+      "time": 1.000817,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_base_loop2_start",
+      "name": "RubbingClothes3",
+      "time": 1.4583333,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_base_loop2_start",
+      "name": "PlayCupSoundForSmallMovement",
+      "time": 1.7042524,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_base_start",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0.50165015,
+      "text": "",
+      "integer": 3
+    },
+    {
+      "clip": "anim_work_pc_base_start",
+      "name": "RubbingClothes3",
+      "time": 0.7046783,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_sub_stop_loop",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 3
+    },
+    {
+      "clip": "anim_work_pc_sub_thinking_end",
+      "name": "RubbingClothes2",
+      "time": 0.32675433,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_pc_sub_thinking_loop",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 3
+    },
+    {
+      "clip": "anim_work_pc_sub_thinking_start",
+      "name": "RubbingClothes2",
+      "time": 0.47643805,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_end",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 1.009901,
+      "text": "",
+      "integer": 1
+    },
+    {
+      "clip": "anim_work_report_base_end",
+      "name": "DeactivatePen",
+      "time": 1.6823531,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_loop",
+      "name": "WritePen",
+      "time": 0.07524985,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_loop2_end",
+      "name": "RubbingClothes4",
+      "time": 0.24509811,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_loop2_loop",
+      "name": "WritePen",
+      "time": 0.075163364,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_loop2_loop",
+      "name": "RubbingClothes4",
+      "time": 1.3341503,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_loop2_loop",
+      "name": "RubbingClothes4",
+      "time": 6.40768,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_loop2_loop",
+      "name": "RubbingClothes3",
+      "time": 7.08415,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_loop2_start",
+      "name": "RubbingClothes3",
+      "time": 0.5735294,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_loop2_start",
+      "name": "RubbingClothes2",
+      "time": 1.8055556,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_loop2_start",
+      "name": "StickPenIntoNote",
+      "time": 3.6854577,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_start",
+      "name": "RubbingClothes3",
+      "time": 0.13421053,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_start",
+      "name": "ActivatePen",
+      "time": 0.9282353,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_base_start",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 1.0069307,
+      "text": "",
+      "integer": 3
+    },
+    {
+      "clip": "anim_work_report_base_start",
+      "name": "StickPenIntoNote",
+      "time": 3.118421,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_sub_stop_end",
+      "name": "RubbingClothes4",
+      "time": 0.28084716,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_sub_stop_loop",
+      "name": "OnChangeHeroineLookCamera",
+      "time": 0,
+      "text": "",
+      "integer": 3
+    },
+    {
+      "clip": "anim_work_report_sub_stop_start",
+      "name": "RubbingClothes4",
+      "time": 0.83660126,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_sub_thinking_end",
+      "name": "RubbingClothes3",
+      "time": 0.15789461,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_sub_thinking_end",
+      "name": "RubbingClothes4",
+      "time": 0.66421556,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_sub_thinking_loop",
+      "name": "RubbingClothes4",
+      "time": 0.8235294,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_sub_thinking_start",
+      "name": "RubbingClothes2",
+      "time": 0.3114035,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_sub_thinking_start",
+      "name": "RubbingClothes4",
+      "time": 0.75490195,
+      "text": "",
+      "integer": 0
+    },
+    {
+      "clip": "anim_work_report_sub_thinking_start",
+      "name": "RubbingClothes3",
+      "time": 1.5294118,
+      "text": "",
+      "integer": 0
+    }
+  ],
+  "methods": {
+    "OnChangeHeroineLookCamera": 42,
+    "RubbingClothes4": 37,
+    "RubbingClothes2": 73,
+    "RubbingClothes3": 68,
+    "AdjustWhenLiftingElbowFromArmrest": 2,
+    "PlayChairAnimationEndBreakMovie": 1,
+    "PlayChairAnimationLoopBreakMovie": 1,
+    "PlayChairCreaking": 26,
+    "PlayChairAnimationStartBreakMovie": 1,
+    "AdjustWhenPlacingElbowOnArmrest": 1,
+    "PlayLaughVoice": 1,
+    "PlayChairAnimationEndBreakReadBook": 1,
+    "DeactivateBook": 1,
+    "PlayChairAnimationStartBreakReadBook": 1,
+    "ActivateBook": 1,
+    "PlayInterestVoice": 1,
+    "NovelFlipPage": 2,
+    "BreakBookBackPage": 1,
+    "BreakBookNextPage": 1,
+    "PlayPenAnimationPickupDroppedPen": 1,
+    "PlayChairAnimationPickupDroppedPen": 1,
+    "PlayDropPen": 1,
+    "PlayDropPenVoice": 1,
+    "PlayChairCaster": 9,
+    "PlayPenAnimationEndSpinning": 1,
+    "DeactivatePen": 2,
+    "PlayPenAnimationLoopSpinning": 1,
+    "PlayPenAnimationStartSpinning": 1,
+    "ActivatePenForSpin": 1,
+    "PlayJumpUpStartVoice": 1,
+    "PlayJumpUpEndVoice": 1,
+    "DeactivateCop": 5,
+    "PlaceCup": 6,
+    "ActivateCop": 4,
+    "PlayCupSoundForSmallMovement": 5,
+    "PlayDrinkToCoolVoice_2": 1,
+    "Drink": 3,
+    "PlayCupSoundAfterDrinking": 2,
+    "PlayDrinkHotVoice": 1,
+    "OnEndDrinkHotReaction": 1,
+    "PlayDrinkToCoolVoice": 1,
+    "PlayChairAnimationEndUseCoffeeMaker": 1,
+    "TakeCopFromCoffeeMaker": 1,
+    "PlayChairAnimationLoopUseCoffeeMaker": 1,
+    "PlayDropCoffeeFromCoffeeMaker": 1,
+    "PourDrinksFromCoffeeMaker": 1,
+    "PlayChairAnimationStartUseCoffeeMaker": 1,
+    "PutCopOnCoffeeMaker": 1,
+    "PlayCoffeeMakerAll": 1,
+    "PlayPomodoroVoice": 28,
+    "PlayChairAnimationStartSitFromOutSide": 1,
+    "RubbingClothes1": 1,
+    "AdjustWhenFinishShowSnack": 3,
+    "PlayChairAnimationFirst": 1,
+    "PlayChairAnimationSecond": 1,
+    "PlayChairAnimationSubBase006": 2,
+    "PlayHandClap": 3,
+    "PlayBearsRestaurantBookAnim": 6,
+    "PlayPutNote": 8,
+    "StartEat1": 3,
+    "TidyingEat1": 3,
+    "StartEat2": 3,
+    "TidyingEat2": 3,
+    "TakeBreadForStory": 1,
+    "PlayWalk_1": 11,
+    "StopWalk_1": 9,
+    "PlayGutsVoice": 1,
+    "FromPcToBook": 1,
+    "PlayPutKeyboard": 4,
+    "FromReportToBook": 1,
+    "PlayMoveNote": 6,
+    "FromBookToPc": 1,
+    "FromReportToPc": 1,
+    "PlayMoveKeyboard": 2,
+    "FromBookToReport": 1,
+    "FromPcToReport": 1,
+    "TidyingEat3": 2,
+    "PlayEatenCupcakeRubHands": 4,
+    "PlayChairAnimationLeaveChairCookieShow": 1,
+    "PlayChairAnimationLeaveChairCookieEatStart1": 1,
+    "EatCookie1": 1,
+    "PlayChairAnimationLeaveChairCookieEatStart2": 1,
+    "EatCookie2": 1,
+    "PlayChairAnimationLeaveChairCookieEatLoop1": 1,
+    "PlayChairAnimationLeaveChairCookieEatLoop2": 1,
+    "PlayChairAnimationLeaveChairCookieEatEnd": 1,
+    "PlayChairAnimationLeaveChairCookieComeback": 1,
+    "AdjustWhenStartShowSnack": 2,
+    "PlayChairAnimationLeaveChairCupcakeShow": 1,
+    "PlayChairAnimationLeaveChairCupcakeEatStart1": 1,
+    "EatCake1": 1,
+    "PlayChairAnimationLeaveChairCupcakeEatStart2": 1,
+    "EatCake2": 1,
+    "PlayChairAnimationLeaveChairCupcakeEatLoop1": 1,
+    "PlayChairAnimationLeaveChairCupcakeEatLoop2": 1,
+    "PlayChairAnimationLeaveChairCupcakeEatEnd": 1,
+    "PlayEatenCupcakeCrushCup": 1,
+    "CrashCup": 1,
+    "PlayChairAnimationLeaveChairCupcakeComeback": 1,
+    "PlayChairAnimationLeaveChairCupComeback": 1,
+    "PlayMotionCupIceShakeAll": 1,
+    "PlayIcewaterSwirlGlassF": 1,
+    "PlayChairAnimationLeaveChairCupGo": 1,
+    "PlayChairAnimationLeaveChairNormalComeback": 1,
+    "PlayChairAnimationLeaveChairNormalGo": 1,
+    "PlayChairAnimationLeaveChairSofaComeback": 1,
+    "PlayChairAnimationLeaveChairSofaGo": 1,
+    "PlaySitSofa": 1,
+    "WindingMusicbox": 1,
+    "PlayMusicbox": 1,
+    "PlayStretchStartVoice": 2,
+    "PlayStretchEndVoice": 2,
+    "RubbingClothes": 2,
+    "PlayChairAnimationOpenWindow": 1,
+    "PlayWindowAnimationOpenWindow": 1,
+    "PlayOpenWindow": 1,
+    "PlayChairAnimationCloseWindow": 1,
+    "PlayWindowAnimationCloseWindow": 1,
+    "PlayCloseWindow": 1,
+    "PutWorkBook": 1,
+    "WorkBookNextPage": 2,
+    "TextbookFlipPage": 2,
+    "TakeWorkBook": 1,
+    "StopKeyboard": 1,
+    "PlayKeyboard": 4,
+    "WritePen": 2,
+    "StickPenIntoNote": 2,
+    "ActivatePen": 1
+  },
+  "chairPenActions": [
+    {
+      "name": "PlayChairAnimationIdle",
+      "kind": "Chair",
+      "state": "Idle",
+      "value": 0,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationFirst",
+      "kind": "Chair",
+      "state": "PlayFirst",
+      "value": 1,
+      "trigger": true
+    },
+    {
+      "name": "PlayChairAnimationSecond",
+      "kind": "Chair",
+      "state": "PlaySecond",
+      "value": 2,
+      "trigger": true
+    },
+    {
+      "name": "PlayChairAnimationSubBase006",
+      "kind": "Chair",
+      "state": "SubBase_006",
+      "value": 4,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationStartBreakMovie",
+      "kind": "Chair",
+      "state": "StartBreakMovie",
+      "value": 600,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLoopBreakMovie",
+      "kind": "Chair",
+      "state": "LoopBreakMovie",
+      "value": 601,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationEndBreakMovie",
+      "kind": "Chair",
+      "state": "EndBreakMovie",
+      "value": 602,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationStartBreakReadBook",
+      "kind": "Chair",
+      "state": "StartBreakReadBook",
+      "value": 650,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationEndBreakReadBook",
+      "kind": "Chair",
+      "state": "EndBreakReadBook",
+      "value": 651,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationPickupDroppedPen",
+      "kind": "Chair",
+      "state": "PickupDroppedPen",
+      "value": 150,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationStartSitFromOutSide",
+      "kind": "Chair",
+      "state": "LeaveChair_Normal_Go",
+      "value": 5000,
+      "trigger": false
+    },
+    {
+      "name": "PlayPenAnimationStartSpinning",
+      "kind": "Pen",
+      "state": "StartSpinning",
+      "value": 0,
+      "trigger": false
+    },
+    {
+      "name": "PlayPenAnimationLoopSpinning",
+      "kind": "Pen",
+      "state": "LoopSpinning",
+      "value": 1,
+      "trigger": false
+    },
+    {
+      "name": "PlayPenAnimationEndSpinning",
+      "kind": "Pen",
+      "state": "EndSpinning",
+      "value": 2,
+      "trigger": false
+    },
+    {
+      "name": "PlayPenAnimationPickupDroppedPen",
+      "kind": "Pen",
+      "state": "PickupDroppedPen",
+      "value": 3,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationOpenWindow",
+      "kind": "Chair",
+      "state": "PlayOpenWindow",
+      "value": 5,
+      "trigger": true
+    },
+    {
+      "name": "PlayChairAnimationCloseWindow",
+      "kind": "Chair",
+      "state": "PlayCloseWindow",
+      "value": 6,
+      "trigger": true
+    },
+    {
+      "name": "PlayChairAnimationStartUseCoffeeMaker",
+      "kind": "Chair",
+      "state": "StartUseCoffeeMaker",
+      "value": 7,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLoopUseCoffeeMaker",
+      "kind": "Chair",
+      "state": "LoopUseCoffeeMaker",
+      "value": 8,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationEndUseCoffeeMaker",
+      "kind": "Chair",
+      "state": "EndUseCoffeeMaker",
+      "value": 9,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationGreetingWave1",
+      "kind": "Chair",
+      "state": "Greeting_Wave_1",
+      "value": 500,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairNormalGo",
+      "kind": "Chair",
+      "state": "LeaveChair_Normal_Go",
+      "value": 5000,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairNormalComeback",
+      "kind": "Chair",
+      "state": "LeaveChair_Normal_Comeback",
+      "value": 5001,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCupGo",
+      "kind": "Chair",
+      "state": "LeaveChair_Cup_Go",
+      "value": 5010,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCupComeback",
+      "kind": "Chair",
+      "state": "LeaveChair_Cup_Comeback",
+      "value": 5011,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCupcakeComeback",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Comeback",
+      "value": 5020,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCupcakeShow",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Show_Loop",
+      "value": 5021,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCupcakeEatStart1",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Eat_Start_1",
+      "value": 5022,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCupcakeEatLoop1",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Eat_Loop_1",
+      "value": 5023,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCupcakeEatStart2",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Eat_Start_2",
+      "value": 5024,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCupcakeEatLoop2",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Eat_Loop_2",
+      "value": 5025,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCupcakeEatEnd",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Eat_End",
+      "value": 5026,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCookieComeback",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Comeback",
+      "value": 5020,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCookieShow",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Show_Loop",
+      "value": 5021,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCookieEatStart1",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Eat_Start_1",
+      "value": 5022,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCookieEatLoop1",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Eat_Loop_1",
+      "value": 5023,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCookieEatStart2",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Eat_Start_2",
+      "value": 5024,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCookieEatLoop2",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Eat_Loop_2",
+      "value": 5025,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairCookieEatEnd",
+      "kind": "Chair",
+      "state": "LeaveChair_Cupcake_Eat_End",
+      "value": 5026,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairSofaGo",
+      "kind": "Chair",
+      "state": "LeaveChair_Sofa_Go",
+      "value": 5100,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationLeaveChairSofaComeback",
+      "kind": "Chair",
+      "state": "LeaveChair_Sofa_Comeback",
+      "value": 5101,
+      "trigger": false
+    },
+    {
+      "name": "PlayChairAnimationPlayMemorie",
+      "kind": "Chair",
+      "state": "PlayStartMemorie",
+      "value": 5200,
+      "trigger": true
+    }
+  ],
+  "cameraCount": 15
+}

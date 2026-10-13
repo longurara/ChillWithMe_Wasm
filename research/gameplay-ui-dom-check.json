@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "checks": [
+    "Unity bridge handshake",
+    "music selection command",
+    "locked chapter polling",
+    "untrusted titles escaped",
+    "note typing preserved",
+    "pending note flush",
+    "dialogue/choice controls",
+    "hide and reveal HUD",
+    "unique and complete element bindings"
+  ],
+  "automatedBrowserGameplay": false
+}

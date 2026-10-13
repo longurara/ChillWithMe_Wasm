@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": "2254",
+      "type": "text/html"
+    },
+    {
+      "path": "/ui/native.css",
+      "status": 200,
+      "bytes": "1257",
+      "type": "text/css"
+    },
+    {
+      "path": "/Build/WebPlayer.loader.js",
+      "status": 200,
+      "bytes": "13114",
+      "type": "application/javascript"
+    },
+    {
+      "path": "/Build/WebPlayer.framework.js",
+      "status": 200,
+      "bytes": "441221",
+      "type": "application/javascript"
+    },
+    {
+      "path": "/Build/WebPlayer.wasm",
+      "status": 200,
+      "bytes": "33564184",
+      "type": "application/wasm"
+    },
+    {
+      "path": "/Build/WebPlayer.data",
+      "status": 200,
+      "bytes": "104750500",
+      "type": "application/octet-stream"
+    },
+    {
+      "path": "/StreamingAssets/chill-story.json",
+      "status": 200,
+      "bytes": "1601192",
+      "type": "application/json"
+    },
+    {
+      "path": "/StreamingAssets/chill-library.json",
+      "status": 200,
+      "bytes": "2767249",
+      "type": "application/json"
+    },
+    {
+      "path": "/assetpacks/animationclip/pack-0000",
+      "status": 200,
+      "bytes": "1138682",
+      "type": "application/octet-stream"
+    },
+    {
+      "path": "/assetpacks/animationclip/pack-0001",
+      "status": 200,
+      "bytes": "889373",
+      "type": "application/octet-stream"
+    },
+    {
+      "path": "/assetpacks/animationclip/pack-0002",
+      "status": 200,
+      "bytes": "994674",
+      "type": "application/octet-stream"
+    }
+  ]
+}

@@ -8,7 +8,9 @@ namespace Hlc.ChillPrototype
         public static void Build()
         {
             ChillAssets.BuildLibrary();
-            ChillMotionAudit.CheckAndBuild();
+            ChillBuild.PrepareAndPreview();
+            ChillMotionAudit.Check();
+            ChillFeaturesCheck.BuildChecked();
         }
     }
 }

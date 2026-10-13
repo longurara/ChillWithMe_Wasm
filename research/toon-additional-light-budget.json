@@ -1,0 +1,1394 @@
+{
+    "budget": 16,
+    "enabledFeatures": [],
+    "variants": [
+        {
+            "shader": "HLC/lilToon/Opaque/4caeb42c9d86fc6fd3c6d82444676f45 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ReflectionCubeTex"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/4caeb42c9d86fc6fd3c6d82444676f45 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/13d4cdc031272ea1814a27d38e76c145 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_BacklightColorTex",
+                "_RimColorTex"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/13d4cdc031272ea1814a27d38e76c145 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/750b417b7931b57481785a8011c8797e [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex"
+            ],
+            "textureCount": 2
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/750b417b7931b57481785a8011c8797e [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/21f04e94bd8cd451b64c2cb13addd5f1 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_BacklightColorTex"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/21f04e94bd8cd451b64c2cb13addd5f1 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/ab2e0bfb005ca413e1774cec3fcd5054 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_ReflectionColorTex",
+                "_ReflectionCubeTex"
+            ],
+            "textureCount": 6
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/ab2e0bfb005ca413e1774cec3fcd5054 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/85150fb174e1df5f14f99c586775382c [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex"
+            ],
+            "textureCount": 2
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/85150fb174e1df5f14f99c586775382c [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/e9c37499a3fdfedbe820145e4e7eceba [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_BacklightColorTex",
+                "_RimColorTex",
+                "_EmissionMap",
+                "_EmissionBlendMask"
+            ],
+            "textureCount": 7
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/e9c37499a3fdfedbe820145e4e7eceba [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/5b97ca7c7f55207f6c5cdbdf7329dd04 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_BacklightColorTex",
+                "_RimColorTex"
+            ],
+            "textureCount": 5
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/5b97ca7c7f55207f6c5cdbdf7329dd04 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/54ddd833f92eb8c1afe150dd6fa67bd6 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_BacklightColorTex"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/54ddd833f92eb8c1afe150dd6fa67bd6 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Cutout/0d7f1beb54fae1cb22a50c82bef15098 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_EmissionMap",
+                "_EmissionBlendMask"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Cutout/0d7f1beb54fae1cb22a50c82bef15098 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/bb3ac88f72f359957316b3d1195cc9f8 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex"
+            ],
+            "textureCount": 2
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/bb3ac88f72f359957316b3d1195cc9f8 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/e7c4bb3a81e2984528455f64e50d3a70 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_MatCapTex",
+                "_MatCapBlendMask",
+                "_EmissionMap"
+            ],
+            "textureCount": 5
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/e7c4bb3a81e2984528455f64e50d3a70 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/af979acdb8c768ce3c86e0793a296cb0 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_BacklightColorTex"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/af979acdb8c768ce3c86e0793a296cb0 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/1e97c72abdb6ad94137c22dab6ffc551 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex"
+            ],
+            "textureCount": 2
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/1e97c72abdb6ad94137c22dab6ffc551 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/4e54e5fd3d7948be9f562fc646f21501 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_RimColorTex"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/4e54e5fd3d7948be9f562fc646f21501 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/563507d20e089a72b9152706a6aa0811 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex"
+            ],
+            "textureCount": 2
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/563507d20e089a72b9152706a6aa0811 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/5f8098bd30fa18372703d7297f048f04 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_MatCapTex",
+                "_MatCapBlendMask"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/5f8098bd30fa18372703d7297f048f04 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/0a4f28788b6121418c752ead58118748 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ReflectionColorTex",
+                "_ReflectionCubeTex",
+                "_EmissionMap"
+            ],
+            "textureCount": 6
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/0a4f28788b6121418c752ead58118748 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/b02338e2227318c00dd8948f41ac12f1 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ReflectionColorTex",
+                "_ReflectionCubeTex",
+                "_EmissionMap",
+                "_EmissionBlendMask"
+            ],
+            "textureCount": 7
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/b02338e2227318c00dd8948f41ac12f1 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/ca5f15947505bece8cfdb3edfc4bf296 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ReflectionColorTex",
+                "_ReflectionCubeTex"
+            ],
+            "textureCount": 5
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/ca5f15947505bece8cfdb3edfc4bf296 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Transparent/1806403ec3fc62b1cb68772257e349f1 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ReflectionColorTex",
+                "_ReflectionCubeTex",
+                "_EmissionMap"
+            ],
+            "textureCount": 6
+        },
+        {
+            "shader": "HLC/lilToon/Transparent/1806403ec3fc62b1cb68772257e349f1 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Transparent/16313493ddc9a5a49b945f62c16b0e7c [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ReflectionColorTex",
+                "_ReflectionCubeTex"
+            ],
+            "textureCount": 5
+        },
+        {
+            "shader": "HLC/lilToon/Transparent/16313493ddc9a5a49b945f62c16b0e7c [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/66cec9a04a511ac24fc8e8d51b1f6375 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ReflectionCubeTex"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/66cec9a04a511ac24fc8e8d51b1f6375 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/3cf4490407fc84c96dddd33655800e57 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_EmissionMap"
+            ],
+            "textureCount": 3
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/3cf4490407fc84c96dddd33655800e57 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/4291c6d287ac50ccec3a063b81837ed9 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_EmissionMap"
+            ],
+            "textureCount": 3
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/4291c6d287ac50ccec3a063b81837ed9 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Cutout/9456b1b73dac89d8025c6786c65ff0a0 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_EmissionMap"
+            ],
+            "textureCount": 3
+        },
+        {
+            "shader": "HLC/lilToon/Cutout/9456b1b73dac89d8025c6786c65ff0a0 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/f4ad4c416ab1a526fb592041671eda88 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_Main2ndTex",
+                "_EmissionMap",
+                "_Emission2ndMap",
+                "_Emission2ndBlendMask"
+            ],
+            "textureCount": 6
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/f4ad4c416ab1a526fb592041671eda88 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/9538005a7bb0b224ab9e493b2071494e [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_EmissionMap",
+                "_Emission2ndMap"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/9538005a7bb0b224ab9e493b2071494e [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Cutout/73c04c3cb709fade9ecdec64e76233b3 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_Main2ndTex",
+                "_AlphaMask",
+                "_DitherTex"
+            ],
+            "textureCount": 5
+        },
+        {
+            "shader": "HLC/lilToon/Cutout/73c04c3cb709fade9ecdec64e76233b3 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/ec5b6468b8cbacb48b125da7635c8fbb [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex"
+            ],
+            "textureCount": 2
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/ec5b6468b8cbacb48b125da7635c8fbb [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/3e8a1c61f30c998ad66e9922f499bdf2 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_Main2ndTex",
+                "_Main3rdTex"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/3e8a1c61f30c998ad66e9922f499bdf2 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/c74e6445d3dfaa5a04fb639b932eb6ed [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_Main2ndTex",
+                "_Main2ndBlendMask",
+                "_Main3rdTex",
+                "_Main3rdBlendMask"
+            ],
+            "textureCount": 6
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/c74e6445d3dfaa5a04fb639b932eb6ed [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/63aa7fa3066a50c4c2e87e9b6c86d79f [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_EmissionMap"
+            ],
+            "textureCount": 3
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/63aa7fa3066a50c4c2e87e9b6c86d79f [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/cb76d4e13657a7bb970874479a93b9ad [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_BacklightColorTex",
+                "_RimColorTex"
+            ],
+            "textureCount": 5
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/cb76d4e13657a7bb970874479a93b9ad [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/08b0e11852356c5e025ee088c6b54db0 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainTex"
+            ],
+            "textureCount": 1
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/08b0e11852356c5e025ee088c6b54db0 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/1525d10eb412ff2a1988167f64696073 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask"
+            ],
+            "textureCount": 3
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/1525d10eb412ff2a1988167f64696073 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/81b17e72d76a9f193bca85ede3ea316b [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_BacklightColorTex",
+                "_ReflectionColorTex",
+                "_ReflectionCubeTex",
+                "_RimColorTex"
+            ],
+            "textureCount": 8
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/81b17e72d76a9f193bca85ede3ea316b [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/56e429605ac84df37c5f61c42ed8b692 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_SmoothnessTex",
+                "_ReflectionColorTex",
+                "_ReflectionCubeTex"
+            ],
+            "textureCount": 7
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/56e429605ac84df37c5f61c42ed8b692 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/e70a045a239a08795772265cf3dc1a78 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_SmoothnessTex",
+                "_ReflectionColorTex",
+                "_ReflectionCubeTex",
+                "_RimColorTex",
+                "_EmissionMap"
+            ],
+            "textureCount": 9
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/e70a045a239a08795772265cf3dc1a78 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Transparent/7de34b58a2ef25803da377c16a6b69b7 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_MatCapTex"
+            ],
+            "textureCount": 3
+        },
+        {
+            "shader": "HLC/lilToon/Transparent/7de34b58a2ef25803da377c16a6b69b7 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/c2c73dcef6c2ab268916000587b358cd [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_SmoothnessTex",
+                "_ReflectionColorTex",
+                "_ReflectionCubeTex",
+                "_MatCap2ndTex",
+                "_MatCap2ndBlendMask"
+            ],
+            "textureCount": 9
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/c2c73dcef6c2ab268916000587b358cd [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/1c8fa3717aae3b4531c6b2b262cf9083 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_EmissionMap",
+                "_EmissionBlendMask"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/1c8fa3717aae3b4531c6b2b262cf9083 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/d83119e081a85fa75eb28552184582a6 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_EmissionBlendMask"
+            ],
+            "textureCount": 3
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/d83119e081a85fa75eb28552184582a6 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/8a418e8fc0ea82ad0661fa90df4fddb1 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ReflectionColorTex",
+                "_ReflectionCubeTex",
+                "_EmissionMap"
+            ],
+            "textureCount": 6
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/8a418e8fc0ea82ad0661fa90df4fddb1 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Transparent/e8d2b9e6fa320986ae3348110b93fd80 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainTex",
+                "_ReflectionCubeTex"
+            ],
+            "textureCount": 3
+        },
+        {
+            "shader": "HLC/lilToon/Transparent/e8d2b9e6fa320986ae3348110b93fd80 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/8ad4c55ef53610172809ad8929c9b34e [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "unity_SpecCube0",
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_ReflectionColorTex",
+                "_ReflectionCubeTex",
+                "_RimColorTex"
+            ],
+            "textureCount": 7
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/8ad4c55ef53610172809ad8929c9b34e [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/e5c592770149bd1c0d5096e7e8f6c264 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_EmissionMap"
+            ],
+            "textureCount": 3
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/e5c592770149bd1c0d5096e7e8f6c264 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/6fdaf6372efa4ddc85215169f5c25845 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex"
+            ],
+            "textureCount": 2
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/6fdaf6372efa4ddc85215169f5c25845 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/da13034099f110e03c80722ddc086400 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_BumpMap"
+            ],
+            "textureCount": 3
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/da13034099f110e03c80722ddc086400 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/1d691ed765aa31cb20b6b4260722c4c7 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_BacklightColorTex",
+                "_RimColorTex"
+            ],
+            "textureCount": 5
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/1d691ed765aa31cb20b6b4260722c4c7 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/6f26abdd57bd93dffc15163024bc3d2d [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask"
+            ],
+            "textureCount": 3
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/6f26abdd57bd93dffc15163024bc3d2d [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/298d4391201ecc5ad0184b0ed4abf708 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask"
+            ],
+            "textureCount": 3
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/298d4391201ecc5ad0184b0ed4abf708 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/af371f95190dfa47e40257356d224daf [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_ShadowBorderMask",
+                "_BacklightColorTex"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/af371f95190dfa47e40257356d224daf [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/042c68d8c0d7388453dde84ad4f093a6 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainLightShadowmapTexture",
+                "_MainTex",
+                "_Main2ndTex",
+                "_Main2ndBlendMask"
+            ],
+            "textureCount": 4
+        },
+        {
+            "shader": "HLC/lilToon/Opaque/042c68d8c0d7388453dde84ad4f093a6 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        },
+        {
+            "shader": "HLC/lilToon/Transparent/88ea96a1522e2992fe0d0223ba67fa27 [Vertex]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [
+                "_MainTex"
+            ],
+            "textureCount": 1
+        },
+        {
+            "shader": "HLC/lilToon/Transparent/88ea96a1522e2992fe0d0223ba67fa27 [Fragment]",
+            "keywords": [
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"
+            ],
+            "textures": [],
+            "textureCount": 0
+        }
+    ]
+}

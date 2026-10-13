@@ -1,0 +1,86 @@
+{
+  "groups": 610,
+  "novels": 2289,
+  "localizations": 2111,
+  "motions": 179,
+  "commands": {
+    "TalkLogOnlyPlayBGM": 1,
+    "VoiceDefectRatio": 20,
+    "DirectionChromaticAberration": 99,
+    "DirectionMonochromeNoise": 39,
+    "DirectionBlackOut": 12,
+    "ChangeLayout": 46,
+    "ChangeWindowView": 71,
+    "WaitForSeconds": 35,
+    "Text": 1207,
+    "DeactivateNormalText": 3,
+    "SetDirectionDelaySeconds": 139,
+    "DirectionGlitch1": 54,
+    "DirectionScreenMove": 35,
+    "DirectionGameStartCamera": 2,
+    "ChangeMotion": 44,
+    "Selection": 73,
+    "ReadNextForScript": 1,
+    "StartSelectOnce": 1,
+    "TutorialSelection": 4,
+    "TutorialFocusPomodoro": 1,
+    "Jump": 10,
+    "TutorialFocusNote": 1,
+    "TutorialFocusTodo": 1,
+    "EndScenario": 61,
+    "PlayBGM": 54,
+    "PlayAmbientBGM": 10,
+    "CameraStop_1": 3,
+    "ScreenSharing_1_Play": 1,
+    "PlaySE": 1,
+    "ScreenSharing_1_End": 1,
+    "DirectionAdjustAllUnstable": 9,
+    "AddTextLoop": 4,
+    "StartTextLoop": 1,
+    "BlackFadeOut": 1,
+    "StartEndCredits": 1,
+    "ChangeVolumeBGM": 1,
+    "FinishEndCredits": 1,
+    "PomodoroVoiceText": 207,
+    "VoiceText": 27,
+    "IfBetweenDateTime": 1,
+    "ChangeHat": 2,
+    "PlayMusicServiceBGM": 1,
+    "SunglassesShineForSatone": 2,
+    "SunglassesShineForKouchan": 1
+  },
+  "sourceIssues": [
+    {
+      "kind": "localization",
+      "id": "selftalk_normal_001",
+      "target": "selftalk_normal_001"
+    },
+    {
+      "kind": "localization",
+      "id": "motion_guts_001 ",
+      "target": "motion_guts_001"
+    },
+    {
+      "kind": "localization",
+      "id": "motion_stretch_001",
+      "target": "motion_stretch_001"
+    },
+    {
+      "kind": "localization",
+      "id": "motion_gymnastics_001",
+      "target": "motion_gymnastics_001"
+    },
+    {
+      "kind": "localization",
+      "id": "game_start_02_CameraTouch_010",
+      "target": "game_start_02_010"
+    },
+    {
+      "kind": "localization",
+      "id": "game_start_02_010",
+      "target": "game_start_02_010"
+    }
+  ],
+  "sha256": "bacf449bbcf2c3f493f8a200375733f90e6a1ab69d16745ddb02076a243fe39a",
+  "bytes": 1601192
+}
