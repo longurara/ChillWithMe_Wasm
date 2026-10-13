@@ -1,1 +1,1 @@
-{"passed":true,"solver":"web CPU solver, not PC Magica","motions":[50,752,1500],"bones":94,"bytes":4581969,"profileHashGuard":true,"stateAndRigGuard":true,"crossfadeSeconds":0.12,"customCostumeFallback":false}
+{"passed":true,"solver":"source MagicaClothV2 reference","motions":[0,50,57,58,100,101,102,103,104,105,200,250,300,600,650,750,752,1500],"bones":94,"maximumPlaybackErrorDegrees":0.000,"maximumReturnStepDegrees":1.387,"loopSeamGuardDegrees":0.5,"PCScreenshotParity":false}

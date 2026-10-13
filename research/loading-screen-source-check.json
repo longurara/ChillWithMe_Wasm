@@ -21,6 +21,26 @@
       "name": "anim_ui_loading_fadein",
       "seconds": 0.56666666,
       "tracks": 12
+    },
+    "errorFinish": {
+      "name": "anim_ui_loading_finish_error",
+      "seconds": 1.3333334,
+      "tracks": 15
+    },
+    "errorFade": {
+      "name": "anim_ui_loading_fadein_error",
+      "seconds": 0.56666666,
+      "tracks": 14
+    },
+    "gameEnd": {
+      "name": "anim_ui_loading_gameend",
+      "seconds": 2.5,
+      "tracks": 14
+    },
+    "creditsIn": {
+      "name": "anim_ui_finish_endcredits_fadein",
+      "seconds": 1.5,
+      "tracks": 6
     }
   },
   "originalPixels": true,

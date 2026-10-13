@@ -10,11 +10,11 @@ A work-in-progress browser port of **Chill with You: Lo-Fi Story**. Spend time w
 - Pomodoro and stopwatch timers.
 - Notes, task lists, calendar, diary, habits, and work statistics.
 - Room decorations, outfits, and local profiles.
-- Local saves with JSON import and export.
+- Local saves with backups, JSON import/export, and Windows save import.
 
 ## Current Status
 
-Version **1.23.0** builds for WebGL. The original loading screen now stays visible until the room is ready. This is an unfinished port: some visuals, physics, AI behavior, and events still differ from the Windows game. Cloud saves are not available yet. Mobile and Safari support have not been fully verified.
+Version **1.24.0** has passed basic story, timer, and input checks on Chrome, Edge, and Firefox. The port is unfinished: visuals, physics, and some behavior still differ from the Windows game. Cloud saves are deferred. Mobile and Safari support have not been fully verified.
 
 ## Run Locally
 
@@ -26,7 +26,7 @@ If you already have the prepared build, run this from the project folder:
 powershell -ExecutionPolicy Bypass -File .\start-preview.ps1
 ```
 
-Open [http://127.0.0.1:8093/](http://127.0.0.1:8093/) in Chrome or Edge. Keep the server running while playing.
+Open [http://127.0.0.1:8093/](http://127.0.0.1:8093/) in Chrome, Edge, or Firefox. Keep the server running while playing.
 
 ## Build from Source
 
@@ -46,10 +46,10 @@ Close the project's Unity Editor before building. For later builds, run only `bu
 
 ## Saves
 
-Progress stays in your browser. Export your save from **Settings → General** before switching browsers or clearing site data. Imported music is stored separately and is not included in the save file.
+Progress stays in your browser. Use **Settings → General** to export a backup or import a Windows save folder/ZIP. Only one tab can write at a time. Imported music is stored separately and is not included in the save file.
 
 ## More Details
 
 - [Build tools](src/graphics/README.md)
 - [Implemented features and remaining differences](research/source-parity-audit.md)
-- [Latest verification](research/startup-1.23.md)
+- [Completion plan and verification limits](research/parity-95.md)

@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "scope": "Local parser/converter checks; no save is written or imported into the game",
+  "numericDictionaryKeys": true,
+  "exact64BitIds": true,
+  "gzip": true,
+  "storedAndDeflatedZip": true,
+  "zipChecksumRejected": true,
+  "duplicateKeysRejected": true,
+  "missingPagesRejected": true,
+  "legacyNotes": true,
+  "habitHistory": true,
+  "playlistUUIDs": true,
+  "realPCSaveReadOnly": true,
+  "sourceFiles": 31,
+  "recognizedRecords": 29,
+  "warningTypes": []
+}

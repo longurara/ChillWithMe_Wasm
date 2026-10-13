@@ -1,0 +1,293 @@
+{
+  "createdUtc": "2026-10-13T22:43:01.498021+00:00",
+  "version": "1.24.0",
+  "gitHead": "c235d3c00711a00ef50978e8a959a0a9a6fd4b46",
+  "buildSha256": {
+    "WebPlayer.wasm": "1f4b5a7a19b445fe0d129bd2e03c29ffab53aa5c26a9ed5f72fc965030041146",
+    "WebPlayer.data": "92bd809f6000535f9b035df0ef9a97948a29162c1f84b043c1583ce4fa708c0c",
+    "WebPlayer.framework.js": "c7b64611ba83553a2916391fed65f21a363ed701dc9d84d83607567b3c4b7b8f"
+  },
+  "sourceStorySha256": "27d5633396050d803e17e9a6018e3ceb1c840df3bd404483738770e28f2eb18a",
+  "physicsAssets": {
+    "sourceJsonBytes": 34294345,
+    "webBinaryBytes": 5647160
+  },
+  "browserGameplay": {
+    "chrome24": {
+      "passed": true,
+      "scope": "Public native command handlers, viewport screenshots, seven language story entries and one real timer boundary; screenshots require visual review",
+      "browser": "chrome",
+      "panes": [
+        "notes",
+        "todos",
+        "habits",
+        "calendar",
+        "statistics",
+        "settings",
+        "profile",
+        "heroine-profile",
+        "special",
+        "decorations",
+        "environment",
+        "music"
+      ],
+      "languages": [
+        "En",
+        "Ja",
+        "ZhHans",
+        "ZhHant",
+        "Pt",
+        "Ko",
+        "Ru"
+      ],
+      "timer": {
+        "breakTime": true,
+        "timerRunning": true,
+        "rounds": 1
+      },
+      "errors": [],
+      "engineMessages": [],
+      "userSaveWritten": false,
+      "isolatedTestSaveWritten": true
+    },
+    "edge24": {
+      "passed": true,
+      "scope": "Public native command handlers, viewport screenshots, seven language story entries and one real timer boundary; screenshots require visual review",
+      "browser": "edge",
+      "panes": [
+        "notes",
+        "todos",
+        "habits",
+        "calendar",
+        "statistics",
+        "settings",
+        "profile",
+        "heroine-profile",
+        "special",
+        "decorations",
+        "environment",
+        "music"
+      ],
+      "languages": [
+        "En",
+        "Ja",
+        "ZhHans",
+        "ZhHant",
+        "Pt",
+        "Ko",
+        "Ru"
+      ],
+      "timer": {
+        "breakTime": true,
+        "timerRunning": true,
+        "rounds": 1
+      },
+      "errors": [],
+      "engineMessages": [],
+      "userSaveWritten": false,
+      "isolatedTestSaveWritten": true
+    },
+    "firefox24": {
+      "passed": true,
+      "scope": "Public native command handlers, viewport screenshots, seven language story entries and one real timer boundary; screenshots require visual review",
+      "browser": "firefox",
+      "panes": [
+        "notes",
+        "todos",
+        "habits",
+        "calendar",
+        "statistics",
+        "settings",
+        "profile",
+        "heroine-profile",
+        "special",
+        "decorations",
+        "environment",
+        "music"
+      ],
+      "languages": [
+        "En",
+        "Ja",
+        "ZhHans",
+        "ZhHant",
+        "Pt",
+        "Ko",
+        "Ru"
+      ],
+      "timer": {
+        "breakTime": true,
+        "timerRunning": true,
+        "rounds": 1
+      },
+      "errors": [],
+      "engineMessages": [
+        "Applying workaround to Firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=1397977"
+      ],
+      "userSaveWritten": false,
+      "isolatedTestSaveWritten": true
+    }
+  },
+  "browserPointerKeyboard": {
+    "chrome24": {
+      "passed": true,
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+      "nativePointerOpen": true,
+      "nativeKeyboardEditSaved": true,
+      "nativeTimerPointerStart": true,
+      "errors": [],
+      "userSaveWritten": false
+    },
+    "edge24": {
+      "passed": true,
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0",
+      "nativePointerOpen": true,
+      "nativeKeyboardEditSaved": true,
+      "nativeTimerPointerStart": true,
+      "errors": [],
+      "userSaveWritten": false
+    },
+    "firefox24": {
+      "passed": true,
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:156.0) Gecko/20100101 Firefox/156.0",
+      "nativePointerOpen": true,
+      "nativeKeyboardEditSaved": true,
+      "nativeTimerPointerStart": true,
+      "errors": [],
+      "userSaveWritten": false
+    }
+  },
+  "shortGpuCapture": {
+    "passed": true,
+    "unity": {
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Laptop GPU (0x00002860) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "backend": "OpenGLES3",
+      "frames": 856,
+      "targetFps": 60,
+      "seconds": 15.01400089263916,
+      "framesPerSecond": 57.013450622558594,
+      "medianFrameIntervalMs": 17,
+      "p95FrameIntervalMs": 19,
+      "maximumFrameIntervalMs": 39,
+      "unityAllocatedBytes": 132775055,
+      "managedBytes": 55406592
+    },
+    "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Laptop GPU (0x00002860) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "wasmHeapBytes": 667484160,
+    "frameCapRespected": true,
+    "frameBudgetMet": true,
+    "scope": "Actual Unity frame intervals and reported hardware; GPU render duration is not measured"
+  },
+  "boundedChromeLayout": {
+    "passed": true,
+    "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "cases": [
+      {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "density": 1.5,
+        "panes": 22
+      }
+    ],
+    "screenshots": 22,
+    "errors": [],
+    "scope": "Window handlers and rendered captures; visual review is required before accepting layout parity",
+    "userSaveWritten": false
+  },
+  "completion95Established": false,
+  "remainingGates": [
+    "Full pointer/keyboard/DPI workflows",
+    "PC-matched rendering and physics captures",
+    "Remaining PC Demo/Release save fixtures",
+    "Sustained GPU frame-time qualification",
+    "Two-hour soak and context lifecycle"
+  ],
+  "referenceGameVersion": "1.17.3",
+  "referenceAssemblySha256": {
+    "Assembly-CSharp.dll": "2daf4eb479a910d9bcb7a4a33c2ab7cdf8f6831d9841fbfe61ccfd9494fc9e7f",
+    "MagicaClothV2.dll": "b4d269098dc4be2a87eb4321422de9d82445ffedb2e9d5fc2e36bc0bcdc187c9",
+    "DistantLands.Cozy.Runtime.dll": "047a57128736dbacd7ae7ad489dc614e05becdfd09689d11abc2d2b8609c1381"
+  },
+  "parity-core-check": {
+    "passed": true,
+    "scope": "Editor behavioural checks, not PC visual parity",
+    "replayClockAndSeed": true,
+    "habitPauseHistory": true,
+    "habitDeletionHistory": true,
+    "legacyMigration": true,
+    "workBreakDeferred": true,
+    "deskModes": 3,
+    "userSaveWritten": false
+  },
+  "pc-save-check": {
+    "passed": true,
+    "scope": "Local parser/converter checks; no save is written or imported into the game",
+    "numericDictionaryKeys": true,
+    "exact64BitIds": true,
+    "gzip": true,
+    "storedAndDeflatedZip": true,
+    "zipChecksumRejected": true,
+    "duplicateKeysRejected": true,
+    "missingPagesRejected": true,
+    "legacyNotes": true,
+    "habitHistory": true,
+    "playlistUUIDs": true,
+    "realPCSaveReadOnly": true,
+    "sourceFiles": 31,
+    "recognizedRecords": 29,
+    "warningTypes": []
+  },
+  "save-store-check": {
+    "passed": true,
+    "scope": "Storage failure/migration checks; browser-managed multi-tab lock tested separately",
+    "migrationSnapshot": true,
+    "previousSaveBackup": true,
+    "staleWriterRejected": true,
+    "quotaPreservesCurrent": true,
+    "recoveryPreservesVerifiedBackup": true,
+    "readOnlyTabCannotWrite": true,
+    "storageDenialAllowsReadOnlyStartup": true,
+    "pagehideFlushBeforeLockRelease": true,
+    "persistedPageshowReacquiresLock": true,
+    "userSaveWritten": false
+  },
+  "physics-bake-check": {
+    "passed": true,
+    "solver": "source MagicaClothV2 reference",
+    "motions": [
+      0,
+      50,
+      57,
+      58,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      200,
+      250,
+      300,
+      600,
+      650,
+      750,
+      752,
+      1500
+    ],
+    "bones": 94,
+    "maximumPlaybackErrorDegrees": 0.0,
+    "maximumReturnStepDegrees": 1.387,
+    "loopSeamGuardDegrees": 0.5,
+    "PCScreenshotParity": false
+  },
+  "cozy-lighting-check": {
+    "passed": true,
+    "presets": 4,
+    "scope": "Source COZY gradient/time/light bindings; PC pixel parity remains unverified",
+    "authoredSunHierarchy": true,
+    "sourceSunIntensity": true,
+    "runtimeAmbientInputs": true
+  }
+}

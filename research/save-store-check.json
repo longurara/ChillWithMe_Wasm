@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "scope": "Storage failure/migration checks; browser-managed multi-tab lock tested separately",
+  "migrationSnapshot": true,
+  "previousSaveBackup": true,
+  "staleWriterRejected": true,
+  "quotaPreservesCurrent": true,
+  "recoveryPreservesVerifiedBackup": true,
+  "readOnlyTabCannotWrite": true,
+  "storageDenialAllowsReadOnlyStartup": true,
+  "pagehideFlushBeforeLockRelease": true,
+  "persistedPageshowReacquiresLock": true,
+  "userSaveWritten": false
+}
