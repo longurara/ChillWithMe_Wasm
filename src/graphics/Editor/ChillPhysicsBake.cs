@@ -9,6 +9,20 @@ using Hlc.ChillPrototype;
 // Records the web solver, not Windows Magica output. Re-run after profile changes.
 public static class ChillPhysicsBake
 {
+    public static string SolverFingerprint()
+    {
+        var source=File.ReadAllText("../src/graphics/Runtime/ChillBonePhysics.cs").Replace("\r\n","\n");
+        var garment=File.ReadAllText("../src/graphics/Runtime/ChillBonePhysics.Garments.cs").Replace("\r\n","\n");
+        garment=garment.Substring(garment.IndexOf("void ResolveGarmentContacts()",StringComparison.Ordinal));
+        using(var hash=System.Security.Cryptography.SHA256.Create())return string.Concat(hash.ComputeHash(System.Text.Encoding.UTF8.GetBytes(source+"\n"+garment)).Select(b=>b.ToString("x2")));
+    }
+    public static void VerifyExistingBake()
+    {
+        var report=File.ReadAllText("../research/physics-coverage-check.json");
+        if(!report.Contains("\"solverFingerprint\":\""+SolverFingerprint()+"\""))throw new InvalidOperationException("Physics solver changed; regenerate the bake");
+        var asset=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-bakes.bytes");var data=ChillBoneBakeCodec.Read(asset);
+        if(data==null||data.clips.Length<18||data.clips.Any(c=>c.frames.Length<2))throw new InvalidOperationException("Invalid existing physics coverage");
+    }
     public static void Build()
     {
         EditorSceneManager.OpenScene("Assets/Prototype/Room.unity");
@@ -22,7 +36,7 @@ public static class ChillPhysicsBake
         if(File.Exists("Assets/Prototype/native-bone-bakes.json"))
         {
             var native=JsonUtility.FromJson<ChillBoneBake>(File.ReadAllText("Assets/Prototype/native-bone-bakes.json"));
-            if(native.profileHash!=physics.BakeProfileHash||!native.paths.SequenceEqual(result.paths)||!native.clips.Select(c=>c.motion).SequenceEqual(values)||native.clips.Any(c=>c.frames==null||c.frames.Length<2||c.frames.Any(f=>f.offsets.Length!=native.paths.Length||f.offsets.Any(q=>new[]{q.x,q.y,q.z,q.w}.Any(v=>float.IsNaN(v)||float.IsInfinity(v))||Mathf.Abs(q.x*q.x+q.y*q.y+q.z*q.z+q.w*q.w-1)>.01f))))
+            if(native.profileHash!=physics.BakeProfileHash||!native.paths.SequenceEqual(result.paths)||native.clips.Any(c=>!player.story.presentation.statePaths.Any(p=>p.motion==c.motion&&p.path==c.state)||c.frames==null||c.frames.Length<2||c.frames.Any(f=>f.offsets.Length!=native.paths.Length||f.offsets.Any(q=>new[]{q.x,q.y,q.z,q.w}.Any(v=>float.IsNaN(v)||float.IsInfinity(v))||Mathf.Abs(q.x*q.x+q.y*q.y+q.z*q.z+q.w*q.w-1)>.01f))))
                 throw new InvalidOperationException("Native physics reference does not match this profile/rig");
             native.producer="source-magica";
             File.WriteAllBytes("Assets/Prototype/bone-bakes.bytes",ChillBoneBakeCodec.Write(native));AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
@@ -39,6 +53,7 @@ public static class ChillPhysicsBake
                 physics.useBakedFallback=true;
             }
             File.WriteAllText("../research/physics-bake-check.json","{\"passed\":true,\"solver\":\"source MagicaClothV2 reference\",\"motions\":["+string.Join(",",values)+"],\"bones\":"+native.paths.Length+",\"maximumPlaybackErrorDegrees\":"+nativeError.ToString("0.000",System.Globalization.CultureInfo.InvariantCulture)+",\"maximumReturnStepDegrees\":"+maximumReturnStep.ToString("0.000",System.Globalization.CultureInfo.InvariantCulture)+",\"loopSeamGuardDegrees\":0.5,\"PCScreenshotParity\":false}");
+            ExpandAllStates(player,physics,native);
             Debug.Log("HLC_NATIVE_PHYSICS_BAKE_PASSED error="+nativeError);return;
         }
         for(int clipIndex=0;clipIndex<values.Length;clipIndex++)
@@ -57,6 +72,7 @@ public static class ChillPhysicsBake
                 clip.frames[frame]=new ChillBoneBake.Frame{offsets=offsets};
             }
         }
+        ExpandAllStates(player,physics,result);
         File.WriteAllBytes("Assets/Prototype/bone-bakes.bytes",ChillBoneBakeCodec.Write(result));AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
         // Check eligibility, matching sample, and crossfade back to live dynamics.
         physics.bakedConfiguration=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-bakes.bytes");physics.useBakedFallback=true;physics.RebindGarment(null);
@@ -74,7 +90,37 @@ public static class ChillPhysicsBake
         for(int frame=0;frame<10;frame++){physics.BeforeAnimator();animator.Play(result.clips[0].state,0,.4f);animator.Update(0);physics.Step(1f/60);}
         if(physics.BakedFallbackActive)throw new InvalidOperationException("Stale physics profile accepts recorded offsets");
         UnityEngine.Object.DestroyImmediate(invalid);
-        File.WriteAllText(Path.GetFullPath("../research/physics-bake-check.json"),"{\"passed\":true,\"solver\":\"web CPU solver, not PC Magica\",\"motions\":[50,752,1500],\"bones\":"+result.paths.Length+",\"bytes\":"+new FileInfo("Assets/Prototype/bone-bakes.json").Length+",\"profileHashGuard\":true,\"stateAndRigGuard\":true,\"crossfadeSeconds\":0.12,\"customCostumeFallback\":false}");
+        File.WriteAllText(Path.GetFullPath("../research/physics-bake-check.json"),"{\"passed\":true,\"solver\":\"web CPU solver, not PC Magica\",\"bones\":"+result.paths.Length+",\"bytes\":"+new FileInfo("Assets/Prototype/bone-bakes.bytes").Length+",\"profileHashGuard\":true,\"stateAndRigGuard\":true,\"crossfadeSeconds\":0.25,\"customCostumeFallback\":true}");
         Debug.Log("HLC_PHYSICS_BAKE_PASSED motions="+values.Length+" bones="+result.paths.Length);
+    }
+    static void ExpandAllStates(ChillGraphicsPlayer player,ChillBonePhysics physics,ChillBoneBake result)
+    {
+        var animator=player.character;bool native=result.producer=="source-magica";
+        foreach(var clip in result.clips)clip.nativeReference=native;
+        var clips=result.clips.ToList();physics.useBakedFallback=false;
+        var states=player.story.presentation.statePaths.GroupBy(p=>p.path).Select(g=>g.First()).Where(p=>animator.HasState(0,Animator.StringToHash(p.path))).ToArray();
+        foreach(var source in states)
+        {
+            if(clips.Any(c=>c.state==source.path))continue;
+            physics.ResetDynamics();animator.Play(source.path,0,0);animator.Update(0);physics.Step(0);
+            var state=animator.GetCurrentAnimatorStateInfo(0);float seconds=state.length;
+            if(float.IsNaN(seconds)||float.IsInfinity(seconds)||seconds<=0||seconds>120)throw new InvalidOperationException("Invalid expanded bake duration: "+source.path);
+            int frames=Mathf.CeilToInt(seconds*30)+1;
+            var clip=new ChillBoneBake.Clip{state=source.path,motion=source.motion,seconds=seconds,loop=state.loop,frames=new ChillBoneBake.Frame[frames]};
+            int warmup=clip.loop?(frames-1)*4:120;
+            for(int frame=0;frame<warmup;frame++){physics.BeforeAnimator();animator.Play(source.path,0,clip.loop?(float)frame/((frames-1)*2):0);animator.Update(0);physics.Step(1f/60);}
+            for(int frame=0;frame<frames;frame++)
+            {
+                physics.BeforeAnimator();animator.Play(source.path,0,(float)frame/(frames-1));animator.Update(0);physics.Step(frame==0?0:seconds/(frames-1));
+                var offsets=physics.RotationOffsets();if(!physics.StateFinite()||offsets.Any(q=>float.IsNaN(q.x)||Quaternion.Angle(Quaternion.identity,q)>90.1f))throw new InvalidOperationException("Invalid expanded bake: "+source.path);
+                clip.frames[frame]=new ChillBoneBake.Frame{offsets=offsets};
+            }
+            clips.Add(clip);
+        }
+        result.clips=clips.ToArray();if(native&&clips.Any(c=>!c.nativeReference))result.producer="source-magica+web-cpu";
+        var bytes=ChillBoneBakeCodec.Write(result);File.WriteAllBytes("Assets/Prototype/bone-bakes.bytes",bytes);AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+        physics.bakedConfiguration=null;physics.RebindGarment(null);physics.bakedConfiguration=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Prototype/bone-bakes.bytes");physics.useBakedFallback=true;physics.RebindGarment(null);
+        File.WriteAllText("../research/physics-coverage-check.json","{\"passed\":true,\"solverFingerprint\":\""+SolverFingerprint()+"\",\"playableStates\":"+states.Length+",\"recordedStates\":"+clips.Count+",\"nativeStates\":"+clips.Count(c=>c.nativeReference)+",\"cpuStates\":"+clips.Count(c=>!c.nativeReference)+",\"bytes\":"+bytes.Length+",\"hybridGarmentMapping\":true,\"PCPixelParity\":false}");
+        Debug.Log("HLC_PHYSICS_COVERAGE_PASSED states="+clips.Count+" native="+clips.Count(c=>c.nativeReference));
     }
 }

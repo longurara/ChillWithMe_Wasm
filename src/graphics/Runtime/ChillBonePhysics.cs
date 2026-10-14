@@ -8,7 +8,7 @@ namespace Hlc.ChillPrototype
     // Rotation-only CPU adaptation. Animator owns human joints and local positions.
     // Source Magica parameters are retained; topology and solver differ on WebGL.
     [DefaultExecutionOrder(200)]
-    public sealed class ChillBonePhysics : MonoBehaviour
+    public sealed partial class ChillBonePhysics : MonoBehaviour
     {
         [Serializable] class Profile { public Group[] groups; public Collision[] colliders; }
         [Serializable] class Key { public float time,value,inSlope,outSlope; }
@@ -182,7 +182,7 @@ namespace Hlc.ChillPrototype
             if(loadedBake!=bakedConfiguration)
             {loadedBake=bakedConfiguration;cachedBake=ChillBoneBakeCodec.Read(bakedConfiguration);}
             bake=cachedBake;
-            if(bake!=null&&(bake.profileHash!=BakeProfileHash||!bake.paths.SequenceEqual(BonePaths())))bake=null;
+            BindBakeBones();
             presentation=GetComponent<ChillGraphicsPlayer>()?.story?.presentation;
             activeBake=null;bakeWeight=0;initialized=true;
         }
@@ -256,6 +256,7 @@ namespace Hlc.ChillPrototype
                     if(length>1e-6f){var correction=edge*((length-Vector3.Distance(a.tickGoal,b.tickGoal))/length*link.stiffness*.5f);a.position+=correction;b.position-=correction;}
                     for(int j=0;j<a.bodies.Length;j++)ResolveCrossEdge(a,b,a.bodies[j],Mathf.Min(a.allowances[j],b.allowances[j]));
                   }
+                  ResolveGarmentContacts();
                 }
                 accumulator=Math.Max(0,accumulator-TickDuration);LastStepCount++;SimulationTicks++;
             }
@@ -266,7 +267,7 @@ namespace Hlc.ChillPrototype
             if(bake==null){activeBake=null;bakeWeight=0;return;}
             ChillBoneBake.Clip requested=null;
             var state=character.GetCurrentAnimatorStateInfo(0);
-            if(useBakedFallback&&bake!=null&&simulation&&DynamicRootCount==0&&!character.IsInTransition(0)&&(!presentation||!presentation.manualLook))
+            if(useBakedFallback&&bake!=null&&simulation&&!character.IsInTransition(0)&&(!presentation||!presentation.manualLook))
                 requested=Array.Find(bake.clips,c=>Animator.StringToHash(c.state)==state.fullPathHash&&state.normalizedTime>=0&&(c.loop||state.normalizedTime<=1));
             if(requested!=activeBake&&activeBake!=null&&bakeWeight>0)requested=null;
             if(requested!=null&&requested!=activeBake){activeBake=requested;bakeWeight=0;}
@@ -291,16 +292,18 @@ namespace Hlc.ChillPrototype
                     var world=Quaternion.FromToRotation(authored,solved)*node.frameRotation;
                     local=node.bone.parent?Quaternion.Inverse(node.bone.parent.rotation)*world:world;limit=child.angleLimit;
                 }
-                else if(activeBake==null||bakeWeight<=0)continue;
-                if(activeBake!=null&&bakeWeight>0)local=Quaternion.Slerp(local,node.frameLocalRotation*activeBake.Sample(index,bakeTime),Mathf.SmoothStep(0,1,bakeWeight));
-                node.outputLocalRotation=bake?.producer=="source-magica"&&bakeWeight>0?local:Quaternion.RotateTowards(node.frameLocalRotation,local,limit);
+                else if(activeBake==null||bakeWeight<=0||bakeBones[index]<0)continue;
+                bool recorded=activeBake!=null&&bakeWeight>0&&bakeBones[index]>=0;
+                if(recorded)local=Quaternion.Slerp(local,node.frameLocalRotation*activeBake.Sample(bakeBones[index],bakeTime),Mathf.SmoothStep(0,1,bakeWeight));
+                node.outputLocalRotation=recorded&&(activeBake.nativeReference||bake?.producer=="source-magica")?local:Quaternion.RotateTowards(node.frameLocalRotation,local,limit);
                 node.bone.localRotation=node.outputLocalRotation;node.applied=true;
             }
             // Keep live particles on the displayed native pose, so leaving a recording
             // does not expose an independently drifting CPU simulation.
-            foreach(var node in nodes)
+            for(int index=0;index<nodes.Count;index++)
             {
-                if(activeBake!=null&&bakeWeight>=.999f&&node.bone&&node.bone.gameObject.activeInHierarchy)
+                var node=nodes[index];
+                if(activeBake!=null&&bakeWeight>=.999f&&bakeBones[index]>=0&&node.bone&&node.bone.gameObject.activeInHierarchy)
                 {
                     var position=node.bone.position;node.previous=node.bakedSynchronized?node.lastBakedPosition:position;
                     node.position=node.renderFrom=node.lastBakedPosition=position;node.tickGoal=node.lastTickGoal=node.goal;node.bakedSynchronized=true;

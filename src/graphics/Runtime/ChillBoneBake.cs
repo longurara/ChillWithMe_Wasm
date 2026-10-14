@@ -8,7 +8,7 @@ namespace Hlc.ChillPrototype
         [Serializable] public class Frame { public Quaternion[] offsets; }
         [Serializable] public class Clip
         {
-            public string state;public int motion;public float seconds;public bool loop;public Frame[] frames;
+            public string state;public int motion;public float seconds;public bool loop,nativeReference;public Frame[] frames;
             public Quaternion Sample(int bone,float normalized)
             {
                 float index=(loop?Mathf.Repeat(normalized,1):Mathf.Clamp01(normalized))*(frames.Length-1);int a=Mathf.FloorToInt(index),b=Mathf.Min(a+1,frames.Length-1);

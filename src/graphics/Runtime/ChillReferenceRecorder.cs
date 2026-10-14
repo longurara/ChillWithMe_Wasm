@@ -14,7 +14,7 @@ using UnityEngine;
 [DefaultExecutionOrder(-10000)]
 public sealed class ChillReferenceRecorder:MonoBehaviour
 {
-    static readonly int[] RecordedMotions={0,50,57,58,100,101,102,103,104,105,200,250,300,600,650,750,752,1500};
+    int[] RecordedMotions={0,50,57,58,100,101,102,103,104,105,200,250,300,600,650,750,752,1500};
     [Serializable]class Configuration{public Group[] groups;public Collision[] colliders;}
     [Serializable]class Group{public string path,parameters;public string[] roots,colliders;}
     [Serializable]class Collision{public string id,path;public bool sphere,radiusSeparation,reverseDirection,alignedOnCenter;public int axis;public float[] center,size;}
@@ -30,6 +30,7 @@ public sealed class ChillReferenceRecorder:MonoBehaviour
     {
         native=assembly;player=UnityEngine.Object.FindObjectOfType<ChillGraphicsPlayer>();animator=player.character;
         animator.runtimeAnimatorController=player.story.storyController;animator.Rebind();animator.Update(0);animator.speed=0;
+        if(Environment.GetEnvironmentVariable("CHILL_NATIVE_ALL_MOTIONS")=="1")RecordedMotions=player.story.presentation.statePaths.Where(p=>animator.HasState(0,Animator.StringToHash(p.path))).Select(p=>p.motion).Distinct().OrderBy(m=>m).ToArray();
         var config=JsonUtility.FromJson<Configuration>(File.ReadAllText("../.tools/native-reference.json"));
         var transforms=UnityEngine.Object.FindObjectsOfType<Transform>(true).GroupBy(PathOf).ToDictionary(g=>g.Key,g=>g.First());
         var colliders=new Dictionary<string,Component>();
@@ -75,7 +76,7 @@ public sealed class ChillReferenceRecorder:MonoBehaviour
         int motion=RecordedMotions[nextClip];
         state=player.story.presentation.statePaths.First(p=>p.motion==motion).path;animator.speed=1;animator.Play(state,0,0);animator.Update(0);
         var clips=animator.GetCurrentAnimatorClipInfo(0);float duration=clips.Length>0?clips[0].clip.length:animator.GetCurrentAnimatorStateInfo(0).length;animator.speed=0;
-        if(float.IsNaN(duration)||float.IsInfinity(duration)||duration<=0||duration>30)throw new InvalidOperationException("Invalid native reference clip duration: "+state+" "+duration);
+        if(float.IsNaN(duration)||float.IsInfinity(duration)||duration<=0||duration>120)throw new InvalidOperationException("Invalid native reference clip duration: "+state+" "+duration);
         clip=new ChillBoneBake.Clip{motion=motion,state=state,seconds=duration,loop=animator.GetCurrentAnimatorStateInfo(0).loop};
         // Simulate at 60 Hz, retain 30 Hz samples, and settle looping cloth for two complete cycles.
         clip.frames=new ChillBoneBake.Frame[Mathf.CeilToInt(clip.seconds*30)+1];simulationFrames=(clip.frames.Length-1)*2;warmup=clip.loop?simulationFrames*2:120;output.clips[nextClip]=clip;frame=0;recording=true;

@@ -1,6 +1,7 @@
 param(
     [Parameter(Mandatory=$true)][string]$PCManaged,
-    [string]$Editor='C:\Program Files\Unity\Hub\Editor\2022.3.62f2\Editor\Unity.exe'
+    [string]$Editor='C:\Program Files\Unity\Hub\Editor\2022.3.62f2\Editor\Unity.exe',
+    [switch]$AllMotions
 )
 $ErrorActionPreference='Stop'
 $taskRoot=$PSScriptRoot
@@ -9,9 +10,11 @@ if(!(Test-Path -LiteralPath (Join-Path $PCManaged 'MagicaClothV2.dll'))){throw '
 if(!(Test-Path -LiteralPath (Join-Path $taskProject 'Assets/Prototype/Room.unity'))){throw 'Prepare/build the recovered project first.'}
 if(Get-Process Unity -ErrorAction SilentlyContinue){throw 'Close Unity before capturing the native reference.'}
 $taskPreviousManaged=$env:CHILL_PC_MANAGED
+$taskPreviousMotions=$env:CHILL_NATIVE_ALL_MOTIONS
 $taskStarted=[DateTime]::UtcNow
 try {
     $env:CHILL_PC_MANAGED=(Resolve-Path -LiteralPath $PCManaged).Path
+    $env:CHILL_NATIVE_ALL_MOTIONS=if($AllMotions){'1'}else{''}
     Push-Location $taskRoot
     try {
         python -X utf8 src/graphics/prepare_native_reference.py
@@ -27,4 +30,4 @@ try {
         if($taskResult.LastWriteTimeUtc -lt $taskStarted){throw 'Capture did not produce a fresh reference.'}
         Write-Host 'Native reference captured. Run build.ps1 to include it in WebGL.'
     } finally {Pop-Location}
-} finally {$env:CHILL_PC_MANAGED=$taskPreviousManaged}
+} finally {$env:CHILL_PC_MANAGED=$taskPreviousManaged;$env:CHILL_NATIVE_ALL_MOTIONS=$taskPreviousMotions}
