@@ -1,4 +1,4 @@
-# ChillWithMe Wasm
+# Chill with You : Lo-Fi Story Wasm
 
 A work-in-progress browser port of **Chill with You: Lo-Fi Story**. Spend time with Satone, listen to music, and use focus tools in a cozy 3D room.
 
