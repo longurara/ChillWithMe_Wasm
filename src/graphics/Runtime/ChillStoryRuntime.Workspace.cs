@@ -21,6 +21,7 @@ namespace Hlc.ChillPrototype
             if(w.notes==null)w.notes=new List<ChillNotePage>();if(w.lists==null)w.lists=new List<ChillTodoGroup>();
             if(w.habits==null)w.habits=new List<ChillHabit>();if(w.deletedHabits==null)w.deletedHabits=new List<ChillHabit>();if(w.days==null)w.days=new List<ChillDayRecord>();if(w.panels==null)w.panels=new List<ChillPanelPosition>();
             if(w.purchases==null)w.purchases=new List<string>();if(w.achievements==null)w.achievements=new List<string>();if(w.calendarEvents==null)w.calendarEvents=new List<string>();
+            MigrateAchievementKeys(w);
             if(w.playedDecorations==null)w.playedDecorations=new List<string>();if(w.playedEnvironments==null)w.playedEnvironments=new List<string>();
             if(w.room==null)w.room=new List<ChillRoomChoice>();if(w.presets==null)w.presets=new List<ChillRoomPreset>();if(w.pcRecords==null)w.pcRecords=new List<ChillPCRecord>();
             if(w.pomodoroAudio==null)w.pomodoroAudio=new ChillTimerAudio();if(w.countupAudio==null)w.countupAudio=new ChillTimerAudio();

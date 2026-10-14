@@ -187,7 +187,7 @@ public static class ChillBuild
         PlayerSettings.WebGL.powerPreference = WebGLPowerPreference.HighPerformance;
         PlayerSettings.WebGL.debugSymbolMode = WebGLDebugSymbolMode.External;
         PlayerSettings.WebGL.template = "APPLICATION:Default";
-        PlayerSettings.bundleVersion = "1.24.0";
+        PlayerSettings.bundleVersion = "1.25.0";
         PlayerSettings.WebGL.dataCaching = false;
         PlayerSettings.WebGL.memorySize = 512;
         PlayerSettings.WebGL.initialMemorySize = 256;
@@ -416,7 +416,7 @@ public static class ChillBuild
         if (!File.Exists(ScenePath)) Prepare();
         PlayerSettings.WebGL.powerPreference = WebGLPowerPreference.HighPerformance;
         PlayerSettings.WebGL.debugSymbolMode = WebGLDebugSymbolMode.External;
-        PlayerSettings.bundleVersion = "1.24.0";
+        PlayerSettings.bundleVersion = "1.25.0";
         PlayerSettings.WebGL.template = "APPLICATION:Default";
         PlayerSettings.WebGL.initialMemorySize = 256;
         PlayerSettings.WebGL.maximumMemorySize = 2048;

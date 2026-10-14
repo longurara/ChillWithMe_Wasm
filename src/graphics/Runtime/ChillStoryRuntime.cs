@@ -57,6 +57,7 @@ namespace Hlc.ChillPrototype
         int noticeRevision;
         public void Notify(string text,bool error=false)
         {
+            text=ChillPortI18n.Translate(text,Language);
             if (error && noticeError && noticeMessage==text) return;
             noticeMessage=text;noticeError=error;noticeRevision++;
         }

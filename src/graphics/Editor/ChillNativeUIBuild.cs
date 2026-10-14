@@ -21,6 +21,7 @@ public static class ChillNativeUIBuild
     {rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.pivot=new Vector2(.5f,.5f);rect.offsetMin=min;rect.offsetMax=max;}
     public static ChillNativeUI Configure(ChillGraphicsPlayer player)
     {
+        Directory.CreateDirectory("Assets/Resources");File.Copy("../src/gameplay-ui/i18n.json","Assets/Resources/chill-port-i18n.json",true);AssetDatabase.ImportAsset("Assets/Resources/chill-port-i18n.json");
         var old=player.GetComponent<ChillGameplayUI>();if(old)UnityEngine.Object.DestroyImmediate(old);
         var ui=player.GetComponent<ChillNativeUI>() ?? player.gameObject.AddComponent<ChillNativeUI>();ui.player=player;
         if(!player.GetComponent<ChillPerformanceCapture>())player.gameObject.AddComponent<ChillPerformanceCapture>();

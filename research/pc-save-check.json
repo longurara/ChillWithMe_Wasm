@@ -14,5 +14,7 @@
   "realPCSaveReadOnly": true,
   "sourceFiles": 31,
   "recognizedRecords": 29,
-  "warningTypes": []
+  "warningTypes": [
+    "Some PC story IDs are absent from this game data and were not imported."
+  ]
 }

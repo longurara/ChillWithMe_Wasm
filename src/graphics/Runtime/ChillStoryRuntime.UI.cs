@@ -9,6 +9,8 @@ namespace Hlc.ChillPrototype
         bool recoveredBackup;
         public int RoomLevel=>save.level;
         public double WorkedSeconds=>save?.workedSeconds??0;
+        public string Language=>save?.language??"En";
+        public bool PreviewUnlock=>save?.previewUnlock??false;
         public string UITranslate(string key) => texts != null && texts.ContainsKey(key) ? Text(key) : key;
         static string TimerLabel(double seconds)
         { long total=(long)Math.Max(0,Math.Min(seconds,7*24*3600)); return (total/3600).ToString("00")+":"+(total/60%60).ToString("00")+":"+(total%60).ToString("00"); }
@@ -61,8 +63,8 @@ namespace Hlc.ChillPrototype
                 case "unlock": save.previewUnlock=command.value != 0; SaveNow(); break;
                 case "language": if(!Playing){save.language=new[]{"En","Ja","ZhHans","ZhHant","Pt","Ko","Ru"}.Contains(command.text)?command.text:"En"; SaveNow();} break;
                 case "mode": if (!Playing && command.value >= 0 && command.value < 3) {player.PlayState((int)command.value);SaveNow();} break;
-                case "time-mode": if (!Playing && command.value >= 0 && command.value < player.environment.presets.Length && ChangeTimeAllowed((int)command.value)) {player.environment.SelectTime((int)command.value);SaveNow();} break;
-                case "window-mode": if (!Playing && command.value >= 0 && command.value <= player.environment.environments.Length && ChangeWindowAllowed((int)command.value)) {player.environment.SelectEnvironment((int)command.value);SaveNow();} break;
+                case "time-mode": if (!Playing && command.value >= 0 && command.value < player.environment.presets.Length && ChangeTimeAllowed((int)command.value)) {if(player.environment.selectedTime!=(int)command.value)AwardAchievement("CHANGE_ENVIROMENT_COUNT");player.environment.SelectTime((int)command.value);SaveNow();} break;
+                case "window-mode": if (!Playing && command.value >= 0 && command.value <= player.environment.environments.Length && ChangeWindowAllowed((int)command.value)) {if(player.environment.selectedEnvironment!=(int)command.value)AwardAchievement("CHANGE_ENVIROMENT_COUNT");player.environment.SelectEnvironment((int)command.value);SaveNow();} break;
                 case "note": UpdateNote(command.text); break;
                 case "todo-add": AddTodo(command.text); break;
                 case "todo-toggle": ToggleTodo((int)command.value); break;

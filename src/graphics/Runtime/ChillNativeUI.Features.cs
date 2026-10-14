@@ -29,12 +29,12 @@ namespace Hlc.ChillPrototype
             var go=Instantiate(source.gameObject,parent,false);go.name="WebFeature_"+key;Show(go,true);FixSprites(go);CleanEvents(go);
             foreach(var animator in go.GetComponentsInChildren<Animator>(true))animator.enabled=false;
             var rect=(RectTransform)go.transform;rect.anchorMin=rect.anchorMax=new Vector2(.5f,1);rect.pivot=new Vector2(.5f,1);rect.anchoredPosition=new Vector2(x,y);rect.sizeDelta=new Vector2(width,52);
-            var text=go.GetComponentInChildren<TMP_Text>(true);if(text){text.text=caption;text.richText=false;text.color=Color.white;text.enableAutoSizing=true;text.fontSizeMin=16;text.fontSizeMax=24;}
+            var text=go.GetComponentInChildren<TMP_Text>(true);if(text){if(key.StartsWith("todoList_"))text.text=caption;else PortCaption(text,caption);text.richText=false;text.color=Color.white;text.enableAutoSizing=true;text.fontSizeMin=16;text.fontSizeMax=24;}
             foreach(var group in go.GetComponentsInChildren<CanvasGroup>(true)){group.alpha=1;group.interactable=group.blocksRaycasts=true;}
             var button=go.GetComponent<Button>();button.onClick.RemoveAllListeners();button.interactable=true;featureButtons[key]=button;return button;
         }
         void FeatureCaption(string key,string text)
-        {if(featureButtons.TryGetValue(key,out var button)&&button){var label=button.GetComponentInChildren<TMP_Text>(true);if(label)label.text=text;}}
+        {if(featureButtons.TryGetValue(key,out var button)&&button){var label=button.GetComponentInChildren<TMP_Text>(true);if(label){if(key=="loadRoomPreset"&&text!="Choose preset"){portLabels.Remove(label);label.text=text;}else PortCaption(label,text);}}}
         TMP_InputField FeatureInput(Transform parent,string key,string text,float y,float width=470,float x=0)
         {
             var source=Get<TMP_InputField>("CurrentPageUI","_titleInputField");if(!source)return null;
@@ -95,10 +95,11 @@ namespace Hlc.ChillPrototype
             if(tagRoot){foreach(var child in tagRoot.GetComponentsInChildren<Transform>(true).Where(t=>t.name=="Content"))Show(child.gameObject,false);Bind(tagRoot.gameObject,()=>{var names=story.PlaylistNames;story.SetPlaylist(names[(Array.IndexOf(names,story.MusicState.playlist)+1)%names.Length]);musicSignature=null;});playlistSelector=tagRoot.GetComponent<Button>();}
             var general=Find(SettingsContent);if(general)
             {
-                var rect=(RectTransform)general;rect.sizeDelta=new Vector2(rect.sizeDelta.x,1645);
+                var rect=(RectTransform)general;rect.sizeDelta=new Vector2(rect.sizeDelta.x,1710);
                 float y=-565;
                 void Add(string key,string title,Action callback){var button=FeatureButton(general,key,title,y);FeatureHook(button,callback);y-=65;}
                 Add("pcSave","Import PC save",()=>ChillBrowserSave.ImportPC(story.gameObject.name));
+                Add("unlockTest","Unlock for testing",()=>{story.UIAction(new ChillUiCommand{action="unlock",value=story.PreviewUnlock?0:1});story.Notify("Unlocking for testing does not complete episodes or grant achievements.");});
                 Add("autonomy","Satone actions",()=>{story.Settings.autonomy=!story.Settings.autonomy;story.ResetAutonomy();story.CommitSettings();});
                 Add("rest","Satone: work / break",()=>story.SetResting(!story.Settings.resting));
                 Add("cameraView","Room camera",()=>story.ChooseRoomView((story.Settings.cameraView+1)%3));
@@ -203,11 +204,13 @@ namespace Hlc.ChillPrototype
         }
         void RefreshFeatureControls()
         {
+            RefreshPortLanguage();
             var story=player.story;
             Write("MusicUI","_musicTitleText",story.MusicLoading?"Loading…":story.CurrentTrack?.title ?? (player.music.clip?player.music.clip.name:"Select music"));
             Write("MusicUI","_artistNameText",story.CurrentTrack?.artist??"");
             if(!story.FeatureReady)return;
             var s=story.Settings;
+            FeatureCaption("unlockTest","Unlock for testing: "+(story.PreviewUnlock?"ON":"OFF"));
             FeatureCaption("cameraView","Room camera: "+new[]{"Desk","Sofa","Bed"}[s.cameraView]);
             foreach(var item in featureSliders)if(item.Item1){item.Item1.SetValueWithoutNotify(item.Item2());var label=item.Item1.transform.parent.GetComponentsInChildren<TMP_Text>(true).FirstOrDefault(t=>t.name.Contains("Current"));if(label)label.text=Mathf.RoundToInt(item.Item2()*100).ToString();}
             FeatureCaption("autonomy","Satone actions: "+(s.autonomy?"ON":"OFF"));FeatureCaption("rest","Satone: "+(story.Resting?"Break":"Work"));FeatureCaption("selfTalk","Self talk: "+(s.selfTalk?"ON":"OFF"));FeatureCaption("greeting","Greeting on launch: "+(s.autoGreeting?"ON":"OFF"));FeatureCaption("autoTime","Automatic time of day: "+(s.autoTime?"ON":"OFF"));FeatureCaption("clock24",s.clock24?"24 hour clock":"12 hour clock");

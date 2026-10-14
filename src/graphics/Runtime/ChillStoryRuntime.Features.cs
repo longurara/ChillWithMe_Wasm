@@ -351,7 +351,7 @@ namespace Hlc.ChillPrototype
         IEnumerator FarewellAfterPose(int scenario)
         {
             yield return new WaitForSecondsRealtime(1);autonomousSequence=null;
-            if(StartAutomaticScenario(scenario)||StartAutomaticScenario(19))AwardAchievement("EXIT_GAME_COUNT");
+            if(StartAutomaticScenario(scenario)||StartAutomaticScenario(19))AwardAchievement("FINISH_GAME_FROM_EXIT_CALL_BUTTON_COUNT");
             else{farewellPending=false;Notify("The farewell conversation is unavailable.",true);}SaveNow();
         }
         public void Tutorial(){if(!Playing){var item=data.groups.FirstOrDefault(g=>g.Scenario==18);if(item!=null)Begin(item,false);}}

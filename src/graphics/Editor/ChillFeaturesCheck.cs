@@ -133,5 +133,5 @@ public static class ChillFeaturesCheck
         File.WriteAllText(Path.GetFullPath("../research/dialogue-layout-check.json"),"{\"passed\":true,\"sourceMessageClassification\":true,\"greetingAboveMusic\":true,\"episodeControlsHiddenDuringGreeting\":true,\"mainStoryRestored\":true,\"clearedOnEnd\":true,\"browserGameplayRun\":false,\"userSaveWritten\":false}");
         Debug.Log("HLC_DIALOGUE_LAYOUT_CHECK_PASSED sourceMessageClassification=true greetingAboveMusic=true");
     }
-    public static void BuildChecked(){Run();ChillPhysicsBake.Build();ChillNativeUIBuild.Build();}
+    public static void BuildChecked(){Run();ChillRemainingCheck.Run();ChillPhysicsBake.Build();ChillNativeUIBuild.Build();}
 }

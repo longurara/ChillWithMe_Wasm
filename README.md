@@ -14,7 +14,7 @@ A work-in-progress browser port of **Chill with You: Lo-Fi Story**. Spend time w
 
 ## Current Status
 
-Version **1.24.0** has passed basic story, timer, and input checks on Chrome, Edge, and Firefox. The port is unfinished: visuals, physics, and some behavior still differ from the Windows game. Cloud saves are deferred. Mobile and Safari support have not been fully verified.
+Version **1.25.0** adds safer asset loading, graphics recovery, more physics coverage, translated settings, and an unlock switch for testing. Unity checks and a Chrome smoke test passed; earlier basic checks also passed on Edge and Firefox. Visuals, physics, and some behavior still differ from the Windows game. Cloud saves are deferred. Mobile and Safari support have not been fully verified.
 
 ## Run Locally
 

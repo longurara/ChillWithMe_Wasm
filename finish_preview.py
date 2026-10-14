@@ -11,6 +11,8 @@ shutil.copy2(source / 'native.css', ui / 'native.css')
 shutil.copy2(source / 'startup.js', ui / 'startup.js')
 shutil.copy2(source / 'pc-save.mjs', ui / 'pc-save.mjs')
 shutil.copy2(source / 'save-store.mjs', ui / 'save-store.mjs')
+shutil.copy2(source / 'context-recovery.mjs', ui / 'context-recovery.mjs')
+shutil.copy2(source / 'i18n.json', ui / 'i18n.json')
 streaming=output/'StreamingAssets'
 streaming.mkdir(parents=True,exist_ok=True)
 for name in ('chill-features.json','story-scene.json','pc-save-metadata.json'):

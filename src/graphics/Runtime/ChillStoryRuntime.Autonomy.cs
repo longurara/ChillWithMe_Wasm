@@ -179,7 +179,7 @@ namespace Hlc.ChillPrototype
         {double end=Now+limit;yield return null;while(!Playing&&!presentation.MotionCompleted&&Now<end)yield return null;}
         IEnumerator Variant(string name)
         {
-            if(SetNativeMotion(name))yield return WaitNative();
+            if(SetNativeMotion(name)){yield return WaitNative();if(name=="BreakBase004_DrinkHot"&&!Playing&&presentation.MotionCompleted)AwardAchievement("DRINK_HOT");}
             if(!Playing)SetNativeMotion(CurrentBaseMotion);autonomousSequence=null;
         }
         IEnumerator WakeAndReact()

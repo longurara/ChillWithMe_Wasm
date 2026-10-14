@@ -24,9 +24,9 @@
       if(type==='error'){window.ChillStartup.fail(message);return;}
       setTimeout(()=>{warning.hidden=true;},5000);
     }
-    import('./ui/save-store.mjs').then(async module=>{window.ChillSaveStore=await module.beginStorageSession(()=>{if(window.chillUnityInstance)window.chillUnityInstance.SendMessage('ChillPrototype','SaveFromBrowser');});}).then(()=>createUnityInstance(document.getElementById('unity-canvas'),{
+    import('./ui/context-recovery.mjs').then(module=>module.attachContextRecovery()).then(recovery=>{window.ChillContextRecovery=recovery;return import('./ui/save-store.mjs');}).then(async module=>{window.ChillSaveStore=await module.beginStorageSession(()=>{if(window.chillUnityInstance)window.chillUnityInstance.SendMessage('ChillPrototype','SaveFromBrowser');});}).then(()=>createUnityInstance(document.getElementById('unity-canvas'),{
       dataUrl:'Build/WebPlayer.data',frameworkUrl:'Build/WebPlayer.framework.js',codeUrl:'Build/WebPlayer.wasm',streamingAssetsUrl:'StreamingAssets',
-      companyName:'HLC',productName:'Chill with You Web',productVersion:'1.24.0',devicePixelRatio:Math.min(window.devicePixelRatio||1,matchMedia('(pointer: coarse)').matches?1.5:2),showBanner:showWarning
+      companyName:'HLC',productName:'Chill with You Web',productVersion:'1.25.0',devicePixelRatio:Math.min(window.devicePixelRatio||1,matchMedia('(pointer: coarse)').matches?1.5:2),showBanner:showWarning
     },progress=>window.ChillStartup.progress(progress))).then(instance=>{
       window.chillUnityInstance=instance;
       document.addEventListener('visibilitychange',()=>instance.SendMessage('ChillPrototype','BrowserVisibility',document.hidden?'hidden':'visible'));
