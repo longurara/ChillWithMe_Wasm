@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 namespace Hlc.ChillPrototype
 {
     // Asset inspection harness, separate from the original game's story systems.
-    public sealed class ChillLibraryBrowser : MonoBehaviour
+    public sealed partial class ChillLibraryBrowser : MonoBehaviour
     {
         public Animator character;
         public AudioSource music;
@@ -35,43 +35,6 @@ namespace Hlc.ChillPrototype
         IEnumerator SelectMusicAndPlay(ChillAssetEntry entry)
         { yield return Select(entry); if (music && music.clip) music.Play(); }
         public bool AssetGuidMatches(string name, string guid) => catalog != null && catalog.assets.Any(a => a.guid == guid && a.name == name);
-        public void LoadExternal(string slot, string assetName, Action<UnityEngine.Object> complete)
-        { StartCoroutine(LoadExternalRoutine(slot, assetName, complete)); }
-
-        IEnumerator LoadExternalRoutine(string slot, string assetName, Action<UnityEngine.Object> complete)
-        {
-            while (!Ready || busy) yield return null;
-            busy = true;
-            if (!externalPacks.TryGetValue(slot, out var held)) externalPacks[slot] = held = new List<string>();
-            Release(held);
-            var entry = catalog.assets.FirstOrDefault(a => string.Equals(a.name, assetName, StringComparison.OrdinalIgnoreCase) || a.guid == assetName);
-            if (entry == null) { busy = false; complete(null); yield break; }
-            var root = metadata[entry.bundle];
-            foreach (string name in root.dependencies.Concat(new[] { entry.bundle }).Distinct())
-            {
-                if (packs.TryGetValue(name, out var existing)) { existing.users++; held.Add(name); continue; }
-                var info = metadata[name];
-                using (var request = UnityWebRequestAssetBundle.GetAssetBundle(BaseUrl + name, Hash128.Parse(info.hash), info.crc))
-                {
-                    yield return request.SendWebRequest();
-                    if (request.result != UnityWebRequest.Result.Success)
-                    { status = request.error; Release(held); busy = false; complete(null); yield break; }
-                    var bundle = DownloadHandlerAssetBundle.GetContent(request);
-                    if (!bundle) { Release(held); busy = false; complete(null); yield break; }
-                    packs[name] = new Pack { bundle = bundle, users = 1 }; held.Add(name);
-                }
-            }
-            var load = packs[entry.bundle].bundle.LoadAssetAsync(entry.assetName);
-            yield return load;
-            busy = false; complete(load.asset);
-        }
-
-        public void ReleaseExternal(string slot)
-        {
-            // Never interrupt an in-flight load; each callback owns the loaded
-            // slot until a later request or component teardown releases it.
-            if (!busy && externalPacks.TryGetValue(slot, out var held)) Release(held);
-        }
         ChillAssetCatalog catalog;
         Dictionary<string, ChillBundleEntry> metadata;
         ChillAssetEntry[] results = Array.Empty<ChillAssetEntry>();
@@ -174,6 +137,7 @@ namespace Hlc.ChillPrototype
                 var info = metadata[name];
                 using (var request = UnityWebRequestAssetBundle.GetAssetBundle(BaseUrl + name, Hash128.Parse(info.hash), info.crc))
                 {
+                    request.timeout=30;
                     var operation = request.SendWebRequest();
                     while (!operation.isDone)
                     { status = "Tải " + entry.name + " · " + (request.downloadProgress * 100).ToString("F0") + "%"; yield return null; }
@@ -305,6 +269,7 @@ namespace Hlc.ChillPrototype
 
         void OnDestroy()
         {
+            CancelAssetLoads();
             ClearPreview();
             if (music) { music.Stop(); music.clip = null; }
             Release(musicPacks);
