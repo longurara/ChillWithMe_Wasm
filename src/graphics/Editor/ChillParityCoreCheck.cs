@@ -76,7 +76,7 @@ public static class ChillParityCoreCheck
                 }
             }
         }
-        finally{story.ResetAutonomy();Set(story,"save",original);player.PlayState(original.deskMode);}
+        finally{story.ResetAutonomy();Set(story,"save",original);Set(story,"noticeMessage","");Set(story,"noticeError",false);player.PlayState(original.deskMode);}
         File.WriteAllText(Path.GetFullPath("../research/parity-core-check.json"),"{\"passed\":true,\"scope\":\"Editor behavioural checks, not PC visual parity\",\"replayClockAndSeed\":true,\"habitPauseHistory\":true,\"habitDeletionHistory\":true,\"legacyMigration\":true,\"workBreakDeferred\":true,\"deskModes\":3,\"userSaveWritten\":false}");
         Debug.Log("HLC_PARITY_CORE_CHECK_PASSED");
     }

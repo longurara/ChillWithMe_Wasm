@@ -24,8 +24,6 @@ public static class ChillStoryPresentationCheck
         ui.RefreshNow();Require(ui.StoryHudHidden&&targets.All(g=>!g.activeSelf),"Main story leaves the room HUD visible");
         var binding=config.bindings.First(b=>b.script=="StorySystemUI");Transform Ref(string key)=>ui.Find(key=="self"?binding.path:binding.refs.First(r=>r.name==key).path);
         Require(Ref("self").gameObject.activeInHierarchy&&Ref("_bottomBackImage").gameObject.activeInHierarchy&&Ref("_autoButton").gameObject.activeInHierarchy&&Ref("_skipButton").gameObject.activeInHierarchy,"Story HUD suppression hides dialogue controls/background");
-        Require(ui.historyPanel.transform.parent==ui.canvas.transform,"Story history remains under the hidden room HUD");
-        ui.Open("history");ui.RefreshNow();Require(ui.historyPanel.activeInHierarchy&&targets.All(g=>!g.activeSelf),"History cannot open independently during a story");ui.Close();
         Set(story,"chapter",null);Set(story,"current",null);Set(story,"message","");Set(story,"shownChars",0);ui.RefreshNow();Require(!ui.StoryHudHidden&&before.All(p=>p.Key.activeSelf==p.Value),"Ending a story loses the previous room HUD state");
         Call(ui,"ToggleHidden");Require(!ui.canvas.transform.Find("UI").gameObject.activeSelf,"Manual HUD hide failed");
         Set(story,"chapter",data.groups.First(g=>g.Scenario==52));ui.RefreshNow();Require(ui.StoryHudHidden&&Ref("_bottomBackImage").gameObject.activeInHierarchy,"Story backdrop is missing after a manually hidden HUD");

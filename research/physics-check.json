@@ -13,7 +13,7 @@
     "frames": 3600,
     "maximumSubsteps": 2,
     "fpsRotationDifference": 0.0,
-    "maximumOffset": 90.0000991821289,
+    "maximumOffset": 44.68916320800781,
     "maximumHumanError": 0.0,
     "maximumPositionError": 0.0,
     "comparison": "Source parameters and rig checked; PC runtime and physical mobile comparison pending."

@@ -10,6 +10,6 @@
     "crossEdges": 20,
     "nativeCapsuleFlags": true,
     "maximumBackHemHipPenetrationMeters": 0.0,
-    "maximumSecondaryAngle": 68.3765869140625,
+    "maximumSecondaryAngle": 38.00019836425781,
     "scope": "Actual transformed back-hem edges against the native hip capsule in eight fixed window poses. Web solver, not PC runtime parity."
 }

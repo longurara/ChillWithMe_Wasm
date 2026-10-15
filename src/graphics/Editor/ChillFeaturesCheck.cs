@@ -61,9 +61,10 @@ public static class ChillFeaturesCheck
         Debug.Log("HLC_MUSIC_PANEL scale="+Get<GameObject>(ui,"openPane").transform.localScale+" groups="+string.Join("|",Get<GameObject>(ui,"openPane").GetComponentsInChildren<CanvasGroup>(true).Select(g=>g.name+"="+g.alpha)));
         ChillNativeUIPreview.RenderCurrent(player,ui.canvas,"preview-features-music.png",1,0,.3f,false,camera=>CheckPanel(Get<GameObject>(ui,"openPane"),camera));
         ui.Close();ui.Open("settings");ui.RefreshNow();ChillNativeUIPreview.RenderCurrent(player,ui.canvas,"preview-features-settings.png",1,0,.3f);
-        Invoke(ui,"OpenAmbient");Canvas.ForceUpdateCanvases();var mixer=Get<GameObject>(ui,"ambientPanel");Require(mixer.GetComponentsInChildren<Slider>(true).Length==30,"Ambient mixer does not contain all native tracks");
-        Require(mixer.GetComponentsInChildren<TMPro.TMP_Text>().Where(t=>t.name.Contains("Current")).All(t=>t.text=="0"),"Ambient volume labels disagree with zero gain");
-        ChillNativeUIPreview.RenderCurrent(player,ui.canvas,"preview-features-ambient.png",1,0,.3f,false,camera=>CheckPanel(mixer,camera));ui.Close();
+        ui.Close();ui.Open("environment");ui.RefreshNow();Canvas.ForceUpdateCanvases();
+        var envPane=Get<GameObject>(ui,"openPane");
+        Require(ui.environmentChoices.Length==42&&envPane.GetComponentsInChildren<Slider>(true).Length==29,"Environment window does not contain all 42 cards and 29 ambient sliders");
+        ChillNativeUIPreview.RenderCurrent(player,ui.canvas,"preview-features-ambient.png",1,0,.3f,false,camera=>CheckPanel(envPane,camera));ui.Close();
         Invoke(ui,"SetTutorialPage",0);var config=JsonUtility.FromJson<ChillNativeUI.Configuration>(ui.configuration.text);
         var tutorial=ui.Find(config.bindings.First(b=>b.script=="TutorialView").path);tutorial.gameObject.SetActive(true);ChillNativeUIPreview.RenderCurrent(player,ui.canvas,"preview-features-tutorial.png",1,0,.3f);tutorial.gameObject.SetActive(false);
         // Check real hit targets, not merely calling the callback method.
@@ -111,7 +112,7 @@ public static class ChillFeaturesCheck
         }
         var uiRoot=ui.canvas.transform.Find("UI");var storyRoot=Ref("StorySystemUI","self");
         int sourceUiOrder=uiRoot.GetSiblingIndex();
-        foreach(var panel in new[]{"story","settings","history","music"})
+        foreach(var panel in new[]{"story","settings","environment","music"})
         {
             ui.Open(panel);Require(uiRoot.GetSiblingIndex()>storyRoot.GetSiblingIndex(),"Popup did not rise above dialogue: "+panel);
             ui.Close();Require(uiRoot.GetSiblingIndex()==sourceUiOrder&&uiRoot.GetSiblingIndex()<storyRoot.GetSiblingIndex(),"Closing popup leaves its background over the dialogue: "+panel);
@@ -122,7 +123,7 @@ public static class ChillFeaturesCheck
         var normal=Ref("StorySystemUI","_normalTextMessage").GetComponent<TMPro.TMP_Text>();normal.ForceMeshUpdate();
         Require(Ref("StorySystemUI","_normalTextParent").gameObject.activeInHierarchy&&!Ref("StorySystemUI","_mainStoryTextParent").gameObject.activeSelf,"Greeting uses the main story window");
         Require(Ref("StorySystemUI","_normalTextCanvasGroup").GetComponent<CanvasGroup>().alpha==1,"Greeting is invisible");
-        Require(!Ref("StorySystemUI","_heroineNameObject").gameObject.activeSelf&&!Ref("StorySystemUI","_autoButton").gameObject.activeSelf&&!Ref("StorySystemUI","_skipButton").gameObject.activeSelf&&!ui.historyDialogueButton.gameObject.activeSelf,"Greeting retains episode-only controls");
+        Require(!Ref("StorySystemUI","_heroineNameObject").gameObject.activeSelf&&!Ref("StorySystemUI","_autoButton").gameObject.activeSelf&&!Ref("StorySystemUI","_skipButton").gameObject.activeSelf,"Greeting retains episode-only controls");
         var characters=normal.textInfo.characterInfo.Take(normal.textInfo.characterCount).Where(c=>c.isVisible).ToArray();Require(characters.Length>0,"Greeting text has no visible glyphs");
         float bottom=characters.Min(c=>normal.transform.TransformPoint(c.bottomLeft).y);var corners=new Vector3[4];((RectTransform)Ref("MusicUI","_playOrPauseButtonImage")).GetWorldCorners(corners);
         Require(bottom>corners.Max(c=>c.y)+2,"Greeting overlaps music playback controls");
