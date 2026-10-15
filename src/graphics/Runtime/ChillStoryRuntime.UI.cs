@@ -37,10 +37,11 @@ namespace Hlc.ChillPrototype
                 chapters=Array.Empty<ChillUiItem>(),page=page,kind=listKind };
             if (data != null && panel == "story" && !Playing)
             {
+                string CategoryTitle(int s)=>s==2?UITranslate("ui_story_category_after"):s==3?UITranslate("ui_story_category_dlc"):s==50?UITranslate("special_alterego_title"):s==51?UITranslate("special_bearsrestaurant_title"):s==52?UITranslate("special_valentine2026_title"):s==53?UITranslate("special_lunaNewYear2026_title"):s==54?UITranslate("special_season_base_title"):s==55?UITranslate("special_magicalprincess_title"):s==56?UITranslate("special_statisticsdev_title"):UITranslate("ui_story_category_extra");
                 var list=data.groups.Where(g => chapters.ContainsKey(g.ID) && (listKind == 3 || listKind == 0 && (g.Scenario == 1 || g.Scenario == 18) || listKind == 1 && (g.Scenario == 2 || g.Scenario == 3 || g.Scenario >= 24 && g.Scenario < 104) || listKind == 2 && g.Scenario != 1 && g.Scenario != 18))
                     .Where(g => string.IsNullOrEmpty(search) || (g.ID+Text(g.TitleLocalizationID)).IndexOf(search,StringComparison.OrdinalIgnoreCase) >= 0).ToArray();
                 page=Mathf.Clamp(page,0,Mathf.Max(0,(list.Length-1)/20)); result.page=page; result.chapterCount=list.Length;
-                result.chapters=list.Skip(allChapters ? 0 : page*20).Take(allChapters ? list.Length : 20).Select(g => new ChillUiItem { id=g.ID,title=string.IsNullOrEmpty(Text(g.TitleLocalizationID)) ? g.ID : Text(g.TitleLocalizationID),detail=Unlocked(g) ? "" : "Cần cấp "+g.UnlockLevel,done=save.completed.Contains(g.ID),enabled=Unlocked(g) }).ToArray();
+                result.chapters=list.Skip(allChapters ? 0 : page*20).Take(allChapters ? list.Length : 20).Select(g => new ChillUiItem { id=g.ID,title=string.IsNullOrEmpty(Text(g.TitleLocalizationID)) ? g.ID : Text(g.TitleLocalizationID),detail=Unlocked(g) ? Text(g.SubtitleLocalizationID) : "Cần cấp "+g.UnlockLevel,groupTitle=listKind==1?CategoryTitle(g.Scenario):"",done=save.completed.Contains(g.ID),enabled=Unlocked(g) }).ToArray();
             }
             return result;
         }
@@ -76,9 +77,9 @@ namespace Hlc.ChillPrototype
                 case "countup-toggle":
                     if(save.timerMode!=1 || PomodoroActive || Playing)break;
                     TimerUserActivity();
-                    if(save.countupRunning){UpdateCountup();save.countupSeconds=CountupElapsed;save.countupRunning=false;}
-                    else{bool fresh=!save.countupActive;save.timerComplete=false;save.countupActive=save.countupRunning=true;save.countupStarted=save.lastCountupTick=Now;if(fresh)TimerVoice("start",true);}
-                    TimerSound(save.countupRunning?0:6);SaveNow();break;
+                    if(save.countupRunning){UpdateCountup();save.countupSeconds=CountupElapsed;save.countupRunning=false;TimerSound(3);TimerVoice("break",true);}
+                    else{bool fresh=!save.countupActive;save.timerComplete=false;save.countupActive=save.countupRunning=true;save.countupStarted=save.lastCountupTick=Now;ResetChoiceTalk();if(fresh)TimerVoice("start",true);else sessionWorkBase=save.workedSeconds;TimerSound(0);}
+                    SaveNow();break;
                 case "countup-reset": bool finishedCountup=save.countupActive;UpdateCountup();save.countupRunning=save.countupActive=false;save.countupSeconds=0;if(finishedCountup){TimerSound(3);TimerVoice("finish",true);}SaveNow();break;
                 case "preset-name":case "preset-loops":case "preset-work":case "preset-break":
                     EnsureTimerPresets();int presetIndex=(int)command.value;
@@ -106,5 +107,63 @@ namespace Hlc.ChillPrototype
         double CountupElapsed=>save.countupSeconds+(save.countupRunning?Math.Max(0,Now-save.countupStarted):0);
         void EnsureTimerPresets(){if(save.timerPresets==null)save.timerPresets=new System.Collections.Generic.List<ChillTimerPreset>();while(save.timerPresets.Count<5)save.timerPresets.Add(new ChillTimerPreset());}
         void UpdateCountup(){if(!save.countupRunning || data==null)return;double now=Now;CreditWork(Math.Max(0,now-save.lastCountupTick),now);save.lastCountupTick=now;}
+        public ChillChapter[] AllChapters=>data?.groups??Array.Empty<ChillChapter>();
+        public string CurrentChapterId=>chapter?.ID??"";
+        public int MainEpisodeProgress=>Mathf.RoundToInt((float)save.mainEpisode);
+        public void DebugSetPreviewUnlock(bool unlock){save.previewUnlock=unlock;WorkspaceChanged();}
+        public void DebugAddPoints(int delta){Workspace.points=Mathf.Max(0,Workspace.points+delta);WorkspaceChanged();}
+        public void DebugSetLevel(int targetLevel){save.level=Mathf.Clamp(targetLevel,1,9999);save.exp=0;ClearRoomDefect();UpdateRoomDefect();WorkspaceChanged();}
+        public void DebugAddExp(double amount)
+        {
+            if(amount<=0||data==null)return;
+            if(Workspace.collaboration>0){CreditCollaboration(amount);SaveNow();return;}
+            save.exp+=amount;
+            bool level32Locked=!save.previewUnlock&&save.mainEpisode<31&&Workspace.collaboration==0;
+            int maxLevel=level32Locked?32:10000;
+            while(save.exp>=RequiredExp()&&RequiredExp()>0&&save.level<maxLevel){save.exp-=RequiredExp();save.level++;}
+            if(level32Locked&&save.level>=32){save.level=32;save.exp=0;}
+            WorkspaceChanged();
+        }
+        public void DebugUnlockAllShopItems()
+        {
+            if(Features?.unlocks==null)return;
+            foreach(var r in Features.unlocks.Where(u=>u.condition=="PointPurchase"))
+            {
+                string key=r.kind+":"+r.item;
+                if(!Workspace.purchases.Contains(key))Workspace.purchases.Add(key);
+            }
+            WorkspaceChanged();
+        }
+        public void DebugSkipAllStory()
+        {
+            if(data?.groups==null)return;
+            foreach(var g in data.groups.Where(g=>g.Scenario==1||g.Scenario==2||g.Scenario==3||g.Scenario==18||g.Scenario>=24&&g.Scenario<104))
+                if(!save.completed.Contains(g.ID))save.completed.Add(g.ID);
+            save.mainEpisode=36;save.needsTutorial=false;save.connectionLostNextEpisode=true;
+            if(save.level<40)save.level=40;
+            ClearRoomDefect();UpdateRoomDefect();WorkspaceChanged();
+        }
+        public void DebugSkipSelectStory(int mainEpisodeCount)
+        {
+            if(data?.groups==null)return;
+            mainEpisodeCount=Mathf.Clamp(mainEpisodeCount,0,36);
+            foreach(var g in data.groups.Where(g=>g.Scenario==1))
+            {
+                if(g.EpisodeNumber<=mainEpisodeCount+.001f){if(!save.completed.Contains(g.ID))save.completed.Add(g.ID);}
+                else save.completed.Remove(g.ID);
+            }
+            save.mainEpisode=mainEpisodeCount;save.needsTutorial=false;
+            save.connectionLostNextEpisode=mainEpisodeCount>=31;
+            if(save.level<mainEpisodeCount+1)save.level=Mathf.Max(1,mainEpisodeCount+1);
+            ClearRoomDefect();UpdateRoomDefect();WorkspaceChanged();
+        }
+        public void DebugTriggerWantToTalk(){EnableChoiceTalk(3600);WorkspaceChanged();}
+        public void DebugForcePlayChapter(string chapterId)
+        {
+            if(data?.groups==null)return;
+            var target=data.groups.FirstOrDefault(g=>g.ID==chapterId);
+            if(target!=null&&chapters.ContainsKey(target.ID))Begin(target,false);
+        }
+        public void DebugAddWorkedHours(double hours){if(hours>0&&data!=null){CreditWork(hours*3600d,Now);SaveNow();}}
     }
 }
