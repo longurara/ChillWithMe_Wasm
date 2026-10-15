@@ -13,9 +13,9 @@ namespace Hlc.ChillPrototype
         public void ChooseRoomView(int index)
         {if(Playing||index<0||index>2||!presentation.cameras.SelectRoomView(index))return;Settings.cameraView=index;SaveNow();}
         public ChillUnlockRule UnlockRule(string kind,string item)=>Features?.unlocks?.FirstOrDefault(r=>r.kind==kind&&string.Equals(r.item,item,StringComparison.OrdinalIgnoreCase));
-        public bool ItemAvailable(string kind,string item)
+        public bool ItemAvailable(string kind,string item,bool ignorePreview=false)
         {
-            var rule=UnlockRule(kind,item);if(save.previewUnlock||rule==null||rule.condition=="None")return true;
+            var rule=UnlockRule(kind,item);if((!ignorePreview&&save.previewUnlock)||rule==null||rule.condition=="None")return true;
             if(rule.condition=="PointPurchase")return Workspace.purchases.Contains(kind+":"+item);
             if(rule.condition=="Scenario")return rule.argument=="None"||save.completed.Contains(rule.argument);
             if(rule.condition=="Level")return int.TryParse(rule.argument,out int level)&&save.level>=level;
@@ -42,7 +42,7 @@ namespace Hlc.ChillPrototype
         public void ResetRoom()
         {if(Playing)return;Workspace.room.Clear();Workspace.hair=Workspace.costume=0;WorkspaceChanged();RestoreRoom();}
         public void ChooseHair(int hair)
-        {if(Playing)return;Workspace.hair=Mathf.Clamp(hair,0,decorations.Data.hairPins.Length);decorations.SetHair(Workspace.hair);WorkspaceChanged();}
+        {if(Playing||(effects&&effects.hatHairLocked))return;Workspace.hair=Mathf.Clamp(hair,0,decorations.Data.hairPins.Length);decorations.SetHair(Workspace.hair);WorkspaceChanged();}
         public void ChooseCostume(int index)
         {if(Playing)return;Workspace.costume=Mathf.Clamp(index,0,4);GetComponent<ChillWardrobe>()?.Apply(Workspace.costume);WorkspaceChanged();}
         public void SaveRoomPreset(string name)
@@ -51,9 +51,23 @@ namespace Hlc.ChillPrototype
         {if(Playing)return;var preset=Workspace.presets.FirstOrDefault(p=>p.name==name);if(preset==null)return;Workspace.room=preset.choices.Where(r=>ItemAvailable("decoration",r.skin)).Select(r=>new ChillRoomChoice{category=r.category,skin=r.skin}).ToList();Workspace.hair=preset.hair;Workspace.costume=preset.costume;player.environment.SelectTime(preset.time);player.environment.SelectEnvironment(preset.window);if(preset.ambience!=null)foreach(var track in Features.ambient)SetAmbience(track.id,preset.ambience.FirstOrDefault(a=>a.id==track.id)?.volume??0,false);WorkspaceChanged();RestoreRoom();}
         public void DeleteRoomPreset(string name){Workspace.presets.RemoveAll(p=>p.name==name);WorkspaceChanged();}
         void RestoreRoom()
-        {if(!Application.isPlaying||VerificationOnly||Playing||!decorations)return;if(roomRoutine!=null)StopCoroutine(roomRoutine);roomRoutine=StartCoroutine(ApplyRoom(++roomVersion));}
+        {if(!Application.isPlaying||VerificationOnly||!decorations)return;if(roomRoutine!=null)StopCoroutine(roomRoutine);roomRoutine=StartCoroutine(ApplyRoom(++roomVersion));}
         IEnumerator ApplyRoom(int token)
-        {decorations.Restore();foreach(var item in Workspace.room.ToArray()){if(token!=roomVersion||Playing)yield break;yield return decorations.Apply(item.skin);if(token!=roomVersion||Playing)yield break;}decorations.SetHair(Workspace.hair);GetComponent<ChillWardrobe>()?.Apply(Workspace.costume);yield return ApplySeasonalDecorations();roomRoutine=null;}
+        {
+            var wardrobe=GetComponent<ChillWardrobe>();
+            for(int cat=1;cat<=12;cat++)if(!Workspace.room.Any(r=>r.category==cat))decorations.RestoreCategory(cat);
+            if(wardrobe)wardrobe.SyncBadge();
+            foreach(var item in Workspace.room.ToArray())
+            {
+                if(token!=roomVersion)yield break;
+                string skin=item.category==2&&effects&&!string.IsNullOrEmpty(effects.hatReplacedHeadphone)?effects.hatReplacedHeadphone:item.skin;
+                yield return decorations.Apply(skin);
+                if(token!=roomVersion)yield break;
+            }
+            decorations.SetHair(effects&&effects.hatHairLocked?0:Workspace.hair);
+            if(wardrobe){wardrobe.Apply(Workspace.costume);wardrobe.SyncBadge();}
+            yield return ApplySeasonalDecorations();roomRoutine=null;
+        }
         void CompletedAchievement(ChillChapter group)
         {
             if(group.Scenario==18)AwardAchievement("COMPLETE_TUTORIAL_COUNT");

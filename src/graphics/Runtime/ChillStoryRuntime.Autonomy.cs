@@ -8,7 +8,7 @@ namespace Hlc.ChillPrototype
 {
     public sealed partial class ChillStoryRuntime
     {
-        public bool Resting=>Settings.resting || save.timerComplete || PomodoroActive && save.breakTime;
+        public bool Resting=>Settings.resting || save.timerComplete || PomodoroActive && save.breakTime || save.countupActive && !save.countupRunning;
         public string AutonomyState {get;private set;}="Work";
         double nextAction,nextVariant,nextSelfTalk,nextLeave,nextLeaveLottery,nextWild,clickCooldown;
         int breakMode=-1,selfTalkCount,previousMode=-1;
@@ -90,7 +90,7 @@ namespace Hlc.ChillPrototype
                 if(Now>=nextAction&&presentation.MotionCompleted){SelectBreak();return;}
                 if(breakMode==4){UpdateSleep();return;}
                 if(Settings.selfTalk && Workspace.profileStatus!="2" && breakMode!=4 && Now>=nextSelfTalk)
-                {ScheduleSelfTalk();if(selfTalkCount<Policy("_oneBreakSelfTalkMax",4) && Chance(Policy("_selfTalkProbability",75))){if(StartReaction(Chance(50)?21:2000+TimeOfDayIndex()))selfTalkCount++;}}
+                {ScheduleSelfTalk();if(selfTalkCount<Policy("_oneBreakSelfTalkMax",4) && Chance(Policy("_selfTalkProbability",75))){if(TrySpecialBreakSelfTalk() || StartReaction(Chance(50)?21:2000+TimeOfDayIndex()))selfTalkCount++;}}
             }
             else if(Now>=nextAction)
             {
@@ -118,6 +118,40 @@ namespace Hlc.ChillPrototype
             return Mathf.Max(1,(float)Delay(group+".BaseDelaySecondsMin",group+".BaseDelaySecondsMax",30,60));
         }
         int TimeOfDayIndex(){int h=ChillRuntimeContext.LocalNow.Hour;return h>5&&h<11?0:h>=11&&h<=16?1:h>=17&&h<=19?2:3;}
+        public bool TrySpecialBreakSelfTalk()
+        {
+            if(StartupBlocking || ConnectionLost || Playing || autonomousSequence!=null || ActivityTransitionPending || data==null)return false;
+            var now=ChillRuntimeContext.LocalNow;string day=DateKey(now);
+            var ctCandidates=new List<(int ep,string key)>();
+            if(now.Hour==7&&now.Minute<=29)ctCandidates.Add((1,"ct:1:"+day));
+            else if(now.Hour==12&&now.Minute<=29)ctCandidates.Add((2,"ct:2:"+day));
+            else if(now.Hour==17&&now.Minute<=29)ctCandidates.Add((3,"ct:3:"+day));
+            else if(now.Hour==0){ctCandidates.Add((4,"ct:4:"+day));ctCandidates.Add((5,"ct:5:"+day));}
+            ctCandidates.RemoveAll(c=>Workspace.selfTalkHistory.Contains(c.key));
+            if(ctCandidates.Count>0&&Chance(20))
+            {
+                var pick=ctCandidates[ChillRuntimeContext.Range(0,ctCandidates.Count)];
+                var item=data.groups.FirstOrDefault(g=>g.Scenario==2050&&(int)g.EpisodeNumber==pick.ep&&Unlocked(g)&&chapters.ContainsKey(g.ID));
+                if(item!=null){Workspace.selfTalkHistory.Add(pick.key);StartSpecificReaction(item);return true;}
+            }
+            var wtCandidates=new List<(int ep,string key)>();
+            if(SessionWorkedSeconds>=36000&&SessionWorkedSeconds<54000){wtCandidates.Add((3,"wt:3:"+day));wtCandidates.Add((4,"wt:4:"+day));}
+            else if(SessionWorkedSeconds>=18000&&SessionWorkedSeconds<21600)wtCandidates.Add((2,"wt:2:"+day));
+            else if(SessionWorkedSeconds>=7200&&SessionWorkedSeconds<10800)wtCandidates.Add((1,"wt:1:"+day));
+            wtCandidates.RemoveAll(c=>Workspace.selfTalkHistory.Contains(c.key));
+            if(wtCandidates.Count>0&&Chance(20))
+            {
+                var pick=wtCandidates[ChillRuntimeContext.Range(0,wtCandidates.Count)];
+                var item=data.groups.FirstOrDefault(g=>g.Scenario==2100&&(int)g.EpisodeNumber==pick.ep&&Unlocked(g)&&chapters.ContainsKey(g.ID));
+                if(item!=null){Workspace.selfTalkHistory.Add(pick.key);StartSpecificReaction(item);return true;}
+            }
+            return false;
+        }
+        void StartSpecificReaction(ChillChapter item)
+        {
+            suspendedChapter=save.chapter;suspendedCursor=save.cursor;suspendedScene=new List<int>(save.sceneHistory);suspendedStoryLive=save.storyLive;
+            Begin(item,false,true);
+        }
         bool StartReaction(int scenario)
         {
             if(StartupBlocking || ConnectionLost || Playing || autonomousSequence!=null||ActivityTransitionPending)return false;
@@ -125,8 +159,7 @@ namespace Hlc.ChillPrototype
             if(bag.Count==0)bag.AddRange(data.groups.Where(g=>g.Scenario==scenario&&Unlocked(g)&&chapters.ContainsKey(g.ID)).OrderBy(_=>ChillRuntimeContext.Value).Select(g=>g.ID));
             if(bag.Count==0)return false;string id=bag[0];bag.RemoveAt(0);
             var item=data.groups.First(g=>g.ID==id);
-            suspendedChapter=save.chapter;suspendedCursor=save.cursor;suspendedScene=new List<int>(save.sceneHistory);suspendedStoryLive=save.storyLive;
-            Begin(item,false,true);return true;
+            StartSpecificReaction(item);return true;
         }
         void TrySatoneClick()
         {
@@ -142,6 +175,7 @@ namespace Hlc.ChillPrototype
             clickCooldown=Now+Policy("PlayerStatusReactionData.CooldownSeconds",5);
             if(autonomousSequence!=null)return;
             if(AcceptStoryInvitation())return;
+            if(Resting&&TryChoiceTalk())return;
             if(!save.timerRunning&&!save.countupRunning){if(TrySmallTalk())return;StartReaction(8);return;}
             if(Resting && breakMode==4 && AutonomyState=="BreakBase005_Sleep"){autonomousSequence=StartCoroutine(WakeAndReact());return;}
             StartReaction(RestingScenario());

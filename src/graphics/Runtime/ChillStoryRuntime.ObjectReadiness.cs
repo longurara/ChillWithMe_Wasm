@@ -7,16 +7,21 @@ namespace Hlc.ChillPrototype
     {
         readonly ChillActivityObjects activityObjects=new ChillActivityObjects();
         bool musicboxActive;
+        public bool IsMusicBoxPlaying=>musicboxActive;
         AudioSource musicboxAudio;
         int musicboxVersion;
         public void OnActivityObjectEvent(string name)
         {
             if(Replaying)return;
-            if(name=="Drink")activityObjects.Drink();
-            else if(name=="PourDrinksFromCoffeeMaker")activityObjects.Pour(Now,false);
+            if(name=="Drink"){activityObjects.Drink();UpdateDrinkIceVisual();}
+            else if(name=="PourDrinksFromCoffeeMaker"){activityObjects.Pour(Now,false);UpdateDrinkIceVisual();}
             else if(name=="PlayWindowAnimationOpenWindow")activityObjects.Window(true,Now,ChillRuntimeContext.Value);
             else if(name=="PlayWindowAnimationCloseWindow")activityObjects.Window(false,Now,ChillRuntimeContext.Value);
             else if(name=="PlayMusicbox")StartMusicbox();
+        }
+        public void UpdateDrinkIceVisual()
+        {
+            if(player&&player.deskObjects)player.deskObjects.UpdateIceVisual(activityObjects.HasIce(Now),activityObjects.IceScale(Now));
         }
         string ReadyObjectMotion()
         {
@@ -31,6 +36,7 @@ namespace Hlc.ChillPrototype
         }
         void StartMusicbox()
         {
+            if(!Resting){CloseMusicbox();return;}
             if(!musicboxActive||!Application.isPlaying||VerificationOnly)return;
             Workspace.musicboxCountdown=2;Workspace.musicboxUpdatedDate=DateKey(ChillRuntimeContext.LocalNow);SaveNow();
             int version=++musicboxVersion;
@@ -44,11 +50,13 @@ namespace Hlc.ChillPrototype
         void CloseMusicbox()
         {
             musicboxVersion++;musicboxActive=false;player.music.volume=Settings.music;if(musicboxAudio){musicboxAudio.Stop();musicboxAudio.clip=null;}
+            if(player&&player.deskObjects)player.deskObjects.CloseMusicbox();
             var animator=player.deskObjects.musicboxAnimator;if(animator){animator.enabled=true;animator.speed=1;animator.Play("EndMemorie",0,0);}
             player.library.ReleaseExternal("activity-musicbox");
         }
         void UpdateMusicboxCalendar()
         {
+            UpdateDrinkIceVisual();
             var today=DateKey(ChillRuntimeContext.LocalNow);
             if(Workspace.musicboxCountdown>0&&Workspace.musicboxUpdatedDate!=today){Workspace.musicboxCountdown--;Workspace.musicboxUpdatedDate=today;SaveNow();}
         }

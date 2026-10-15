@@ -5,8 +5,27 @@ namespace Hlc.ChillPrototype
 {
     public sealed partial class ChillStoryRuntime
     {
-        double workSessionStart,lastWorkEnd,sessionWorkBase,timerTotalBase,pendingTimerUntil;
+        double workSessionStart,lastWorkEnd,sessionWorkBase,timerTotalBase,pendingTimerUntil,choiceTalkUntil;
         int pendingTimerScenario;
+        float choiceTalkProbability;
+        public bool ChoiceTalkAvailable=>Now<choiceTalkUntil&&choiceTalkProbability>0f;
+        public float ChoiceTalkProbability=>ChoiceTalkAvailable?choiceTalkProbability:0f;
+        public void EnableChoiceTalk(double workedSeconds)
+        {
+            float maxProb=Policy("ChoiceTalkData.maxTalkProbability",50f);
+            float maxMin=Mathf.Max(1f,Policy("ChoiceTalkData.maxWorkedMinutes",60f));
+            float workedMin=(float)(Math.Max(0.0,workedSeconds)/60.0);
+            choiceTalkProbability=workedMin>maxMin?maxProb:(workedMin/maxMin*maxProb);
+            choiceTalkUntil=Now+Policy("ChoiceTalkData.enableChoiceTalkDurationSeconds",300f);
+        }
+        public void ResetChoiceTalk(){choiceTalkUntil=0;choiceTalkProbability=0f;}
+        public bool TryChoiceTalk()
+        {
+            if(!ChoiceTalkAvailable)return false;
+            float prob=choiceTalkProbability;
+            ResetChoiceTalk();
+            return Chance(prob)&&StartReaction(7);
+        }
         public ChillTimerAudio TimerAudio(bool countup)=>countup?Workspace.countupAudio:Workspace.pomodoroAudio;
         public void SaveTimerAudio()=>SaveNow();
         public void PreviewTimerSound(bool countup,bool finish)
@@ -22,9 +41,11 @@ namespace Hlc.ChillPrototype
         {
             if(!FeatureReady)return;
             if(phase=="start")
-            {if(countup||save.rounds==0)timerTotalBase=save.workedSeconds;workSessionStart=Now;sessionWorkBase=save.workedSeconds;}
+            {ResetChoiceTalk();if(countup||save.rounds==0)timerTotalBase=save.workedSeconds;workSessionStart=Now;sessionWorkBase=save.workedSeconds;}
+            if(phase=="break")EnableChoiceTalk(Math.Max(0,save.workedSeconds-sessionWorkBase));
             if(phase=="finish")
             {
+                EnableChoiceTalk(Math.Max(0,save.workedSeconds-sessionWorkBase));
                 save.timerComplete=true;
                 if(save.level>=33&&save.mainEpisode<32&&!save.connectionLostNextEpisode)
                 {save.lastStoryUnlockWorkSeconds+=Math.Max(0,save.workedSeconds-timerTotalBase);if(save.lastStoryUnlockWorkSeconds>=50*60)save.connectionLostNextEpisode=true;}

@@ -197,7 +197,6 @@ namespace Hlc.ChillPrototype
             foreach(var source in pausedStoryAmbience)if(source&&source.clip&&AmbientLevel(ambienceSources.FirstOrDefault(p=>p.Value==source).Key)>0)source.UnPause();pausedStoryAmbience.Clear();
             voice.pitch = 1; voiceDefect = 0;cachedStorySound=1;
             if (effects) effects.ResetEffects();
-            if (decorations) decorations.Restore();
             if (presentation && wasPlaying) presentation.ResetPresentation(true);
             Replaying=false;
             player.deskObjects.restoring=false;
@@ -241,7 +240,7 @@ namespace Hlc.ChillPrototype
             if (!Playing) SaveNow();
             if(!ambientDialogue)StopStory();else {generation++;StopMotionSounds();choices.Clear();loops.Clear();}
             if(selected.Scenario>=50&&selected.Scenario<=56)Workspace.collaboration=selected.Scenario-49;
-            ClearRoomDefect();CancelRoom();automaticDialogue=ambientDialogue;invitedChapter=null;player.library.visible = false; player.library.RestoreCharacter();
+            ClearRoomDefect();automaticDialogue=ambientDialogue;invitedChapter=null;player.library.visible = false; player.library.RestoreCharacter();
             previousMusic = player.music.clip; previousMusicPlaying = player.music.isPlaying;previousMusicLoop=player.music.loop;previousMusicTime=previousMusic?player.music.time:0;talkLog=resume?!save.storyLive:fromTalkLog&&!ambientDialogue;save.storyLive=!talkLog;
             if(!ambientDialogue){player.music.Pause();foreach(var source in ambienceSources.Values)if(source&&source.isPlaying){pausedStoryAmbience.Add(source);source.Pause();}}
             if (!chapters.TryGetValue(selected.ID, out sentences)) { status = "Đoạn này không có kịch bản."; return; }
@@ -542,14 +541,73 @@ namespace Hlc.ChillPrototype
             if (saveAllowed && (VerificationOnly||ChillBrowserSave.CanWrite) && Now - lastSave >= 5) SaveNow(false);
         }
 
-        public void MotionSound(string name)
+        public readonly List<string> recentMotionSounds = new List<string>();
+        public void MotionSound(string name, string parameter = "")
         {
             if (Replaying || data == null || !sound) return;
             if (name == "PlayKeyboard" || name == "StopKeyboard") { MotionLoop(true,name == "PlayKeyboard"); return; }
             if (name == "PlayWritePen" || name == "StopWritePen") { MotionLoop(false,name == "PlayWritePen"); return; }
             if (name.StartsWith("Stop")) return;
+            if (name == "PlaceCup")
+            {
+                string cupSkin = Workspace.room.FirstOrDefault(r => r.category == 1)?.skin ?? "Cup_1";
+                string placeSound = "PlaceCup";
+                if (parameter == "DefaultPos")
+                {
+                    if (cupSkin.StartsWith("Cup_3", StringComparison.OrdinalIgnoreCase)) placeSound = "PlaceCupOnSaucer";
+                    else if (cupSkin.StartsWith("Cup_5", StringComparison.OrdinalIgnoreCase)) placeSound = "PlaceCupOnCorkCoaster";
+                }
+                PlayMotionOneShot(placeSound);
+                if (activityObjects.HasIce(Now)) PlayMotionOneShot("Icewater_Swirl_Glass_E");
+                return;
+            }
+            if (name == "PlayMotionCupIceShakeAll") { if (!activityObjects.HasIce(Now)) return; PlayMotionOneShot("Motion_Cup_Ice_Shak_all"); return; }
+            if (name == "PlayCupSoundForStrongMovement") { if (!activityObjects.HasIce(Now)) return; PlayMotionOneShot("Icewater_Swirl_Glass_A"); return; }
+            if (name == "PlayCupSoundForSmallMovement") { if (!activityObjects.HasIce(Now)) return; PlayMotionOneShot(Chance(50) ? "Icewater_Swirl_Glass_B" : "Icewater_Swirl_Glass_G"); return; }
+            if (name == "PlayCupSoundAfterDrinking") { if (!activityObjects.HasIce(Now)) return; PlayMotionOneShot(Chance(50) ? "Icewater_Swirl_Glass_C" : "Icewater_Swirl_Glass_D"); return; }
+            if (name.StartsWith("PlayIcewaterSwirlGlass", StringComparison.Ordinal))
+            {
+                if (!activityObjects.HasIce(Now)) return;
+                PlayMotionOneShot("Icewater_Swirl_Glass_" + name[name.Length - 1]);
+                return;
+            }
+            if (name == "PlayFridgeSequence")
+            {
+                PlayMotionOneShot("FridgeDoorOpen");
+                if (Application.isPlaying && !VerificationOnly) StartCoroutine(FridgeSequenceRoutine(generation));
+                else { PlayMotionOneShot("PlayTakeOutFromFridge_1"); PlayMotionOneShot("FridgeDoorClose"); }
+                return;
+            }
+            if (name == "PlayIceMakerSequence")
+            {
+                if (Application.isPlaying && !VerificationOnly) StartCoroutine(IceMakerSequenceRoutine(generation));
+                else { foreach (var step in new[] { "Ice_Maker_Open", "Ice_In_Glass", "Ice_Maker_Close", "FridgeDoorOpen", "Icewater_In_Glass", "FridgeDoorClose" }) PlayMotionOneShot(step); }
+                return;
+            }
             if (name == "RubbingClothes") name="RubbingClothes"+ChillRuntimeContext.Range(1,5);
-            if (pendingSounds.Contains(name)) return;
+            PlayMotionOneShot(name);
+        }
+        IEnumerator FridgeSequenceRoutine(int token)
+        {
+            yield return new WaitForSecondsRealtime(0.6f); if (token != generation || Replaying) yield break; PlayMotionOneShot("PlayTakeOutFromFridge_1");
+            yield return new WaitForSecondsRealtime(0.8f); if (token != generation || Replaying) yield break; PlayMotionOneShot("FridgeDoorClose");
+        }
+        IEnumerator IceMakerSequenceRoutine(int token)
+        {
+            var delays = new[] { 1.0f, 0.3f, 0.3f, 0.8f, 1.5f, 1.5f };
+            var clips = new[] { "Ice_Maker_Open", "Ice_In_Glass", "Ice_Maker_Close", "FridgeDoorOpen", "Icewater_In_Glass", "FridgeDoorClose" };
+            for (int i = 0; i < clips.Length; i++)
+            {
+                yield return new WaitForSecondsRealtime(delays[i]);
+                if (token != generation || Replaying) yield break;
+                PlayMotionOneShot(clips[i]);
+            }
+        }
+        void PlayMotionOneShot(string name)
+        {
+            recentMotionSounds.Add(name);
+            if (recentMotionSounds.Count > 32) recentMotionSounds.RemoveAt(0);
+            if (VerificationOnly || pendingSounds.Contains(name)) return;
             if (motionSounds.TryGetValue(name, out var clip)) { if (clip) sound.PlayOneShot(clip, .3f); return; }
             var alias = data.music.FirstOrDefault(m => m.title == name); if (alias == null || string.IsNullOrEmpty(alias.clip) || motionSounds.Count >= 64) return;
             pendingSounds.Add(name); int token = generation;
@@ -581,19 +639,24 @@ namespace Hlc.ChillPrototype
             var levels = data.parameters.LevelUpInfoData;
             return save.level - 1 < levels.nextLevelNecessaryExpArray.Length ? levels.nextLevelNecessaryExpArray[save.level - 1] : levels.nextLevelNecessaryExpBase;
         }
+        public double SessionWorkedSeconds { get; set; }
         void CreditWork(double seconds,double end=0)
         {
             if (seconds <= 0) return;
             var levels = data.parameters.LevelUpInfoData;
             seconds = Math.Min(seconds, levels.pomodoroExpBaseMaxHour * 3600);
             save.workedSeconds += seconds;
+            SessionWorkedSeconds += seconds;
             RecordWork(seconds,end>0?end:Now);
             Workspace.pointRemainder+=seconds/60/Math.Max(.01f,Policy("PointUpInfoData.pomodoroPointBaseMinutes",1))*Policy("PointUpInfoData.pomodoroPointBaseMax",10);
             int earned=(int)Math.Min(int.MaxValue-Workspace.points,Math.Floor(Workspace.pointRemainder));Workspace.points+=earned;Workspace.pointRemainder-=earned;
             if(Workspace.collaboration>0){CreditCollaboration(seconds/(Math.Max(1,levels.pomodoroExpBaseMinutes)*60)*levels.pomodoroExpBaseMax);return;}
             save.exp += seconds / (Math.Max(1, levels.pomodoroExpBaseMinutes) * 60) * levels.pomodoroExpBaseMax;
             int previousLevel=save.level;
-            while (save.exp >= RequiredExp() && RequiredExp() > 0 && save.level < 10000) { save.exp -= RequiredExp(); save.level++; }
+            bool level32Locked=!save.previewUnlock&&save.mainEpisode<31&&Workspace.collaboration==0;
+            int maxLevel=level32Locked?32:10000;
+            while (save.exp >= RequiredExp() && RequiredExp() > 0 && save.level < maxLevel) { save.exp -= RequiredExp(); save.level++; }
+            if (level32Locked && save.level >= 32) { save.level = 32; save.exp = 0; }
             if(save.level>previousLevel)UISelectSound(3);
         }
         void UpdateTimer()
@@ -612,8 +675,10 @@ namespace Hlc.ChillPrototype
                 {
                     save.rounds++;
                     AwardAchievement("COMPLETE_POMODORO_COUNT");
+                    EnableChoiceTalk(save.workMinutes * 60.0);
                     if (save.rounds >= save.loopCount) { save.timerRunning = false; save.pausedRemaining = 0; status = "Đã hoàn thành "+save.loopCount+" phiên làm việc.";TimerVoice("finish",false); SaveNow(); break; }
                 }
+                else ResetChoiceTalk();
                 save.breakTime = !save.breakTime;
                 if(catchup==0)TimerVoice(save.breakTime?"break":"start",false);
                 save.lastTimerTick = save.timerEnd;
@@ -624,103 +689,5 @@ namespace Hlc.ChillPrototype
 
         void OnApplicationPause(bool paused) { if (paused && data != null) SaveNow(); }
         void OnApplicationQuit() { if (data != null) SaveNow(); }
-
-        void OnGUI()
-        {
-            if (ChillGameplayUI.Active) return;
-            if (!visible && !Playing) return;
-            if (player.uiFont) GUI.skin.font = player.uiFont;
-            var dialogueFont = save.language == "Ja" && japaneseFont ? japaneseFont : player.uiFont;
-            if (storyLabel == null || storyLabel.font != dialogueFont)
-            {
-                storyLabel = new GUIStyle(GUI.skin.label) { font = dialogueFont, fontSize = 16, wordWrap = true };
-                storyButton = new GUIStyle(GUI.skin.button) { font = dialogueFont, fontSize = 14, wordWrap = true };
-            }
-            float scale = Mathf.Clamp(Screen.width / 1000f, .65f, 1.5f); var previous = GUI.matrix;
-            GUI.matrix = Matrix4x4.Scale(new Vector3(scale, scale, 1));
-            float width = Screen.width / scale, height = Screen.height / scale;
-            GUILayout.BeginArea(new Rect(280, 12, Mathf.Max(260, width - 292), height - 24), GUI.skin.box);
-            GUILayout.Label("Chill with You · Cốt truyện và tiến trình"); GUILayout.Label(status);
-            if (data == null) { GUILayout.EndArea(); GUI.matrix = previous; return; }
-            selectedTab = GUILayout.Toolbar(selectedTab, new[] { "Truyện", "Ghi chú", "Save", "Nhật ký", "Pomodoro" });
-            if (Playing)
-            {
-                dialogueScroll = GUILayout.BeginScrollView(dialogueScroll, GUILayout.Height(Mathf.Min(180, height * .35f)));
-                GUILayout.Label((current != null && current.Talker == 1 ? "Satone\n" : "") + message.Substring(0, Math.Min(shownChars, message.Length)), storyLabel);
-                GUILayout.EndScrollView();
-                if (loadingAudio) GUILayout.Label("Đang tải lời thoại…");
-                for (int i = 0; i < choices.Count; i++)
-                {
-                    GUI.enabled = current.Command != 15 || !save.usedChoices.Contains(choices[i].Arg2);
-                    if (GUILayout.Button(Text(choices[i].LocalizationID), storyButton)) chosen = i;
-                }
-                GUI.enabled = true;
-                if (choices.Count == 0 && GUILayout.Button(typing ? "Hiện hết chữ" : "Tiếp")) next = true;
-                autoRead = GUILayout.Toggle(autoRead, "Tự đọc tiếp");
-                if (GUILayout.Button("Dừng truyện · giữ vị trí")) { SaveNow(); StopStory(); }
-            }
-            else if (selectedTab == 0)
-            {
-                if (!string.IsNullOrEmpty(save.chapter) && GUILayout.Button("Tiếp tục truyện đang đọc")) Begin(data.groups.First(g => g.ID == save.chapter), true);
-                bool unlock = GUILayout.Toggle(save.previewUnlock, "Mở toàn bộ để thử (không bỏ qua tiến trình đã đọc)");
-                if (unlock != save.previewUnlock) { save.previewUnlock = unlock; SaveNow(); }
-                int language = GUILayout.Toolbar(save.language == "En" ? 0 : 1, new[] { "English", "Japanese" });
-                save.language = language == 0 ? "En" : "Ja";
-                int kind = GUILayout.Toolbar(listKind, new[] { "Chính", "Ngoại truyện", "Hội thoại", "Tất cả" });
-                if (kind != listKind) { listKind = kind; page = 0; }
-                string query = GUILayout.TextField(search); if (query != search) { search = query; page = 0; }
-                var list = data.groups.Where(g => chapters.ContainsKey(g.ID) && (listKind == 3 || listKind == 0 && (g.Scenario == 1 || g.Scenario == 18) || listKind == 1 && (g.Scenario == 2 || g.Scenario == 3 || g.Scenario >= 24 && g.Scenario < 104) || listKind == 2 && g.Scenario != 1 && g.Scenario != 18))
-                    .Where(g => string.IsNullOrEmpty(search) || (g.ID + Text(g.TitleLocalizationID)).IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0).ToArray();
-                GUILayout.BeginHorizontal();
-                if (page > 0 && GUILayout.Button("←", GUILayout.Width(40))) page--;
-                GUILayout.Label(list.Length + " đoạn · trang " + (page + 1));
-                if ((page + 1) * 20 < list.Length && GUILayout.Button("→", GUILayout.Width(40))) page++;
-                GUILayout.EndHorizontal();
-                listScroll = GUILayout.BeginScrollView(listScroll);
-                foreach (var item in list.Skip(page * 20).Take(20))
-                {
-                    GUI.enabled = Unlocked(item);
-                    string title = Text(item.TitleLocalizationID); if (string.IsNullOrEmpty(title)) title = item.ID;
-                    if (GUILayout.Button((save.completed.Contains(item.ID) ? "✓ " : "") + title + (!GUI.enabled ? " · Lv " + item.UnlockLevel : ""), storyButton)) Begin(item, false);
-                }
-                GUI.enabled = true; GUILayout.EndScrollView();
-            }
-            if (selectedTab == 1)
-            {
-                noteScroll = GUILayout.BeginScrollView(noteScroll); save.note = GUILayout.TextArea(save.note ?? "", 64000, GUILayout.MinHeight(120));
-                newTodo = GUILayout.TextField(newTodo, 200);
-                if (GUILayout.Button("Thêm công việc") && !string.IsNullOrWhiteSpace(newTodo) && save.todos.Count < 100) { save.todos.Add(new ChillTodo { title = newTodo.Trim() }); newTodo = ""; SaveNow(); }
-                for (int i = 0; i < save.todos.Count; i++)
-                { GUILayout.BeginHorizontal(); var todo = save.todos[i]; todo.done = GUILayout.Toggle(todo.done, todo.title); if (GUILayout.Button("×", GUILayout.Width(30))) { save.todos.RemoveAt(i--); SaveNow(); } GUILayout.EndHorizontal(); }
-                GUILayout.EndScrollView();
-            }
-            if (selectedTab == 2)
-            {
-                GUILayout.Label("Cấp " + save.level + " · " + save.completed.Count + " đoạn đã đọc\nSave của bản web được lưu riêng trong trình duyệt này.");
-                if (GUILayout.Button("Lưu ngay")) { saveAllowed = true; if (SaveNow()) status = "Đã lưu tiến trình."; }
-                if (GUILayout.Button("Xuất file save")) { SaveNow(); ChillBrowserSave.Export(save); }
-                if (GUILayout.Button("Nhập file save web")) ChillBrowserSave.Import(gameObject.name);
-            }
-            if (selectedTab == 3)
-            { listScroll = GUILayout.BeginScrollView(listScroll); foreach (string line in history) GUILayout.Label(line, storyLabel); GUILayout.EndScrollView(); }
-            if (selectedTab == 4)
-            {
-                GUILayout.Label("Cấp " + save.level + " · " + save.exp.ToString("F0") + "/" + RequiredExp().ToString("F0") + " EXP\nĐã làm việc: " + TimeSpan.FromSeconds(save.workedSeconds).ToString(@"hh\:mm\:ss"));
-                GUI.enabled = !save.timerRunning;
-                GUILayout.Label("Làm việc: " + save.workMinutes + " phút"); save.workMinutes = (int)GUILayout.HorizontalSlider(save.workMinutes, 1, 180);
-                GUILayout.Label("Nghỉ: " + save.breakMinutes + " phút"); save.breakMinutes = (int)GUILayout.HorizontalSlider(save.breakMinutes, 1, 120);
-                GUI.enabled = true;
-                double remaining = save.timerRunning ? Math.Max(0, save.timerEnd - Now) : save.pausedRemaining;
-                GUILayout.Label((save.breakTime ? "Nghỉ · " : "Làm việc · ") + TimeSpan.FromSeconds(remaining).ToString(@"hh\:mm\:ss"));
-                if (GUILayout.Button(save.timerRunning ? "Tạm dừng" : save.pausedRemaining > 0 ? "Tiếp tục" : "Bắt đầu"))
-                {
-                    if (save.timerRunning) { UpdateTimer(); save.pausedRemaining = Math.Max(0, save.timerEnd - Now); save.timerRunning = false; }
-                    else { save.timerEnd = Now + (save.pausedRemaining > 0 ? save.pausedRemaining : save.workMinutes * 60); save.lastTimerTick = Now; save.timerRunning = true; }
-                    SaveNow();
-                }
-                if (GUILayout.Button("Kết thúc phiên")) { UpdateTimer(); save.timerRunning = false; save.pausedRemaining = 0; save.breakTime = false; SaveNow(); }
-            }
-            GUILayout.EndArea(); GUI.matrix = previous;
-        }
     }
 }

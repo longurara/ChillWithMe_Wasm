@@ -33,10 +33,51 @@ namespace Hlc.ChillPrototype
                 Chance(Policy("PlayerStatusReactionData.CommonProbabilityPercent",50))?2750:Resting?2751:2752;
             if(StartReaction(scenario))lastStatusReaction=Now;
         }
-        void DailyAppearance()
+        public static string AppearanceDateKey(DateTime localNow)=>DateKey(localNow.Hour<6?localNow.Date.AddDays(-1):localNow.Date);
+        public int SelectDailyCostume(int month)
         {
-            if(!Workspace.appearanceDaily||Workspace.lastAppearanceDate==DateKey(ChillRuntimeContext.LocalNow))return;
-            Workspace.lastAppearanceDate=DateKey(ChillRuntimeContext.LocalNow);Workspace.hair=ChillRuntimeContext.Range(0,4);var weights=Features.dailyCostumes;float total=0;foreach(var item in weights)total+=item.weights[ChillRuntimeContext.LocalNow.Month-1];float draw=ChillRuntimeContext.Value*total;Workspace.costume=0;foreach(var item in weights){draw-=item.weights[ChillRuntimeContext.LocalNow.Month-1];if(draw<0){Workspace.costume=item.id;break;}}WorkspaceChanged();RestoreRoom();
+            var weights=Features?.dailyCostumes;
+            if(weights==null||weights.Length==0)return 0;
+            int m=Mathf.Clamp(month-1,0,11);
+            if(Workspace.costumeWeights==null)Workspace.costumeWeights=new System.Collections.Generic.List<ChillCostumeWeight>();
+            ChillCostumeWeight Entry(int id)
+            {
+                string skin="Costume_"+(id+1);
+                var e=Workspace.costumeWeights.Find(w=>w.skin==skin);
+                if(e==null){e=new ChillCostumeWeight{skin=skin,weight=100f};Workspace.costumeWeights.Add(e);}
+                return e;
+            }
+            float total=0f;
+            foreach(var item in weights)total+=item.weights[m]*Entry(item.id).weight;
+            int selected=0;
+            if(total>0f)
+            {
+                float draw=ChillRuntimeContext.Value*total;
+                foreach(var item in weights)
+                {
+                    draw-=item.weights[m]*Entry(item.id).weight;
+                    if(draw<0f){selected=item.id;break;}
+                }
+            }
+            foreach(var item in weights)
+            {
+                var e=Entry(item.id);
+                if(item.id==selected)e.weight*=0.5f;
+                else if(item.weights[m]>0f)e.weight+=50f;
+            }
+            return selected;
+        }
+        public void DailyAppearance()
+        {
+            var localNow=ChillRuntimeContext.LocalNow;
+            string dateKey=AppearanceDateKey(localNow);
+            if(!Workspace.appearanceDaily||Workspace.lastAppearanceDate==dateKey)return;
+            Workspace.lastAppearanceDate=dateKey;
+            bool forceNormalHair=save.workedSeconds<3600||save.mainEpisode>=31&&save.mainEpisode<32;
+            Workspace.hair=forceNormalHair?0:ChillRuntimeContext.Range(0,5)==4?ChillRuntimeContext.Range(1,4):0;
+            bool forceDefaultCostume=!save.previewUnlock&&save.mainEpisode<4;
+            Workspace.costume=forceDefaultCostume?0:SelectDailyCostume(localNow.Month);
+            WorkspaceChanged();if(!VerificationOnly)RestoreRoom();
         }
     }
 }

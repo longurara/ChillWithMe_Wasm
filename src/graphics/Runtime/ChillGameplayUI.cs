@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Hlc.ChillPrototype
 {
     [Serializable] public class ChillUiCommand { public string action,text,id; public float value; }
-    [Serializable] public class ChillUiItem { public string id,title,detail; public bool enabled,done; }
+    [Serializable] public class ChillUiItem { public string id,title,detail,groupTitle; public bool enabled,done; }
     [Serializable] public class ChillStoryUiState
     {
         public bool ready,playing,typing,loadingAudio,autoRead,unlock,timerRunning,timerActive,breakTime,saveAllowed,countupRunning,countupActive;

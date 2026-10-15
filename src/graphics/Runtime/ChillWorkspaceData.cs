@@ -26,10 +26,13 @@ namespace Hlc.ChillPrototype
         public List<ChillRoomChoice> room=new List<ChillRoomChoice>();
         public List<ChillRoomPreset> presets=new List<ChillRoomPreset>();
         public List<ChillPCRecord> pcRecords=new List<ChillPCRecord>();
+        public List<ChillCostumeWeight> costumeWeights=new List<ChillCostumeWeight>();
+        public List<string> selfTalkHistory=new List<string>();
         public string noteId,listId,profileName="Player",profileStatus="",profileIcon="",lastAppearanceDate="";
         public int points,hair,costume,collaboration;public double[] collaborationExp=new double[7];public double pointRemainder,legacyWorkSeconds;public bool workMigrated;
         public bool appearanceDaily,reminders;
         public ChillTimerAudio pomodoroAudio=new ChillTimerAudio(),countupAudio=new ChillTimerAudio();
     }
+    [Serializable] public class ChillCostumeWeight {public string skin;public float weight=100f;}
     [Serializable] public class ChillTimerAudio {public int start,finish=3;public float startVolume=.5f,finishVolume=.5f;public bool startMute,finishMute,voice=true;}
 }

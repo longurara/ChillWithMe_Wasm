@@ -16,7 +16,7 @@ namespace Hlc.ChillPrototype
                 UnityEngine.Object mesh=null,material=null;bool done=false;
                 player.library.LoadExternal("snack-mesh-"+i,part.mesh,o=>{mesh=o;done=true;});while(!done&&!Playing)yield return null;if(Playing)yield break;done=false;
                 player.library.LoadExternal("snack-material-"+i,part.material,o=>{material=o;done=true;});while(!done&&!Playing)yield return null;if(Playing)yield break;
-                var filter=target.GetComponent<MeshFilter>();var renderer=target.GetComponent<Renderer>();if(filter&&mesh is Mesh m)filter.sharedMesh=m;if(renderer&&material is Material mat)renderer.sharedMaterial=mat;
+                var filter=target.GetComponent<MeshFilter>();if(filter&&mesh is Mesh m){filter.sharedMesh=null;filter.sharedMesh=ChillDecorations.SanitizeMesh(m);ChillDecorations.RefreshRenderer(filter.gameObject,player);}var renderer=target.GetComponent<Renderer>();if(renderer&&material is Material mat)renderer.sharedMaterial=mat;
             }
         }
         static string TransformPath(Transform t)=>t.parent?TransformPath(t.parent)+"/"+t.name:t.name;

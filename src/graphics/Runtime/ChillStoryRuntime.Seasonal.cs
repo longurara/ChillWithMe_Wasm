@@ -23,12 +23,13 @@ namespace Hlc.ChillPrototype
         {
             if(!decorations)return;
             int season=SeasonalEvent;
+            bool wearingSunglasses=Workspace.room.Any(r=>r.category==3&&r.skin=="Glasses_4");
             bool christmas=season==100&&!Playing,april=season==102&&(!Playing||chapter?.Scenario==102);
-            bool shine=april&&(WantsToTalk||!save.completed.Contains("event_2026_aprilfool_001"));
+            bool shine=(april&&(WantsToTalk||!save.completed.Contains("event_2026_aprilfool_001")))||(wearingSunglasses&&WantsToTalk);
             if(!shine)aprilShineStarted=-1;else if(aprilShineStarted<0)aprilShineStarted=Now+2.5;
             float alpha=0;
             if(shine&&Now>=aprilShineStarted){float time=(float)(Now-aprilShineStarted)%5.3f;alpha=time<2?1-Mathf.Pow(1-time/2,2):time<2.5f?1:time<3.3f?Mathf.Pow(1-(time-2.5f)/.8f,2):0;}
-            decorations.SeasonalObjects(christmas,april,alpha);
+            decorations.SeasonalObjects(christmas,april,alpha,wearingSunglasses);
         }
         IEnumerator ApplySeasonalDecorations()
         {

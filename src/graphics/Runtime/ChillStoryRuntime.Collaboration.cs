@@ -13,6 +13,8 @@ namespace Hlc.ChillPrototype
         bool CollaborationUnlocked(ChillChapter chapter)
         {if(chapter.EpisodeNumber>CollaborationLevel(chapter.Scenario))return false;if(chapter.EpisodeNumber<=1)return true;return data.groups.Where(c=>c.Scenario==chapter.Scenario&&c.EpisodeNumber<chapter.EpisodeNumber).All(c=>save.completed.Contains(c.ID));}
         public bool ChapterAvailable(ChillChapter chapter)=>Unlocked(chapter);
+        public bool ChapterCompleted(string id)=>save.completed.Contains(id);
+        public void SelectCollaboration(int collab){Workspace.collaboration=Math.Max(0,Math.Min(7,collab));WorkspaceChanged();}
         public void NormalProgression(){Workspace.collaboration=0;WorkspaceChanged();}
     }
 }

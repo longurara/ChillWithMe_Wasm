@@ -17,7 +17,7 @@ namespace Hlc.ChillPrototype
         public ChillMusicState MusicState {get {EnsureFeaturesSave();return save.musicState;}}
         public ChillTrack CurrentTrack => Tracks.FirstOrDefault(t=>t.guid==MusicState.selected);
         public ChillTrack[] Tracks => Features==null?Array.Empty<ChillTrack>():Features.music.Concat(MusicState.imports).ToArray();
-        public bool TrackAvailable(ChillTrack track)=>save.previewUnlock||string.IsNullOrEmpty(track.requiredChapter)||save.completed.Contains(track.requiredChapter);
+        public bool TrackAvailable(ChillTrack track)=>(track.uuid!="5008cbff-d18d-5339-a12d-b8525d047507"||save.previewUnlock||ChillRuntimeContext.LocalNow>=new DateTime(2025,12,25))&&(save.previewUnlock||string.IsNullOrEmpty(track.requiredChapter)||save.completed.Contains(track.requiredChapter));
         public ChillTrack[] PlaylistTracks => Tracks.Where(TrackAvailable).Where(t=>MusicState.playlist=="ALL" || MusicState.playlist=="Favorites" && MusicState.favorites.Contains(t.guid) || MusicState.playlist=="Imported" && t.personal || MusicState.playlists.Any(p=>p.name==MusicState.playlist && p.tracks.Contains(t.guid))).OrderBy(t=>PlaylistOrder(t.guid)).ToArray();
         public int MusicRevision {get;private set;}
         public bool MusicLoading {get;private set;}
@@ -122,7 +122,7 @@ namespace Hlc.ChillPrototype
             Application.targetFrameRate=wasFocused?s.activeFps:s.inactiveFps;
             ChillBrowserFrameRate.Apply(Application.targetFrameRate);
             if(GraphicsSettings.currentRenderPipeline is UniversalRenderPipelineAsset pipeline)
-            {pipeline.renderScale=s.renderScale;pipeline.msaaSampleCount=s.quality==2?4:2;pipeline.shadowDistance=s.quality==0?8:15;}
+            {pipeline.renderScale=s.renderScale;pipeline.msaaSampleCount=s.quality==2?4:2;pipeline.shadowDistance=s.quality==0?8:10;}
             var cameraData=player.view.GetUniversalAdditionalCameraData();cameraData.renderPostProcessing=s.postProcessing;
             foreach(var source in ambienceSources)source.Value.volume=AmbientLevel(source.Key)*s.ambient;
             nextClock=0;
@@ -156,7 +156,7 @@ namespace Hlc.ChillPrototype
         {MusicState.playlist=name;shuffleBag.Clear();MusicRevision++;SaveNow();}
         public ChillTrack[] Queue=>PlaylistTracks.Where(t=>!MusicState.excluded.Contains(t.guid)).ToArray();
         public void ToggleTrackExcluded(string guid){if(!MusicState.excluded.Remove(guid))MusicState.excluded.Add(guid);shuffleBag.Clear();MusicRevision++;SaveNow();}
-        public string[] PlaylistNames=>new[]{"ALL","Favorites","Imported"}.Concat(MusicState.playlists.Select(p=>p.name)).ToArray();
+        public string[] PlaylistNames=>new[]{"ALL","Favorites","Imported"}.Concat(MusicState.playlists.Where(p=>p.name!="ALL").Select(p=>p.name)).ToArray();
         public void CreatePlaylist(string name)
         {
             name=(name??"").Trim();if(name.Length<1||name.Length>60||PlaylistNames.Contains(name)||MusicState.playlists.Count>=20){Notify("Playlist name must be unique (1–60 characters).",true);return;}
@@ -167,7 +167,13 @@ namespace Hlc.ChillPrototype
         public void AddTrackToPlaylist(string guid)
         {var list=MusicState.playlists.FirstOrDefault(p=>p.name==MusicState.playlist);if(list==null){Notify("Select a custom playlist first.");return;}if(!list.tracks.Contains(guid)&&list.tracks.Count<500)list.tracks.Add(guid);MusicRevision++;SaveNow();}
         public void MoveTrack(string guid,int offset)
-        {var list=MusicState.playlists.FirstOrDefault(p=>p.name==MusicState.playlist);if(list==null)return;int from=list.tracks.IndexOf(guid),to=Mathf.Clamp(from+offset,0,list.tracks.Count-1);if(from<0||to==from)return;list.tracks.RemoveAt(from);list.tracks.Insert(to,guid);MusicRevision++;SaveNow();}
+        {
+            var list=MusicState.playlists.FirstOrDefault(p=>p.name==MusicState.playlist);
+            if(list==null&&MusicState.playlist=="ALL"){list=new ChillPlaylist{name="ALL",tracks=PlaylistTracks.Select(t=>t.guid).ToList()};MusicState.playlists.Add(list);}
+            if(list==null)return;
+            if(MusicState.playlist=="ALL")foreach(var t in Tracks.Where(TrackAvailable))if(!list.tracks.Contains(t.guid))list.tracks.Add(t.guid);
+            int from=list.tracks.IndexOf(guid),to=Mathf.Clamp(from+offset,0,list.tracks.Count-1);if(from<0||to==from)return;list.tracks.RemoveAt(from);list.tracks.Insert(to,guid);MusicRevision++;SaveNow();
+        }
         public void RemoveTrack(string guid)
         {
             var list=MusicState.playlists.FirstOrDefault(p=>p.name==MusicState.playlist);
@@ -272,6 +278,11 @@ namespace Hlc.ChillPrototype
             ChillPersonalMusic.Revoke(result.url);
         }
         public float AmbientLevel(int id)=>Settings.ambience.FirstOrDefault(a=>a.id==id)?.volume??0;
+        void SyncRainWithThunder()
+        {
+            foreach(int rainId in new[]{8,9})
+                if(ambienceSources.TryGetValue(rainId,out var rain)&&rain&&rain.clip&&rain.isPlaying){rain.time=0f;rain.Play();}
+        }
         public void SetAmbience(int id,float value,bool persist=true)
         {
             var track=Features?.ambient.FirstOrDefault(t=>t.id==id);if(track==null)return;value=Mathf.Clamp01(value);
@@ -279,12 +290,13 @@ namespace Hlc.ChillPrototype
             int token=ambienceTokens.TryGetValue(id,out var version)?version+1:1;ambienceTokens[id]=token;
             if(!ambienceSources.TryGetValue(id,out var source)){source=gameObject.AddComponent<AudioSource>();source.playOnAwake=false;source.loop=true;ambienceSources[id]=source;}
             source.volume=value*Settings.ambient;
+            if(id==5||id==6)source.pitch=ChillRuntimeContext.Range(.95f,1.05f);
             if(value==0){source.Stop();source.clip=null;player.library.ReleaseExternal("ambience-"+id);}
-            else if(source.clip){if(!source.isPlaying)source.Play();}
+            else if(source.clip){if(!source.isPlaying){source.Play();if(id==10)SyncRainWithThunder();}}
             else if(!ambiencePending.Contains(id))
             {
                 ambiencePending.Add(id);
-                player.library.LoadExternal("ambience-"+id,track.guid,asset=>{ambiencePending.Remove(id);if(asset is AudioClip clip){if(AmbientLevel(id)>0){source.clip=clip;source.volume=AmbientLevel(id)*Settings.ambient;source.Play();}else player.library.ReleaseExternal("ambience-"+id);}else Notify("Ambient track unavailable: "+track.name,true);});
+                player.library.LoadExternal("ambience-"+id,track.guid,asset=>{ambiencePending.Remove(id);if(asset is AudioClip clip){if(AmbientLevel(id)>0){source.clip=clip;source.volume=AmbientLevel(id)*Settings.ambient;source.Play();if(id==10)SyncRainWithThunder();}else player.library.ReleaseExternal("ambience-"+id);}else Notify("Ambient track unavailable: "+track.name,true);});
             }
             if(persist)SaveNow();
         }
