@@ -20,6 +20,14 @@ namespace Hlc.ChillPrototype
         public Animator actor;
         bool frameMobileRoom;int mobileFrameDelay;
         Vector3 mobileTarget;
+        public bool AprilFoolCamera { get; private set; }
+        public void ChangeToAprilFoolCamera() => SetAprilFoolCamera(true);
+        public void ChangeToDefaultCamera() => SetAprilFoolCamera(false);
+        public void SetAprilFoolCamera(bool active)
+        {
+            AprilFoolCamera = active;
+            SelectRoomView(active && fixedViews != null && fixedViews.Length > 1 ? 1 : 0);
+        }
         public bool SelectRoomView(int index)
         {
             if(fixedViews==null||index<0||index>=fixedViews.Length||!fixedViews[index])return false;

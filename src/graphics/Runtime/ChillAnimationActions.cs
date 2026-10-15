@@ -16,7 +16,7 @@ namespace Hlc.ChillPrototype
             if (objects) objects.Action(name, item.stringParameter, item.intParameter);
             if (name == "OnChangeHeroineLookCamera" && presentation) presentation.cameras.Switch(item.intParameter);
             if (presentation && name.StartsWith("AdjustWhen")) presentation.AdjustSleeve(name);
-            if (story && Application.isPlaying) story.MotionSound(name);
+            if (story && Application.isPlaying) story.MotionSound(name, item.stringParameter);
             if(story && name=="PlayPomodoroVoice")story.OnPomodoroVoiceEvent(item.intParameter);
             if(story && Application.isPlaying)story.OnActivityObjectEvent(name);
         }

@@ -82,11 +82,21 @@ public static class ChillBuild
         var pipeline = UniversalRenderPipelineAsset.Create(rendererData);
         pipeline.name = "ChillURP"; pipeline.msaaSampleCount = 2; pipeline.renderScale = 1;
         pipeline.supportsHDR = false; pipeline.supportsCameraDepthTexture = false; pipeline.supportsCameraOpaqueTexture = false;
-        pipeline.shadowDistance = 15;
+        pipeline.shadowDistance = 10;
         var pipelineSO = new SerializedObject(pipeline);
-        SetInt(pipelineSO, "m_MainLightShadowmapResolution", 1024);
+        SetInt(pipelineSO, "m_MainLightShadowmapResolution", 4096);
+        SetInt(pipelineSO, "m_ShadowCascadeCount", 4);
+        var c2 = pipelineSO.FindProperty("m_Cascade2Split"); if (c2 != null) c2.floatValue = 0.044999998f;
+        var c3 = pipelineSO.FindProperty("m_Cascade3Split"); if (c3 != null) c3.vector2Value = new Vector2(0.033122387f, 0.10750001f);
+        var c4 = pipelineSO.FindProperty("m_Cascade4Split"); if (c4 != null) c4.vector3Value = new Vector3(0.067f, 0.2f, 0.467f);
+        var cb = pipelineSO.FindProperty("m_CascadeBorder"); if (cb != null) cb.floatValue = 0.29649597f;
+        SetBool(pipelineSO, "m_SoftShadowsSupported", true);
+        SetBool(pipelineSO, "m_ConservativeEnclosingSphere", false);
+        SetInt(pipelineSO, "m_SoftShadowQuality", (int)SoftShadowQuality.High);
         SetInt(pipelineSO, "m_AdditionalLightsRenderingMode", (int)LightRenderingMode.PerPixel);
         SetBool(pipelineSO, "m_AdditionalLightShadowsSupported", false);
+        SetInt(pipelineSO, "m_PrefilteringModeMainLightShadows", 4);
+        SetBool(pipelineSO, "m_PrefilterSoftShadows", false);
         pipelineSO.ApplyModifiedPropertiesWithoutUndo();
         SaveNew(pipeline, "Assets/Prototype/ChillURP.asset");
         GraphicsSettings.defaultRenderPipeline = pipeline;
@@ -320,6 +330,7 @@ public static class ChillBuild
         var ambient = new SphericalHarmonicsL2();
         ambient.AddAmbientLight(new Color(0.38f, 0.41f, 0.46f));
         RenderSettings.ambientProbe = ambient;
+        ChillLightingBuild.ConfigureSceneLights();
         // Keep authored directional lights and their source hierarchy. COZY's
         // sampled atmosphere sets the active sunlight and ambient gradient.
     }

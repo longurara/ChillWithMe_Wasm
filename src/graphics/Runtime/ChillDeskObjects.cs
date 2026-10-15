@@ -48,8 +48,14 @@ namespace Hlc.ChillPrototype
             foreach(var pose in before.Values)if(pose.bone){var item=new ReturnPose{from=pose,target=Snapshot(pose.bone),applied=true};returning.Add(item);Apply(pose);}
             returnElapsed=0;returnDuration=seconds;
         }
-        bool windowOpen;
+        bool windowOpen,musicboxPlaying;
+        float musicboxCloseRemaining;
         public bool WindowOpen=>windowOpen;
+        public bool MusicboxPlaying=>musicboxPlaying;
+        public float MusicboxWindingAngle{get;private set;}
+        public float CurrentIceScale{get;private set;}
+        public bool CurrentIceVisible{get;private set;}
+        public bool CurrentSteamVisible{get;private set;}
         public bool restoring;
         int breadKind = 1;
         void Start() { CaptureDefaults(); }
@@ -58,6 +64,42 @@ namespace Hlc.ChillPrototype
             foreach (var animator in new[] { chairAnimator,penAnimator,breakBookAnimator,musicboxAnimator })
                 if (animator) foreach (var t in animator.GetComponentsInChildren<Transform>(true))
                     if (captured.Add(t)) defaults.Add(new Pose { bone=t,position=t.localPosition,rotation=t.localRotation,scale=t.localScale });
+        }
+        public void UpdateIceVisual(bool visible,float scale)
+        {
+            CurrentIceVisible=visible;CurrentIceScale=visible?scale:0f;
+            foreach(var cop in new[]{handCop,roomCop,coffeeMakerCop})
+            {
+                if(!cop)continue;
+                foreach(var t in cop.GetComponentsInChildren<Transform>(true))
+                    if(t!=cop.transform&&t.name.IndexOf("ice",StringComparison.OrdinalIgnoreCase)>=0)
+                    {t.gameObject.SetActive(visible);if(visible)t.localScale=Vector3.one*scale;}
+            }
+            if(visible)UpdateSteamVisual(false);
+        }
+        public void UpdateSteamVisual(bool visible)
+        {
+            CurrentSteamVisible=visible;
+            foreach(var cop in new[]{handCop,roomCop,coffeeMakerCop})
+            {
+                if(!cop)continue;
+                foreach(var ps in cop.GetComponentsInChildren<ParticleSystem>(true))
+                {
+                    if(visible){ps.gameObject.SetActive(true);if(!ps.isPlaying)ps.Play();}
+                    else ps.Stop(true,ParticleSystemStopBehavior.StopEmitting);
+                }
+                foreach(var t in cop.GetComponentsInChildren<Transform>(true))
+                    if(t!=cop.transform&&t.name.IndexOf("steam",StringComparison.OrdinalIgnoreCase)>=0)
+                        t.gameObject.SetActive(visible);
+            }
+        }
+        public void CloseMusicbox()
+        {
+            if(!musicboxPlaying)return;
+            musicboxPlaying=false;
+            musicboxCloseRemaining=1.3f;
+            if(musicboxAnimator)musicboxAnimator.speed=1f;
+            Trigger(musicboxAnimator,"PlayCloseMemorie");
         }
         public void HideSnacks() { Hide(cupcake); Hide(cookie); Hide(breadA); Hide(breadB); }
         static void Hide(GameObject[] items) { if (items != null) foreach (var item in items) if (item) item.SetActive(false); }
@@ -104,8 +146,9 @@ namespace Hlc.ChillPrototype
                 case "PlayWindowAnimationCloseWindow": windowOpen=false; Trigger(windowAnimator,"PlayCloseWindow"); break;
                 case "PlayDropCoffeeFromCoffeeMaker": if (coffeeDrop) { coffeeDrop.gameObject.SetActive(true); coffeeDrop.Play(); } break;
                 case "DeactivateDropCoffee": if (coffeeDrop) coffeeDrop.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear); break;
-                case "WindingMusicbox": Trigger(musicboxAnimator,"PlayOpenMemorie"); break;
-                case "PlayMusicbox": if (musicboxAnimator) musicboxAnimator.speed = 0; break;
+                case "WindingMusicbox": musicboxPlaying=false; Trigger(musicboxAnimator,"PlayOpenMemorie"); break;
+                case "PlayMusicbox": musicboxPlaying=true; if (musicboxAnimator) musicboxAnimator.speed = 0; break;
+                case "PlayMemorieAnimationCloseMusicbox": CloseMusicbox(); break;
                 case "PourDrinksFromCoffeeMaker": if (Application.isPlaying && !restoring) StartCoroutine(StopPouring()); break;
                 case "PlayBearsRestaurantBookAnim":
                     if (bearsRestaurantBookAnimator && !string.IsNullOrEmpty(parameter))
@@ -153,12 +196,22 @@ namespace Hlc.ChillPrototype
             else if (motion.StartsWith("WorkBase003")) Action("ActivatePen");
         }
         static void Trigger(Animator animator, string name)
-        { if (animator) { animator.enabled = true; animator.speed = 1; animator.SetTrigger(name); } }
+        { if (animator && animator.runtimeAnimatorController && animator.gameObject.activeInHierarchy) { animator.enabled = true; animator.speed = 1; animator.SetTrigger(name); } }
         IEnumerator StopPouring() { yield return new WaitForSecondsRealtime(2); Action("DeactivateDropCoffee"); }
         public void AdvanceProps(float seconds)
         {
             foreach (var animator in new[] { deskObjectAnimator,workBookAnimator,chairAnimator,breakBookAnimator,penAnimator,bearsRestaurantBookAnimator,windowAnimator,musicboxAnimator })
                 if (animator && animator.enabled && animator.gameObject.activeInHierarchy && animator.speed > 0) animator.Update(seconds);
+            if ((musicboxPlaying || musicboxCloseRemaining > 0f) && seconds > 0f)
+            {
+                float step = musicboxPlaying ? seconds : Mathf.Min(seconds, musicboxCloseRemaining);
+                if (!musicboxPlaying) musicboxCloseRemaining = Mathf.Max(0f, musicboxCloseRemaining - seconds);
+                MusicboxWindingAngle += 6f * step;
+                if (musicboxAnimator)
+                    foreach (var t in musicboxAnimator.GetComponentsInChildren<Transform>(true))
+                        if (t != musicboxAnimator.transform && (t.name.IndexOf("winding", StringComparison.OrdinalIgnoreCase) >= 0 || t.name.IndexOf("neji", StringComparison.OrdinalIgnoreCase) >= 0))
+                            t.Rotate(new Vector3(6f * step, 0f, 0f));
+            }
         }
         void DeskMotion(int motion)
         { if (deskObjectAnimator) { deskObjectAnimator.enabled = true; deskObjectAnimator.speed = 1; deskObjectAnimator.SetInteger("MotionType", motion); } }
@@ -175,6 +228,7 @@ namespace Hlc.ChillPrototype
         {
             RestoreReturnTargets();returning.Clear();
             CaptureDefaults();
+            musicboxPlaying=false;musicboxCloseRemaining=0f;MusicboxWindingAngle=0f;
             foreach (var animator in new[] { chairAnimator,penAnimator,breakBookAnimator,musicboxAnimator }) if (animator) animator.enabled=false;
             foreach (var pose in defaults) if (pose.bone) { pose.bone.localPosition=pose.position; pose.bone.localRotation=pose.rotation; pose.bone.localScale=pose.scale; }
             if (windowAnimator) { Play(windowAnimator,windowOpen ? "OpenWindow" : "CloseWindow"); windowAnimator.Update(0); windowAnimator.Play(windowOpen ? "OpenWindow" : "CloseWindow",0,1); windowAnimator.Update(0); windowAnimator.speed=0; }

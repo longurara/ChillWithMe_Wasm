@@ -41,9 +41,13 @@ namespace Hlc.ChillPrototype
         { BuildLibrary(true); }
         public static void RebuildForLighting()
         {
-            ChillLightingBuild.Configure();AssetDatabase.SaveAssets();BuildLibrary(false);
+            ChillLightingBuild.Configure();AssetDatabase.SaveAssets();BuildLibrary(false, true);
         }
-        static void BuildLibrary(bool regenerateToon)
+        public static void RebuildMeshBundles()
+        {
+            BuildLibrary(false, false);
+        }
+        static void BuildLibrary(bool regenerateToon, bool forceRebuild = false)
         {
             if(regenerateToon)ChillBuild.PrepareToonForWeb();
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
@@ -84,7 +88,7 @@ namespace Hlc.ChillPrototype
             var options=BuildAssetBundleOptions.ChunkBasedCompression|BuildAssetBundleOptions.StrictMode;
             // URP strips light keywords when additional lighting is disabled.
             // Rebuild existing bundles so cached materials get the new variants.
-            if(!regenerateToon)options|=BuildAssetBundleOptions.ForceRebuildAssetBundle;
+            if(!regenerateToon&&forceRebuild)options|=BuildAssetBundleOptions.ForceRebuildAssetBundle;
             var manifest=BuildPipeline.BuildAssetBundles(output,builds,options,BuildTarget.WebGL);
             if (!manifest) throw new InvalidOperationException("WebGL asset library build failed.");
             CheckShaders();

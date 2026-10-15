@@ -118,8 +118,9 @@ namespace Hlc.ChillPrototype
                 foreach(var bone in root.GetComponentsInChildren<Transform>(true))
                 {
                     if(humanBones.Contains(bone)||indices.ContainsKey(bone)||(!dynamic&&bone!=root&&!skinnedBones.Contains(bone)))continue;
-                    var contacts=(group.colliders??Array.Empty<string>()).Where(bodies.ContainsKey).Select(id=>bodies[id]).Concat(supplements).ToArray();
-                    var node=new Node{bone=bone,group=group,pinned=bone==root,root=rootIndex,bodies=contacts,coat=group.roots.Any(r=>r.Contains("Character_Paka_"))};
+                    bool isCoat=group.roots.Any(r=>r.Contains("Character_Paka_"));
+                    var contacts=(group.colliders??Array.Empty<string>()).Where(bodies.ContainsKey).Select(id=>bodies[id]).Concat(isCoat?Enumerable.Empty<Body>():supplements).ToArray();
+                    var node=new Node{bone=bone,group=group,pinned=bone==root,root=rootIndex,bodies=contacts,coat=isCoat};
                     if(!node.pinned&&bone.parent&&indices.TryGetValue(bone.parent,out int parent)){node.parent=parent;node.depth=nodes[parent].depth+1;}
                     else{node.pinned=true;node.root=nodes.Count;}
                     int index=nodes.Count;nodes.Add(node);indices[bone]=index;if(node.parent>=0)nodes[node.parent].children.Add(index);
@@ -140,7 +141,7 @@ namespace Hlc.ChillPrototype
                 // A 40-degree ceiling on every joint kept the distal hem rigid
                 // when the hips bend. Retain the depth curve with a 90-degree
                 // web ceiling; human joints and translations remain Animator-owned.
-                float cap=node.group.name.Contains("Hair")?30:node.group.name=="Web sleeve"?12:node.group.roots.Any(r=>r.Contains("christmashat"))?25:90;
+                float cap=node.group.name.Contains("Hair")?30:node.group.name=="Web sleeve"?12:node.group.roots.Any(r=>r.Contains("christmashat"))?25:node.coat?38:90;
                 node.angleLimit=node.group.useAngleLimit&&node.group.angleCurve!=null?Mathf.Clamp(node.group.angleCurve.At(depth),0,cap):cap;
                 node.radius=Mathf.Max(0,node.group.radiusCurve!=null&&node.group.radiusCurve.value>0?node.group.radiusCurve.At(depth):node.group.radius);
                 node.damping=Mathf.Clamp(node.group.dampingCurve!=null&&node.group.dampingCurve.value>0?node.group.dampingCurve.At(depth):node.group.damping,.03f,.85f);
@@ -267,7 +268,7 @@ namespace Hlc.ChillPrototype
             if(bake==null){activeBake=null;bakeWeight=0;return;}
             ChillBoneBake.Clip requested=null;
             var state=character.GetCurrentAnimatorStateInfo(0);
-            if(useBakedFallback&&bake!=null&&simulation&&!character.IsInTransition(0)&&(!presentation||!presentation.manualLook))
+            if(useBakedFallback&&bake!=null&&simulation&&!character.IsInTransition(0))
                 requested=Array.Find(bake.clips,c=>Animator.StringToHash(c.state)==state.fullPathHash&&state.normalizedTime>=0&&(c.loop||state.normalizedTime<=1));
             if(requested!=activeBake&&activeBake!=null&&bakeWeight>0)requested=null;
             if(requested!=null&&requested!=activeBake){activeBake=requested;bakeWeight=0;}
@@ -326,7 +327,7 @@ namespace Hlc.ChillPrototype
         {
             if(!body.active)return;
             // Point and interior edge contacts catch crossings of thin limbs.
-            for(int sample=0;sample<3;sample++)
+            for(int sample=body.end!=null?0:2;sample<3;sample++)
             {
                 float weight=sample==0?.5f:sample==1?.75f:1;var point=Vector3.Lerp(parent.position,node.position,weight);
                 var closest=Closest(point,body.a,body.b,out float t);float radius=Mathf.Max(0,Mathf.Lerp(body.ra,body.rb,t)+node.radius-allowance);
@@ -344,7 +345,13 @@ namespace Hlc.ChillPrototype
             {
                 float t=sample*.25f;var point=Vector3.Lerp(a.position,b.position,t);
                 var closest=Closest(point,body.a,body.b,out float along);
-                float radius=Mathf.Max(0,Mathf.Lerp(body.ra,body.rb,along)+Mathf.Lerp(a.radius,b.radius,t)-allowance);
+                float chordAllowance=allowance;
+                if(a.depth<3)
+                {
+                    var authored=Vector3.Lerp(a.tickGoal,b.tickGoal,t);var authoredClosest=Closest(authored,body.a,body.b,out float authoredAlong);
+                    chordAllowance=Mathf.Max(allowance,Mathf.Lerp(body.ra,body.rb,authoredAlong)+Mathf.Lerp(a.radius,b.radius,t)-Vector3.Distance(authored,authoredClosest));
+                }
+                float radius=Mathf.Max(0,Mathf.Lerp(body.ra,body.rb,along)+Mathf.Lerp(a.radius,b.radius,t)-chordAllowance);
                 var delta=point-closest;if(delta.sqrMagnitude>=radius*radius)continue;
                 var normal=delta.sqrMagnitude>1e-10f?delta.normalized:(Vector3.Lerp(a.tickGoal,b.tickGoal,t)-closest).normalized;
                 if(normal.sqrMagnitude<.1f)normal=Vector3.forward;

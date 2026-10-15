@@ -40,7 +40,7 @@ namespace Hlc.ChillPrototype
                 }
                 else { Release(); command.Blit(source, temporary); }
                 material.SetVector("_ChillEffects", new Vector4(effect.glitch, effect.monochrome, effect.chromatic, effect.blackout));
-                material.SetVector("_ChillExtra", new Vector4(effect.shake, effect.flash, Time.unscaledTime, 0));
+                material.SetVector("_ChillExtra", new Vector4(effect.shake, effect.flash, Time.unscaledTime, effect.blackoutBlind ? 1 : 0));
                 command.Blit(temporary, source, material);
                 command.ReleaseTemporaryRT(temporary);
                 context.ExecuteCommandBuffer(command); CommandBufferPool.Release(command);

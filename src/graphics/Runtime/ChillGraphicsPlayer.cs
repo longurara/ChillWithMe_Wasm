@@ -74,7 +74,7 @@ namespace Hlc.ChillPrototype
             {
                 pipeline.renderScale = lowQuality ? 0.8f : 1f;
                 pipeline.msaaSampleCount = 2;
-                pipeline.shadowDistance = lowQuality ? 8f : 15f;
+                pipeline.shadowDistance = lowQuality ? 8f : 10f;
             }
         }
 

@@ -61,14 +61,14 @@ namespace Hlc.ChillPrototype
         }
         IEnumerator LoadExternalRoutine(string slot,string assetName,Action<UnityEngine.Object> complete,int version)
         {
-            PendingAssetLoads++;bool acquired=false,success=false;var held=new List<string>();UnityEngine.Object result=null;
+            PendingAssetLoads++;bool acquired=false,success=false;var held=new List<string>();List<string> previous=null;UnityEngine.Object result=null;
             try
             {
                 float deadline=Time.realtimeSinceStartup+120;
                 while((!Ready||busy)&&!InitializationFailed&&SlotCurrent(slot,version)&&Time.realtimeSinceStartup<deadline)yield return null;
                 if(!Ready||busy||InitializationFailed||!SlotCurrent(slot,version))yield break;
                 busy=true;acquired=true;activeSlots.Add(slot);
-                if(externalPacks.TryGetValue(slot,out var previous))Release(previous);
+                externalPacks.TryGetValue(slot,out previous);
                 externalPacks[slot]=held;
                 var entry=catalog.assets.FirstOrDefault(a=>string.Equals(a.name,assetName,StringComparison.OrdinalIgnoreCase)||a.guid==assetName);
                 if(entry==null||!metadata.TryGetValue(entry.bundle,out var root))yield break;
@@ -88,6 +88,7 @@ namespace Hlc.ChillPrototype
             finally
             {
                 if(!success){Release(held);if(externalPacks.TryGetValue(slot,out var owned)&&owned==held)externalPacks.Remove(slot);}
+                if(previous!=null)Release(previous);
                 if(acquired){busy=false;activeSlots.Remove(slot);}
                 PendingAssetLoads--;
                 try{complete?.Invoke(result);}catch(Exception error){Debug.LogException(error);}

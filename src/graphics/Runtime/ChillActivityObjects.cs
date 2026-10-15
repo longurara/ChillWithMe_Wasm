@@ -12,6 +12,8 @@ namespace Hlc.ChillPrototype
         int nextPour;
         public bool Empty=>drinks<=0;
         public bool Hot(double now)=>!cold&&drinks==5&&now-lastPour<600;
+        public bool HasIce(double now)=>cold&&now-lastPour<3600;
+        public float IceScale(double now)=>!HasIce(now)?0:Math.Max(0,1f-(5-Math.Max(1,Math.Min(5,drinks)))*.01f-.1f*(float)Math.Min(1,Math.Max(0,(now-lastPour)/3600)));
         public bool CanRefill(double now)=>Empty&&now-lastPour>=3600;
         public bool NeedCold(double now,float draw,float chance)
         {if(!CanRefill(now))return false;if(nextPour==0)nextPour=draw<chance?2:1;return nextPour==2;}

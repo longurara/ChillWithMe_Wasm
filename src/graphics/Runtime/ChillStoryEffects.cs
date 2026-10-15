@@ -9,7 +9,7 @@ namespace Hlc.ChillPrototype
     {
         public static ChillStoryEffects Active;
         public float glitch, shake, blackout, monochrome, chromatic, flash;
-        public bool frozen;
+        public bool frozen, blackoutBlind, hatHairLocked;
         public Animator screenSharing;
         public GameObject hat;
         public SkinnedMeshRenderer hair;
@@ -19,19 +19,35 @@ namespace Hlc.ChillPrototype
         readonly List<Glow> glows = new List<Glow>();
         readonly Dictionary<int,int> versions = new Dictionary<int,int>();
         bool costumeCaptured,previousHatActive;
+        int previousHairStyle;
+        public string hatReplacedHeadphone { get; private set; } = "";
         float previousHairShape;
         float delay;
         public bool HasEffect => frozen || glitch > .001f || shake > .001f || blackout > .001f || monochrome > .001f || chromatic > .001f || flash > .001f;
         void OnEnable() { Active = this; }
         void OnDisable() { if (Active == this) Active = null; ResetEffects(); }
+        void NotifyNoise()
+        {
+            var story = presentation && presentation.player ? presentation.player.story : GetComponentInParent<ChillGraphicsPlayer>()?.story;
+            if (story) story.UpdateEffectNoise(glitch, monochrome, shake, blackout);
+        }
         public void ResetEffects()
         {
-            StopAllCoroutines(); glitch = shake = blackout = monochrome = chromatic = flash = delay = 0; frozen = false;
+            StopAllCoroutines(); glitch = shake = blackout = monochrome = chromatic = flash = delay = 0; frozen = blackoutBlind = hatHairLocked = false;
             versions.Clear();
+            NotifyNoise();
             if (costumeCaptured)
             {
                 if (hat) hat.SetActive(previousHatActive);
                 if (hair && hair.sharedMesh.blendShapeCount > 1) hair.SetBlendShapeWeight(1,previousHairShape);
+                var story = presentation && presentation.player ? presentation.player.story : GetComponentInParent<ChillGraphicsPlayer>()?.story;
+                if (story && story.decorations && !story.VerificationOnly)
+                {
+                    story.decorations.SetHair(previousHairStyle);
+                    var hp = story.Workspace.room.Find(r => r.category == 2);
+                    if (hp != null && !string.IsNullOrEmpty(hp.skin) && gameObject.activeInHierarchy) StartCoroutine(story.decorations.Apply(hp.skin));
+                }
+                hatReplacedHeadphone = "";
                 costumeCaptured=false;
             }
             foreach (var glow in glows) if (glow.renderer) glow.renderer.SetPropertyBlock(glow.previous,glow.slot);
@@ -41,10 +57,31 @@ namespace Hlc.ChillPrototype
         static float Value(string text) => float.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) ? result : 0;
         public void SetHat(bool enable)
         {
+            var story = presentation && presentation.player ? presentation.player.story : GetComponentInParent<ChillGraphicsPlayer>()?.story;
             if (!costumeCaptured)
-            { previousHatActive=hat && hat.activeSelf; previousHairShape=hair && hair.sharedMesh.blendShapeCount > 1 ? hair.GetBlendShapeWeight(1) : 0; costumeCaptured=true; }
+            {
+                previousHatActive=hat && hat.activeSelf;
+                previousHairShape=hair && hair.sharedMesh.blendShapeCount > 1 ? hair.GetBlendShapeWeight(1) : 0;
+                previousHairStyle=story ? story.Workspace.hair : 0;
+                costumeCaptured=true;
+            }
+            hatHairLocked = enable;
             if (hat) hat.SetActive(enable);
             if (hair && hair.sharedMesh.blendShapeCount > 1) hair.SetBlendShapeWeight(1,enable ? 100 : 0);
+            if (story && story.decorations)
+            {
+                var hp = story.Workspace.room.Find(r => r.category == 2);
+                hatReplacedHeadphone = enable && hp != null && hp.skin != null && hp.skin.StartsWith("Headphone_2") ? "Headphone_1" : "";
+                if (!story.VerificationOnly)
+                {
+                    story.decorations.SetHair(enable ? 0 : story.Workspace.hair);
+                    if (gameObject.activeInHierarchy)
+                    {
+                        if (!string.IsNullOrEmpty(hatReplacedHeadphone)) StartCoroutine(story.decorations.Apply(hatReplacedHeadphone));
+                        else if (hp != null && !string.IsNullOrEmpty(hp.skin)) StartCoroutine(story.decorations.Apply(hp.skin));
+                    }
+                }
+            }
         }
         public void Apply(ChillSentence row)
         {
@@ -82,7 +119,9 @@ namespace Hlc.ChillPrototype
             if (row.Command == 210)
             {
                 blackout=Mathf.Clamp01(Value(row.Arg1));
-                if (row.Arg2 >= 0) { yield return new WaitForSecondsRealtime(row.Arg2); if (Current(key,version)) blackout=0; }
+                blackoutBlind=blackout>0 && Value(row.Arg3)==1;
+                NotifyNoise();
+                if (row.Arg2 >= 0) { yield return new WaitForSecondsRealtime(row.Arg2); if (Current(key,version)) { blackout=0; blackoutBlind=false; NotifyNoise(); } }
                 yield break;
             }
             if (row.Command == 230 || row.Command == 231)
@@ -168,7 +207,7 @@ namespace Hlc.ChillPrototype
         {
             if (row.Command == 220) { frozen=row.Arg2 < 0; return; }
             if (row.Command == 200 || row.Command == 205) {Set(row.Command,row.Arg2<0?Mathf.Clamp01(Value(row.Arg1)):0);return;}
-            if (row.Command == 210) { blackout=row.Arg2 < 0 ? Mathf.Clamp01(Value(row.Arg1)) : 0; return; }
+            if (row.Command == 210) { blackout=row.Arg2 < 0 ? Mathf.Clamp01(Value(row.Arg1)) : 0; blackoutBlind=blackout>0 && Value(row.Arg3)==1; NotifyNoise(); return; }
             if (row.Command == 1000) { Apply(row); return; }
             if (row.Command == 200 || row.Command == 205 || row.Command == 210 || row.Command == 215 || row.Command == 216 || row.Command == 219 || row.Command == 90)
                 Set(row.Command,row.Command == 90 ? 1 : Mathf.Clamp01(Value(row.Arg1)));
@@ -185,6 +224,7 @@ namespace Hlc.ChillPrototype
                 case 216: chromatic = value; break;
                 case 219: glitch = shake = chromatic = value; break;
             }
+            NotifyNoise();
         }
     }
 }
