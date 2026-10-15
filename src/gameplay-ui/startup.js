@@ -90,7 +90,7 @@
 
   function extractPackName(url){
     const str=typeof url==='string'?url:(url&&url.url)||'';
-    const m=/\/assetpacks\/([^?#]+)/.exec(str);
+    const m=/(?:^|\/)assetpacks\/([^?#]+)/.exec(str);
     return m?decodeURIComponent(m[1]):null;
   }
   function makeCacheKey(packName){
