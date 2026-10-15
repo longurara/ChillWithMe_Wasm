@@ -44,6 +44,7 @@ namespace Hlc.ChillPrototype
         Dictionary<GameObject, bool> originalActive = new Dictionary<GameObject, bool>();
         readonly Dictionary<string, UnityEngine.Object> assetCache = new Dictionary<string, UnityEngine.Object>();
         readonly Dictionary<int, List<Material>> categoryClones = new Dictionary<int, List<Material>>();
+        readonly Dictionary<int, string> appliedCategorySkins = new Dictionary<int, string>();
         List<Material> clones = new List<Material>();
         int version;
         static string PathOf(Transform t) => t.parent ? PathOf(t.parent) + "/" + t.name : t.name;
@@ -160,16 +161,17 @@ namespace Hlc.ChillPrototype
             filter.sharedMesh = target;
             RefreshRenderer(filter.gameObject, GetComponent<ChillGraphicsPlayer>(), originalMaterials, seasonalRenderers);
         }
-        public void RestoreCategory(int category)
+        public void RestoreCategory(int category) => RestoreCategoryInternal(category, null);
+        void RestoreCategoryInternal(int category, HashSet<MeshFilter> skipMeshes)
         {
             EnsureInitialized();
-            if (data == null) return;
+            if (data == null || !appliedCategorySkins.Remove(category)) return;
             foreach (var binding in data.bindings)
             {
                 if (binding.category != category) continue;
                 foreach (string path in binding.meshes ?? Array.Empty<string>())
-                    if (Find(path)?.GetComponent<MeshFilter>() is MeshFilter mf && originalMeshes.TryGetValue(mf, out var origMesh)) SetMesh(mf, origMesh);
-                if (Find(binding.lens)?.GetComponent<MeshFilter>() is MeshFilter lf && originalMeshes.TryGetValue(lf, out var origLens)) SetMesh(lf, origLens);
+                    if (Find(path)?.GetComponent<MeshFilter>() is MeshFilter mf && (skipMeshes == null || !skipMeshes.Contains(mf)) && originalMeshes.TryGetValue(mf, out var origMesh)) SetMesh(mf, origMesh);
+                if (Find(binding.lens)?.GetComponent<MeshFilter>() is MeshFilter lf && (skipMeshes == null || !skipMeshes.Contains(lf)) && originalMeshes.TryGetValue(lf, out var origLens)) SetMesh(lf, origLens);
                 foreach (string path in binding.renderers ?? Array.Empty<string>())
                     if (Find(path)?.GetComponent<Renderer>() is Renderer r && originalMaterials.TryGetValue(r, out var origMats)) r.sharedMaterials = origMats;
                 if (binding.models != null)
@@ -211,6 +213,7 @@ namespace Hlc.ChillPrototype
             if (data == null) yield break;
             var skin = data.skins.FirstOrDefault(s => s.name == name);
             if (skin == null) { Debug.LogWarning("Unknown decoration skin: " + name); yield break; }
+            if (appliedCategorySkins.TryGetValue(skin.category, out string currentSkin) && currentSkin == skin.name) yield break;
             int token = version;
             var pending = new List<PendingBinding>();
             for (int i = 0; i < data.bindings.Length; i++)
@@ -239,7 +242,15 @@ namespace Hlc.ChillPrototype
                 else yield return Load(state.emission, asset => entry.emission = asset as Texture);
                 if (token != version) yield break;
             }
-            RestoreCategory(skin.category);
+            var skipMeshes = new HashSet<MeshFilter>();
+            foreach (var entry in pending)
+            {
+                if (entry.state == null) continue;
+                if (entry.mesh) foreach (string path in entry.binding.meshes ?? Array.Empty<string>()) if (Find(path)?.GetComponent<MeshFilter>() is MeshFilter filter) skipMeshes.Add(filter);
+                if (entry.lens && Find(entry.binding.lens)?.GetComponent<MeshFilter>() is MeshFilter lensFilter) skipMeshes.Add(lensFilter);
+            }
+            RestoreCategoryInternal(skin.category, skipMeshes);
+            appliedCategorySkins[skin.category] = skin.name;
             if (!categoryClones.TryGetValue(skin.category, out var catList)) categoryClones[skin.category] = catList = new List<Material>();
             foreach (var entry in pending)
             {
@@ -290,6 +301,7 @@ namespace Hlc.ChillPrototype
         {
             EnsureInitialized();
             version++;
+            appliedCategorySkins.Clear();
             foreach (var item in originalMeshes) if (item.Key) SetMesh(item.Key, item.Value);
             foreach (var item in originalMaterials) if (item.Key) item.Key.sharedMaterials = item.Value;
             foreach (var item in originalActive) if (item.Key) item.Key.SetActive(item.Value);

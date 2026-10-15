@@ -17,11 +17,18 @@ namespace Hlc.ChillPrototype
         public ChillBonePhysics physics;
         public Font uiFont;
         public bool visible;
-        class Pack { public AssetBundle bundle; public int users; }
+        class Pack { public AssetBundle bundle; public int users; public bool pinned; }
         readonly Dictionary<string, Pack> packs = new Dictionary<string, Pack>();
         readonly List<string> musicPacks = new List<string>(), previewPacks = new List<string>();
         readonly Dictionary<string, List<string>> externalPacks = new Dictionary<string, List<string>>();
-        public bool Ready => metadata != null;
+        readonly Dictionary<string, ChillAssetEntry> assetsByGuid = new Dictionary<string, ChillAssetEntry>(StringComparer.OrdinalIgnoreCase);
+        readonly Dictionary<string, ChillAssetEntry> assetsByName = new Dictionary<string, ChillAssetEntry>(StringComparer.OrdinalIgnoreCase);
+        readonly Dictionary<string, UnityEngine.Object> pinnedAssetCache = new Dictionary<string, UnityEngine.Object>(StringComparer.OrdinalIgnoreCase);
+        bool startupPreloadFinished;
+        public string PreloadMode { get; private set; } = "core";
+        public int MountedPackCount => packs.Count;
+        public int TotalPackCount => metadata?.Count ?? 0;
+        public bool Ready => metadata != null && startupPreloadFinished;
         public bool InitializationFailed { get; private set; }
         public bool Busy => busy;
         public string Status => status;
@@ -34,7 +41,16 @@ namespace Hlc.ChillPrototype
         }
         IEnumerator SelectMusicAndPlay(ChillAssetEntry entry)
         { yield return Select(entry); if (music && music.clip) music.Play(); }
-        public bool AssetGuidMatches(string name, string guid) => catalog != null && catalog.assets.Any(a => a.guid == guid && a.name == name);
+        public bool AssetGuidMatches(string name, string guid) => !string.IsNullOrEmpty(guid) && assetsByGuid.TryGetValue(guid, out var a) && a.name == name;
+        ChillAssetEntry FindAssetEntry(string nameOrGuid)
+        {
+            if (string.IsNullOrEmpty(nameOrGuid)) return null;
+            if (assetsByGuid.TryGetValue(nameOrGuid, out var byG)) return byG;
+            if (assetsByName.TryGetValue(nameOrGuid, out var byN)) return byN;
+            return null;
+        }
+        static readonly string[] CoreBundlePrefixes = { "texture2d/", "mesh/", "sound/", "animationclip/", "sprite/", "material/", "gameobject/", "animatorcontroller/", "cubemap/", "avatar/", "rendertexture/", "flare/", "terrainlayer/", "audiomixercontroller/" };
+        static bool IsCoreBundle(string bundleName) => !string.IsNullOrEmpty(bundleName) && CoreBundlePrefixes.Any(p => bundleName.StartsWith(p, StringComparison.OrdinalIgnoreCase));
         ChillAssetCatalog catalog;
         Dictionary<string, ChillBundleEntry> metadata;
         ChillAssetEntry[] results = Array.Empty<ChillAssetEntry>();
@@ -66,6 +82,13 @@ namespace Hlc.ChillPrototype
                 catch(System.Exception error){parseError=error.Message;}
                 if(parseError!=null){status="Không đọc được danh sách: "+parseError;InitializationFailed=true;GetComponent<ChillStartupGate>()?.Fail(status);yield break;}
             }
+            foreach (var a in catalog.assets)
+            {
+                if (!string.IsNullOrEmpty(a.guid) && !assetsByGuid.ContainsKey(a.guid)) assetsByGuid[a.guid] = a;
+                if (!string.IsNullOrEmpty(a.name) && !assetsByName.ContainsKey(a.name)) assetsByName[a.name] = a;
+            }
+            yield return WaitAndMountPreload();
+            startupPreloadFinished = true;
             status = catalog.assets.Length + " asset · chọn một mục để tải và xem";
             Filter();
         }
@@ -118,8 +141,8 @@ namespace Hlc.ChillPrototype
         void Release(List<string> held)
         {
             foreach (string name in held)
-                if (packs.TryGetValue(name, out var pack) && --pack.users == 0)
-                { pack.bundle.Unload(true); packs.Remove(name); }
+                if (packs.TryGetValue(name, out var pack) && !pack.pinned && --pack.users <= 0)
+                { if (pack.bundle) pack.bundle.Unload(true); packs.Remove(name); }
             held.Clear();
         }
 

@@ -333,6 +333,18 @@ namespace Hlc.ChillPrototype
             }
 
             GUILayout.Space(6f);
+            if(player.library)
+            {
+                GUILayout.Label($"=== Asset Preload Mode (Current: {player.library.PreloadMode} | Mounted: {player.library.MountedPackCount}/{player.library.TotalPackCount}) ===");
+                GUILayout.BeginHorizontal();
+                if(GUILayout.Button("Mức 1 (~142MB)"))player.library.ChangePreloadMode("core");
+                if(GUILayout.Button("Mức 2 (~217MB)"))player.library.ChangePreloadMode("voice");
+                if(GUILayout.Button("Mức 3 (~454MB)"))player.library.ChangePreloadMode("all");
+                if(GUILayout.Button("Live"))player.library.ChangePreloadMode("live");
+                GUILayout.EndHorizontal();
+            }
+
+            GUILayout.Space(6f);
             GUILayout.Label("=== UI Diagnostics ===");
             GUILayout.Label($"Recovered Sprites: {(spriteReplacements?.Length??0)}");
             GUILayout.Label($"Skin Thumbnails Mapped: {(skinThumbnails?.Length??0)}");
