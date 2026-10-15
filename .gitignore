@@ -24,3 +24,6 @@ __pycache__/
 *.pid
 *.log
 *.tmp
+BRAIN.md
+brain.md
+
