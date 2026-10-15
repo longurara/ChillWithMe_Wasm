@@ -26,7 +26,12 @@ namespace Hlc.ChillPrototype
         void SetPaneUsing(string selected)
         {
             foreach(var pair in new[]{("settings","SettingUI"),("story","StorySelectUI"),("music","MusicPlayListView"),("notes","NoteUI"),("todos","TodoListUI"),("calendar","CalendarUI"),("habits","HabitTrackerUI"),("environment","EnvironmentUI"),("decorations","DecorationListUI")})
-            {var button=RefOf(pair.Item2,"_facilityOpenButton");var style=button?button.GetComponent<ChillNativeInteraction>():null;if(style)style.SetUsing(selected==pair.Item1);}
+            {
+                var button=RefOf(pair.Item2,"_facilityOpenButton");
+                var style=button?button.GetComponent<ChillNativeInteraction>():null;
+                bool usingPane=IsFloatingPane(pair.Item1)?activeFloatingPanes.Contains(pair.Item1):(exclusivePane==pair.Item1||selected==pair.Item1);
+                if(style)style.SetUsing(usingPane);
+            }
         }
         void RefreshFirstGuide()
         {

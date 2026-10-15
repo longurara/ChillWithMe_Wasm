@@ -26,7 +26,7 @@ namespace Hlc.ChillPrototype
                 }
                 else
                 {
-                    if(pane=="history")Close();
+                    if(IsPaneOpen("history"))CloseExclusivePane();
                     foreach(var pair in storyHudBefore)if(pair.Key)pair.Key.SetActive(pair.Value);
                     storyHudBefore.Clear();if(nativeUiRoot)nativeUiRoot.gameObject.SetActive(storyUiWasActive);if(reveal)reveal.SetActive(storyRevealWasActive);
                 }
